@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://shasha4ever2000-design.github.io/worldcup2026/sitemap.xml
