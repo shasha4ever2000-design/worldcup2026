@@ -1,0 +1,137 @@
+================================================================
+  FIXING worldcup2026 — STEP-BY-STEP (no code experience needed)
+================================================================
+
+WHAT YOU GOT IN THIS FOLDER
+  1) scores.json            — fresh results, filling in the gap
+  2) update-scores.mjs      — small program that fetches results
+  3) auto-update-scores.yml — robot that runs the program every 30 min
+  4) HOW-TO-DEPLOY.txt      — this file
+
+
+--------------------------------------------------------------------
+WHY YOUR SITE WAS WRONG / LATE  (the short version)
+--------------------------------------------------------------------
+- Your site loads results from a file called "scores.json" in your
+  GitHub repo. That file was last updated on June 16 and was missing
+  the matches from June 16-17 onward.
+- Your page DOES try to auto-fetch live results from a free API
+  (TheSportsDB), but that API quietly skips some matches (Iraq–Norway
+  for example was missing), and it only looks back 3 days.
+- Result: any match the static file didn't have AND the API didn't
+  return stayed blank.
+
+The fix below has two parts:
+  PART A — paste a corrected scores.json (instant fix for today)
+  PART B — install a free GitHub robot that updates scores.json for
+           you every 30 minutes from now until the final (no more
+           manual editing)
+
+
+====================================================================
+PART A — REPLACE scores.json  (2 minutes, instant fix)
+====================================================================
+
+ 1. Open your repo in a browser:
+       https://github.com/shasha4ever2000-design/worldcup2026
+
+ 2. Click the file named  scores.json
+
+ 3. Click the pencil icon (top right) to edit.
+
+ 4. Select ALL the existing content and delete it.
+
+ 5. Open the new scores.json from THIS folder
+    (worldcup-fix\scores.json), select all, copy, paste into GitHub.
+
+ 6. Scroll to the bottom of the page. Under "Commit changes",
+    leave the default message and click the green "Commit changes"
+    button.
+
+ 7. Wait ~1 minute, then refresh
+       https://shasha4ever2000-design.github.io/worldcup2026/
+    Hard refresh on your phone (close tab, reopen) so the cache
+    doesn't trick you.
+
+You should now see:
+    France 3-1 Senegal
+    Iraq   1-4 Norway
+    Argentina 3-0 Algeria
+    Austria 3-1 Jordan
+(and all the older results that were already correct)
+
+Matches still in progress (e.g. England v Croatia at the time this
+was prepared) will fill in automatically once Part B is installed.
+
+
+====================================================================
+PART B — INSTALL THE AUTO-UPDATE ROBOT  (5 minutes, one time only)
+====================================================================
+
+You will add TWO files to your repo. Both are in this folder.
+
+----- File 1 of 2 :  update-scores.mjs  (put at the root) -----
+
+ 1. Open  https://github.com/shasha4ever2000-design/worldcup2026
+ 2. Click "Add file" -> "Create new file".
+ 3. In the file name box, type exactly:    update-scores.mjs
+ 4. Open update-scores.mjs from this folder, copy everything,
+    paste it into GitHub.
+ 5. Scroll down, click "Commit new file".
+
+----- File 2 of 2 :  auto-update-scores.yml  (put in .github/workflows/) -----
+
+ 1. Click "Add file" -> "Create new file" again.
+ 2. In the file name box, type exactly (note the slashes, they create folders):
+        .github/workflows/auto-update-scores.yml
+ 3. Open auto-update-scores.yml from this folder, copy everything,
+    paste it into GitHub.
+ 4. Click "Commit new file".
+
+----- Give the robot permission to write to your repo -----
+
+ 1. In your repo, click "Settings" (top menu).
+ 2. In the left sidebar: "Actions" -> "General".
+ 3. Scroll down to "Workflow permissions".
+ 4. Choose "Read and write permissions".
+ 5. Click Save.
+
+----- Run it once to test -----
+
+ 1. Click the "Actions" tab at the top of your repo.
+ 2. In the left sidebar, click "Auto-update World Cup scores".
+ 3. Click the grey "Run workflow" button on the right -> "Run workflow".
+ 4. Wait ~30 seconds. A green check mark = success.
+ 5. Click into the run, expand "Update scores.json" to see what it
+    did. If it found new finished matches, it auto-committed them
+    to scores.json. If not, you'll see "No score updates".
+
+From now on, it runs every 30 minutes automatically. You do not have
+to do anything.
+
+
+====================================================================
+A NOTE ON LIMITS
+====================================================================
+- The free TheSportsDB API sometimes lags 5-30 minutes behind the
+  actual final whistle. That's a data-source limit, not your site.
+- If a result is REALLY late (an hour+ after FT), it usually means
+  TheSportsDB just hasn't indexed that specific match. You can
+  always edit scores.json by hand the same way as Part A.
+- The 30-minute cron schedule is the minimum interval GitHub allows
+  on free public repos. Going more frequently isn't worth it given
+  TheSportsDB's own update lag.
+
+
+====================================================================
+THINGS I DELIBERATELY DID NOT TOUCH
+====================================================================
+- Your index.html is 88 KB of carefully-formatted code. Editing it
+  by hand is risky for a non-coder, and your live-fetch already
+  works -- it just needed the data-source gap fixed. If you want
+  me to also clean up index.html (widen the live-fetch window,
+  exclude "Club World Cup" explicitly, etc.) say the word and I'll
+  produce a patched version.
+- I did not enter a final for matches that were still "in play" at
+  the time these files were prepared. The robot in Part B will
+  fill those in once the real final is reported.
