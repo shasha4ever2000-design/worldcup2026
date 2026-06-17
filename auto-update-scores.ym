@@ -1,0 +1,40 @@
+name: Auto-update World Cup scores
+
+on:
+  schedule:
+    # Every 30 minutes during the tournament. GitHub may delay free-tier
+    # cron jobs by a few minutes; that's expected.
+    - cron: "*/30 * * * *"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+concurrency:
+  group: scores-updater
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Update scores.json
+        run: node update-scores.mjs
+
+      - name: Commit any changes
+        run: |
+          if [[ -n "$(git status --porcelain scores.json)" ]]; then
+            git config user.name "scores-bot"
+            git config user.email "scores-bot@users.noreply.github.com"
+            git add scores.json
+            git commit -m "auto: update scores ($(date -u +'%Y-%m-%d %H:%M UTC'))"
+            git push
+          else
+            echo "No score changes."
+          fi
