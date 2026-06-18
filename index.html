@@ -8,7 +8,7 @@
 <link rel="canonical" href="https://shasha4ever2000-design.github.io/worldcup2026/"/>
 <meta name="theme-color" content="#064e3b"/>
 <link rel="manifest" href="manifest.json"/>
-<link rel="icon" href="icon-192.png"/>
+<link rel="icon" href="icon-192.png"/>h
 <link rel="apple-touch-icon" href="apple-touch-icon.png"/>
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
@@ -27,6 +27,22 @@
 <meta name="twitter:image" content="https://shasha4ever2000-design.github.io/worldcup2026/og-image.png"/>
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"SportsEvent","name":"FIFA World Cup 2026","sport":"Football","startDate":"2026-06-11","endDate":"2026-07-19","eventStatus":"https://schema.org/EventScheduled","location":{"@type":"Place","name":"USA, Canada & Mexico"},"organizer":{"@type":"Organization","name":"FIFA","url":"https://www.fifa.com"}}
+</script>
+<!-- Google Analytics 4 -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-XXXXXXXXXX', {
+  page_title: 'FIFA World Cup 2026',
+  page_location: window.location.href,
+  custom_map: {'dimension1': 'language', 'dimension2': 'theme'}
+});
+// Track language switches
+window.trackLang = function(lang) { gtag('event', 'language_switch', {value: lang}); };
+// Track tab changes
+window.trackTab = function(tab) { gtag('event', 'tab_view', {value: tab}); };
 </script>
 <style>
 :root{--bg:#f1f5f9;--card:#fff;--ink:#0f172a;--ink2:#334155;--muted:#64748b;--green:#047857;--green-d:#064e3b;--green-l:#d1fae5;--gold:#f59e0b;--line:#e2e8f0;--rose:#e11d48;--chip:#f1f5f9;--shadow:0 1px 3px rgba(15,23,42,.06);--r:13px;--blue:#2563eb}
@@ -604,11 +620,11 @@ init();
 function updateCountdowns(){document.querySelectorAll(".nation").forEach(card=>{const team=card.dataset.team,list=M.filter(m=>m.h===team||m.a===team),now=Date.now(),next=list.find(m=>new Date(m.dt)>now);const cd=card.querySelector(".cd");if(!next||!cd)return;const diff=new Date(next.dt)-now;if(diff<=0)return;const bs=cd.querySelectorAll("b");if(bs.length===4){bs[0].textContent=String(Math.floor(diff/864e5)).padStart(2,"0");bs[1].textContent=String(Math.floor(diff%864e5/36e5)).padStart(2,"0");bs[2].textContent=String(Math.floor(diff%36e5/6e4)).padStart(2,"0");bs[3].textContent=String(Math.floor(diff%6e4/1e3)).padStart(2,"0")}})}
 setInterval(updateCountdowns,1000);
 /* ============ FEEDBACK ============ */
-const FORMSPREE_ENDPOINT="https://formspree.io/f/REPLACE_WITH_YOUR_ID";
+const FORMSPREE_ENDPOINT="https://api.web3forms.com/submit";
 function escapeHtml(x){return(x+"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
 function saveName(v){store.set("wc_name",v)}
 window.setRating=function(v){store.set("wc_rating",v);document.querySelectorAll("#starRow .star").forEach(s=>s.classList.toggle("on",+s.dataset.v<=v));vibrate(8)};
-window.submitFeedback=async function(){const name=(document.getElementById("fbName").value||"").trim(),msg=(document.getElementById("fbMsg").value||"").trim(),rating=store.get("wc_rating",0);if(!rating&&!msg){toast(t().fbEmpty);return}const fb=store.get("wc_feedback",[]);fb.push({name,msg,rating,ts:Date.now()});store.set("wc_feedback",fb);if(FORMSPREE_ENDPOINT&&!/REPLACE_WITH_YOUR_ID/.test(FORMSPREE_ENDPOINT)){try{await fetch(FORMSPREE_ENDPOINT,{method:"POST",headers:{"Content-Type":"application/json",Accept:"application/json"},body:JSON.stringify({rating:rating+" / 5",name:name||"Anonymous",message:msg,site:"World Cup 2026 Hub"})})}catch(e){}}toast(t().fbThanks);vibrate(20);openFeedback()};
+window.submitFeedback=async function(){const name=(document.getElementById("fbName").value||"").trim(),msg=(document.getElementById("fbMsg").value||"").trim(),rating=store.get("wc_rating",0);if(!rating&&!msg){toast(t().fbEmpty);return}const fb=store.get("wc_feedback",[]);fb.push({name,msg,rating,ts:Date.now()});store.set("wc_feedback",fb);if(FORMSPREE_ENDPOINT&&!/REPLACE_WITH_YOUR_ID/.test(FORMSPREE_ENDPOINT)){try{await fetch(FORMSPREE_ENDPOINT,{method:"POST",headers:{"Content-Type":"application/json",Accept:"application/json"},body:JSON.stringify({access_key:"YOUR_WEB3FORMS_KEY",rating:rating+" / 5",name:name||"Anonymous",message:msg,site:"World Cup 2026 Hub",from_page:window.location.href})})}catch(e){}}toast(t().fbThanks);vibrate(20);openFeedback()};
 function openFeedback(){const fb=store.get("wc_feedback",[]),myR=store.get("wc_rating",0),myName=store.get("wc_name","");let stars="";for(let i=1;i<=5;i++)stars+=`<span class="star ${i<=myR?"on":""}" data-v="${i}" onclick="setRating(${i})">★</span>`;const recent=fb.slice(-6).reverse().map(f=>`<div class="cmt"><div class="cmt-h"><b>${escapeHtml(f.name)||(lang==="ar"?"زائر":"Guest")}</b><span class="cmt-stars">${"★".repeat(f.rating)}${"☆".repeat(5-f.rating)}</span></div>${f.msg?`<div class="cmt-b">${escapeHtml(f.msg)}</div>`:""}</div>`).join("")||`<div class="empty" style="padding:14px">${t().noCmts}</div>`;document.getElementById("sheetTitle").textContent="💬 "+t().feedback;document.getElementById("sheetBody").innerHTML=`<div class="fb-label">${t().rateThis}</div><div class="stars" id="starRow">${stars}</div><input class="fb-in" id="fbName" placeholder="${t().yourName}" value="${escapeHtml(myName)}" oninput="saveName(this.value)"/><textarea class="fb-in" id="fbMsg" rows="3" placeholder="${t().yourComment}"></textarea><button class="fb-submit" onclick="submitFeedback()">${t().sendFb}</button><div class="fb-note">${t().fbNote}</div><div style="margin-top:16px" class="fb-label">${t().recentCmts}</div>${recent}`;showSheet()}
 document.getElementById("fbFab").onclick=openFeedback;
 
@@ -673,6 +689,27 @@ function setTickerItems(items){
   el.style.animationDuration=Math.max(30,Math.round(totalChars*0.28))+"s";
 }
 if("serviceWorker"in navigator)navigator.serviceWorker.register("sw.js").catch(()=>{});
+/* ============ VISITOR ANALYTICS ============ */
+// Free visitor counter using countapi.xyz
+async function trackVisit() {
+  try {
+    const r = await fetch('https://api.countapi.xyz/hit/worldcup2026-hub/visits');
+    if (r.ok) {
+      const d = await r.json();
+      window._totalVisits = d.value;
+    }
+  } catch(e) {}
+  // Also store visit in localStorage for returning visitor detection
+  const visits = store.get('wc_visits', 0) + 1;
+  store.set('wc_visits', visits);
+  const firstVisit = store.get('wc_first_visit', null);
+  if (!firstVisit) store.set('wc_first_visit', new Date().toISOString());
+  store.set('wc_last_visit', new Date().toISOString());
+  store.set('wc_user_agent', navigator.userAgent.substring(0, 100));
+  store.set('wc_lang_pref', navigator.language);
+}
+trackVisit();
+
 </script>
 </body>
 </html>
