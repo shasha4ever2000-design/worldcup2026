@@ -305,7 +305,9 @@ L: England, Croatia, Ghana, Panama
   <div class="chips" id="chips" role="group"></div>
 </div>
 
+<div class="ad-slot" data-placement="header" aria-hidden="true" style="min-height:0"></div>
 <div id="content" aria-live="polite"></div>
+<div class="ad-slot" data-placement="footer" aria-hidden="true" style="min-height:0;margin:8px 0"></div>
 <footer id="t_footer"></footer>
 </div>
 
@@ -461,8 +463,8 @@ const M=[
 ];
 
 /* ============ i18n ============ */
-const I={en:{title:"FIFA World Cup 2026",live:"LIVE",sub:"🌎 USA · Canada · Mexico · Jun 11 – Jul 19, 2026",played:"Played",goals:"Goals",avgGoal:"Avg/Match",remaining:"Remaining",daysFinal:"To Final",teams:"Teams",scores:"⚽ Live Scores",news:"📰 Latest News",ksa_t:"🇸🇦 Saudi Arabia · Green Falcons",ksa_g:"Group H — Spain, Uruguay & Cape Verde",next:"NEXT MATCH",days:"days",hrs:"hrs",min:"min",sec:"sec",done:"Kicked off / finished",search:"Search team…",local:"My local time",all:"All",today:"Today",ksa:"🇸🇦 KSA",ko:"Knockouts",grp:"Group",r32:"Round of 32",r16:"Round of 16",qf:"Quarter-final",sf:"Semi-final",third:"3rd Place",final:"Final",vs:"vs",ft:"FT",liveLbl:"● LIVE",noMatch:"No matches found.",koLeg:"<b>Knockout key:</b> 1A = Group A winner · 2A = runner-up · 3·ABCDF = best 3rd · W73 = match 73 winner.",footer:'Live scores on <a href="https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026" target="_blank" rel="noopener">FIFA.com</a> · Built with Claude AI',sw:"عربي",tabSch:"Schedule",tabGrp:"Groups",tabBrk:"Bracket",tabStat:"Stats",tabFav:"⭐ My Teams",todayP:"Today",pos:"#",team:"Team",mp:"P",w:"W",d:"D",l:"L",gd:"GD",pts:"Pts",form:"Form",rank:"FIFA Ranking",coach:"Coach",conf:"Confederation",qual:"Qualification",keyPlayers:"Key Players",remind:"🔔 Remind",reminded:"🔔 Set",predict:"Prediction — who wins?",draw:"Draw",addCal:"📅 Calendar",share:"↗ Share",venue:"Venue",cap:"Capacity",stage:"Stage",noFav:"No favourites yet. Tap ⭐ on a match to follow a team.",weather:"Match-city weather",loadingW:"Loading weather…",jumpToday:"⚽ Today",installApp:"⬇ Install",spotlight:"⭐ Player Spotlight",addedFav:"Added to favourites ⭐",removedFav:"Removed from favourites",remindSet:"Reminder set — 15 min before kickoff 🔔",voteToast:"Prediction saved ✓",copied:"Link copied ✓",qualified:"Advances to knockouts",statTitle:"Tournament Stats",stTotalG:"Total goals",stAvg:"Goals per match",stHigh:"Highest-scoring match",stBig:"Biggest win",stClean:"Clean sheets",stByGroup:"Goals by group",noStat:"Stats appear here once matches are played.",matches:"Matches",teamMatches:"All matches",tabSim:"🔮 Sim",simTitle:"Group Stage Simulator",simHint:"Tap ＋/− to simulate remaining matches — standings update live",qualBadge:"Q ✓",thirdBadge:"3rd",elimBadge:"Out",resetGrp:"↺ Reset",gbTitle:"Golden Boot — Top Scorers",egypt:"🇪🇬 Egypt",feedback:"Rate & Comment",rateThis:"How would you rate this site?",yourName:"Your name (optional)",yourComment:"Write a comment…",sendFb:"Submit Feedback",fbNote:"Your rating & comments help improve this site.",recentCmts:"Recent comments",noCmts:"No comments yet — be the first!",fbThanks:"Thank you for your feedback! ✓",fbEmpty:"Please add a rating or a comment.",sfOn:"Spoiler-free ON — tap any score to reveal",sfOff:"Spoiler-free mode (hide scores)",sfBar:"🙈 Spoiler-free mode is ON — tap any score to reveal it",scoresUpdated:"Scores updated \u2713",winProb:"Win probability (model)",predNote:"Simple model from FIFA ranking & recent form \u2014 for fun, not betting."},
-ar:{title:"كأس العالم ٢٠٢٦",live:"مباشر",sub:"🌎 أمريكا · كندا · المكسيك · ١١ يونيو – ١٩ يوليو",played:"لُعبت",goals:"أهداف",avgGoal:"معدل/مباراة",remaining:"متبقية",daysFinal:"للنهائي",teams:"منتخب",scores:"⚽ النتائج",news:"📰 الأخبار",ksa_t:"🇸🇦 السعودية · الصقور الخضر",ksa_g:"المجموعة H — إسبانيا والأوروغواي والرأس الأخضر",next:"المباراة القادمة",days:"يوم",hrs:"ساعة",min:"دقيقة",sec:"ثانية",done:"جارية أو انتهت",search:"ابحث عن منتخب…",local:"توقيتي المحلي",all:"الكل",today:"اليوم",ksa:"🇸🇦 السعودية",ko:"إقصائية",grp:"المجموعة",r32:"دور الـ٣٢",r16:"دور الـ١٦",qf:"ربع النهائي",sf:"نصف النهائي",third:"المركز الثالث",final:"النهائي",vs:"ضد",ft:"انتهت",liveLbl:"● مباشر",noMatch:"لا توجد مباريات.",koLeg:"<b>مفتاح الأدوار:</b> 1A = أول المجموعة A · 2A = الثاني · W73 = فائز المباراة 73.",footer:'النتائج على <a href="https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026" target="_blank" rel="noopener">FIFA.com</a> · بُني بواسطة Claude AI',sw:"English",tabSch:"الجدول",tabGrp:"المجموعات",tabBrk:"الشجرة",tabStat:"إحصائيات",tabFav:"⭐ منتخباتي",todayP:"اليوم",pos:"#",team:"المنتخب",mp:"ل",w:"ف",d:"ت",l:"خ",gd:"الفرق",pts:"نقاط",form:"الأداء",rank:"تصنيف فيفا",coach:"المدرب",conf:"الاتحاد",qual:"التأهل",keyPlayers:"أبرز اللاعبين",remind:"🔔 ذكّرني",reminded:"🔔 تم",predict:"توقّع — من يفوز؟",draw:"تعادل",addCal:"📅 التقويم",share:"↗ مشاركة",venue:"الملعب",cap:"السعة",stage:"الدور",noFav:"لا مفضلات بعد. اضغط ⭐ على مباراة لمتابعة منتخب.",weather:"طقس مدينة المباراة",loadingW:"جارٍ تحميل الطقس…",jumpToday:"⚽ اليوم",installApp:"⬇ تثبيت",spotlight:"⭐ أبرز اللاعبين",addedFav:"أُضيف للمفضلة ⭐",removedFav:"أُزيل من المفضلة",remindSet:"تم ضبط التذكير — قبل ١٥ دقيقة 🔔",voteToast:"حُفظ التوقّع ✓",copied:"نُسخ الرابط ✓",qualified:"يتأهل للأدوار الإقصائية",statTitle:"إحصائيات البطولة",stTotalG:"مجموع الأهداف",stAvg:"معدل الأهداف للمباراة",stHigh:"أعلى مباراة تهديفًا",stBig:"أكبر فوز",stClean:"شِباك نظيفة",stByGroup:"الأهداف حسب المجموعة",noStat:"تظهر الإحصائيات بعد لعب المباريات.",matches:"المباريات",teamMatches:"كل المباريات",tabSim:"🔮 محاكاة",simTitle:"محاكي دور المجموعات",simHint:"اضغط ＋/− لمحاكاة المباريات المتبقية — الترتيب يتحدث فوراً",qualBadge:"م ✓",thirdBadge:"ثالث",elimBadge:"خارج",resetGrp:"↺ إعادة",gbTitle:"الحذاء الذهبي — الهدافون",egypt:"🇪🇬 مصر",feedback:"قيّم وعلّق",rateThis:"كيف تقيّم هذا الموقع؟",yourName:"اسمك (اختياري)",yourComment:"اكتب تعليقًا…",sendFb:"إرسال التقييم",fbNote:"تقييمك وتعليقاتك تساعد في تحسين الموقع.",recentCmts:"أحدث التعليقات",noCmts:"لا تعليقات بعد — كن أول من يعلّق!",fbThanks:"شكرًا لملاحظاتك! ✓",fbEmpty:"الرجاء إضافة تقييم أو تعليق.",sfOn:"وضع إخفاء النتائج مفعّل — انقر على أي نتيجة لإظهارها",sfOff:"إخفاء النتائج (بدون إفساد)",sfBar:"🙈 وضع إخفاء النتائج مفعّل — انقر على أي نتيجة لإظهارها",scoresUpdated:"تم تحديث النتائج \u2713",winProb:"احتمالية الفوز (نموذج)",predNote:"نموذج مبسّط من تصنيف فيفا والأداء الأخير \u2014 للمتعة فقط."}};
+const I={en:{title:"FIFA World Cup 2026",live:"LIVE",sub:"🌎 USA · Canada · Mexico · Jun 11 – Jul 19, 2026",played:"Played",goals:"Goals",avgGoal:"Avg/Match",remaining:"Remaining",daysFinal:"To Final",teams:"Teams",scores:"⚽ Live Scores",news:"📰 Latest News",ksa_t:"🇸🇦 Saudi Arabia · Green Falcons",ksa_g:"Group H — Spain, Uruguay & Cape Verde",next:"NEXT MATCH",days:"days",hrs:"hrs",min:"min",sec:"sec",done:"Kicked off / finished",search:"Search team…",local:"My local time",all:"All",today:"Today",ksa:"🇸🇦 KSA",ko:"Knockouts",grp:"Group",r32:"Round of 32",r16:"Round of 16",qf:"Quarter-final",sf:"Semi-final",third:"3rd Place",final:"Final",vs:"vs",ft:"FT",liveLbl:"● LIVE",noMatch:"No matches found.",koLeg:"<b>Knockout key:</b> 1A = Group A winner · 2A = runner-up · 3·ABCDF = best 3rd · W73 = match 73 winner.",footer:'Live scores on <a href="https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026" target="_blank" rel="noopener">FIFA.com</a> · <a href="privacy.html">Privacy</a> · Built with Claude AI',sw:"عربي",tabSch:"Schedule",tabGrp:"Groups",tabBrk:"Bracket",tabStat:"Stats",tabFav:"⭐ My Teams",todayP:"Today",pos:"#",team:"Team",mp:"P",w:"W",d:"D",l:"L",gd:"GD",pts:"Pts",form:"Form",rank:"FIFA Ranking",coach:"Coach",conf:"Confederation",qual:"Qualification",keyPlayers:"Key Players",remind:"🔔 Remind",reminded:"🔔 Set",predict:"Prediction — who wins?",draw:"Draw",addCal:"📅 Calendar",share:"↗ Share",venue:"Venue",cap:"Capacity",stage:"Stage",noFav:"No favourites yet. Tap ⭐ on a match to follow a team.",weather:"Match-city weather",loadingW:"Loading weather…",jumpToday:"⚽ Today",installApp:"⬇ Install",spotlight:"⭐ Player Spotlight",addedFav:"Added to favourites ⭐",removedFav:"Removed from favourites",remindSet:"Reminder set — 15 min before kickoff 🔔",voteToast:"Prediction saved ✓",copied:"Link copied ✓",qualified:"Advances to knockouts",statTitle:"Tournament Stats",stTotalG:"Total goals",stAvg:"Goals per match",stHigh:"Highest-scoring match",stBig:"Biggest win",stClean:"Clean sheets",stByGroup:"Goals by group",noStat:"Stats appear here once matches are played.",matches:"Matches",teamMatches:"All matches",tabSim:"🔮 Sim",simTitle:"Group Stage Simulator",simHint:"Tap ＋/− to simulate remaining matches — standings update live",qualBadge:"Q ✓",thirdBadge:"3rd",elimBadge:"Out",resetGrp:"↺ Reset",gbTitle:"Golden Boot — Top Scorers",egypt:"🇪🇬 Egypt",feedback:"Rate & Comment",rateThis:"How would you rate this site?",yourName:"Your name (optional)",yourComment:"Write a comment…",sendFb:"Submit Feedback",fbNote:"Your rating & comments help improve this site.",recentCmts:"Recent comments",noCmts:"No comments yet — be the first!",fbThanks:"Thank you for your feedback! ✓",fbEmpty:"Please add a rating or a comment.",sfOn:"Spoiler-free ON — tap any score to reveal",sfOff:"Spoiler-free mode (hide scores)",sfBar:"🙈 Spoiler-free mode is ON — tap any score to reveal it",scoresUpdated:"Scores updated \u2713",winProb:"Win probability (model)",predNote:"Simple model from FIFA ranking & recent form \u2014 for fun, not betting.",tabLeague:"\ud83c\udfc5 League",leagueTitle:"Pick'em League",leagueHint:"Vote on matches, then share your picks. Friends who open your link join your league \u2014 most correct predictions wins!",leagueShare:"\ud83d\udcf2 Share my picks",leagueCopy:"Copy share link",myName:"Your display name",emptyLeague:"You're the only one here yet. Tap Share to invite friends!",me:"You",pts2:"pts",correct:"correct",addFriend:"\u2795 {name} wants to join your league. Add them?",friendAdded:"\u2713 {name} added to league",friendDupe:"{name} is already in your league (updated)",removeFriend:"Remove",picksMade:"picks",rank:"Rank",overallLeader:"\ud83e\udd47 Leading",noPicks:"No picks yet \u2014 vote on match cards first",linkCopied:"Share link copied! Send via WhatsApp \u2728",privacy:"Privacy",privacyNote:"This site uses local storage to remember your picks and language preference. We don't collect personal data without consent. See full Privacy Policy.",cookieMsg:"This site uses local storage and Google Analytics to improve your experience. By using this site you agree.",accept:"Accept",decline:"Decline",learnMore:"Learn more"},
+ar:{title:"كأس العالم ٢٠٢٦",live:"مباشر",sub:"🌎 أمريكا · كندا · المكسيك · ١١ يونيو – ١٩ يوليو",played:"لُعبت",goals:"أهداف",avgGoal:"معدل/مباراة",remaining:"متبقية",daysFinal:"للنهائي",teams:"منتخب",scores:"⚽ النتائج",news:"📰 الأخبار",ksa_t:"🇸🇦 السعودية · الصقور الخضر",ksa_g:"المجموعة H — إسبانيا والأوروغواي والرأس الأخضر",next:"المباراة القادمة",days:"يوم",hrs:"ساعة",min:"دقيقة",sec:"ثانية",done:"جارية أو انتهت",search:"ابحث عن منتخب…",local:"توقيتي المحلي",all:"الكل",today:"اليوم",ksa:"🇸🇦 السعودية",ko:"إقصائية",grp:"المجموعة",r32:"دور الـ٣٢",r16:"دور الـ١٦",qf:"ربع النهائي",sf:"نصف النهائي",third:"المركز الثالث",final:"النهائي",vs:"ضد",ft:"انتهت",liveLbl:"● مباشر",noMatch:"لا توجد مباريات.",koLeg:"<b>مفتاح الأدوار:</b> 1A = أول المجموعة A · 2A = الثاني · W73 = فائز المباراة 73.",footer:'النتائج على <a href="https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026" target="_blank" rel="noopener">FIFA.com</a> · <a href="privacy.html">الخصوصية</a> · بُني بواسطة Claude AI',sw:"English",tabSch:"الجدول",tabGrp:"المجموعات",tabBrk:"الشجرة",tabStat:"إحصائيات",tabFav:"⭐ منتخباتي",todayP:"اليوم",pos:"#",team:"المنتخب",mp:"ل",w:"ف",d:"ت",l:"خ",gd:"الفرق",pts:"نقاط",form:"الأداء",rank:"تصنيف فيفا",coach:"المدرب",conf:"الاتحاد",qual:"التأهل",keyPlayers:"أبرز اللاعبين",remind:"🔔 ذكّرني",reminded:"🔔 تم",predict:"توقّع — من يفوز؟",draw:"تعادل",addCal:"📅 التقويم",share:"↗ مشاركة",venue:"الملعب",cap:"السعة",stage:"الدور",noFav:"لا مفضلات بعد. اضغط ⭐ على مباراة لمتابعة منتخب.",weather:"طقس مدينة المباراة",loadingW:"جارٍ تحميل الطقس…",jumpToday:"⚽ اليوم",installApp:"⬇ تثبيت",spotlight:"⭐ أبرز اللاعبين",addedFav:"أُضيف للمفضلة ⭐",removedFav:"أُزيل من المفضلة",remindSet:"تم ضبط التذكير — قبل ١٥ دقيقة 🔔",voteToast:"حُفظ التوقّع ✓",copied:"نُسخ الرابط ✓",qualified:"يتأهل للأدوار الإقصائية",statTitle:"إحصائيات البطولة",stTotalG:"مجموع الأهداف",stAvg:"معدل الأهداف للمباراة",stHigh:"أعلى مباراة تهديفًا",stBig:"أكبر فوز",stClean:"شِباك نظيفة",stByGroup:"الأهداف حسب المجموعة",noStat:"تظهر الإحصائيات بعد لعب المباريات.",matches:"المباريات",teamMatches:"كل المباريات",tabSim:"🔮 محاكاة",simTitle:"محاكي دور المجموعات",simHint:"اضغط ＋/− لمحاكاة المباريات المتبقية — الترتيب يتحدث فوراً",qualBadge:"م ✓",thirdBadge:"ثالث",elimBadge:"خارج",resetGrp:"↺ إعادة",gbTitle:"الحذاء الذهبي — الهدافون",egypt:"🇪🇬 مصر",feedback:"قيّم وعلّق",rateThis:"كيف تقيّم هذا الموقع؟",yourName:"اسمك (اختياري)",yourComment:"اكتب تعليقًا…",sendFb:"إرسال التقييم",fbNote:"تقييمك وتعليقاتك تساعد في تحسين الموقع.",recentCmts:"أحدث التعليقات",noCmts:"لا تعليقات بعد — كن أول من يعلّق!",fbThanks:"شكرًا لملاحظاتك! ✓",fbEmpty:"الرجاء إضافة تقييم أو تعليق.",sfOn:"وضع إخفاء النتائج مفعّل — انقر على أي نتيجة لإظهارها",sfOff:"إخفاء النتائج (بدون إفساد)",sfBar:"🙈 وضع إخفاء النتائج مفعّل — انقر على أي نتيجة لإظهارها",scoresUpdated:"تم تحديث النتائج \u2713",winProb:"احتمالية الفوز (نموذج)",predNote:"نموذج مبسّط من تصنيف فيفا والأداء الأخير \u2014 للمتعة فقط.",tabLeague:"🏅 الدوري",leagueTitle:"دوري التوقعات",leagueHint:"صوّت على المباريات ثم شارك رابطك مع أصحابك — من يفتح الرابط ينضم لدوريك. الأكثر توقعات صحيحة يفوز!",leagueShare:"📲 شارك توقعاتي",leagueCopy:"انسخ الرابط",myName:"اسمك الظاهر",emptyLeague:"أنت الوحيد هنا. اضغط شارك لدعوة الأصدقاء!",me:"أنت",pts2:"نقطة",correct:"صحيحة",addFriend:"➕ يريد {name} الانضمام لدوريك. إضافة؟",friendAdded:"✓ تمت إضافة {name} للدوري",friendDupe:"{name} موجود بالفعل (تم التحديث)",removeFriend:"إزالة",picksMade:"توقع",rank:"الترتيب",overallLeader:"🥇 المتصدر",noPicks:"لا توجد توقعات بعد — صوّت على المباريات أولاً",linkCopied:"تم نسخ الرابط! أرسله عبر واتساب ✨",privacy:"الخصوصية",privacyNote:"يحفظ الموقع توقعاتك ولغتك في متصفحك فقط. لا نجمع بيانات شخصية دون موافقة. اطلع على سياسة الخصوصية.",cookieMsg:"يستخدم هذا الموقع التخزين المحلي وGoogle Analytics لتحسين تجربتك. باستخدامك الموقع فأنت توافق.",accept:"موافق",decline:"رفض",learnMore:"المزيد"}};
 
 /* ============ SAFE STORAGE ============ */
 const store={get(k,d){try{const v=localStorage.getItem(k);return v==null?d:JSON.parse(v)}catch{return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch{}}};
@@ -478,6 +480,8 @@ let filter="all",query="",tab="schedule",day="all";
 let favs=store.get("wc_favs",[]),votes=store.get("wc_votes",{}),notifs=store.get("wc_notifs",{});
 let spoilerFree=store.get("wc_spoiler",false);
 let simScores=store.get("wc_sim",{});
+let friends=store.get("wc_friends",[]);
+let consentChoice=store.get("wc_consent",null);
 let deferredPrompt=null,lastFocus=null;
 const t=()=>I[lang],tn=n=>lang==="ar"?(TEAM_AR[n]||n):n,tc=c=>lang==="ar"?(CITY_AR[c]||c):c;
 const KO_S=["R32","R16","QF","SF","3rd","Final"];
@@ -635,7 +639,7 @@ document.addEventListener("keydown",e=>{if(e.key==="Escape"&&document.getElement
 document.addEventListener("keydown",e=>{if((e.key==="Enter"||e.key===" ")&&e.target&&e.target.matches&&e.target.matches('[role="button"]')&&!["BUTTON","A","INPUT","TEXTAREA","SELECT"].includes(e.target.tagName)){e.preventDefault();e.target.click()}});
 
 /* ============ RENDER ============ */
-const TABS=[["schedule","tabSch"],["groups","tabGrp"],["bracket","tabBrk"],["stats","tabStat"],["favorites","tabFav"],["sim","tabSim"]];
+const TABS=[["schedule","tabSch"],["groups","tabGrp"],["bracket","tabBrk"],["stats","tabStat"],["favorites","tabFav"],["sim","tabSim"],["league","tabLeague"]];
 const CHIP_K=["all","eg","ksa","ko","A","B","C","D","E","F","G","H","I","J","K","L"];
 function renderChips(){document.getElementById("datestrip").innerHTML=dateStripHTML();document.getElementById("chips").innerHTML=CHIP_K.map(k=>{const lbl={all:t().all,eg:t().egypt,ksa:t().ksa,ko:t().ko}[k]||(t().grp+" "+k);return`<div class="chip${filter===k&&day==="all"?" on":""}" onclick="setFilter('${k}')" role="button" tabindex="0">${lbl}</div>`}).join("")}
 window.setFilter=function(k){filter=k;day="all";query="";document.getElementById("search").value="";renderChips();renderContent()}
@@ -648,7 +652,7 @@ const sfb=document.getElementById("sfBar");if(sfb)sfb.textContent=spoilerFree?t(
 document.getElementById("tabBar").innerHTML=TABS.map(([k,l])=>`<button class="tab${tab===k?" on":""}" onclick="setTab('${k}')" role="tab" aria-selected="${tab===k}">${t()[l]}</button>`).join("");
 document.getElementById("scheduleControls").style.display=tab==="schedule"?"block":"none";document.getElementById("todayFab").classList.toggle("show",false);renderChips();renderNations();renderContent()}
 window.setTab=function(k){tab=k;if(window.trackTab)trackTab(k);render()}
-function renderContent(){const el=document.getElementById("content");if(tab==="schedule")el.innerHTML=`<div class="sec">${schHTML()}</div>`;else if(tab==="groups")el.innerHTML=`<div class="sec">${grpHTML()}</div>`;else if(tab==="bracket")el.innerHTML=brkHTML();else if(tab==="stats")el.innerHTML=statsHTML();else if(tab==="favorites")el.innerHTML=favHTML();else if(tab==="sim")el.innerHTML=simHTML();
+function renderContent(){const el=document.getElementById("content");if(tab==="schedule")el.innerHTML=`<div class="sec">${schHTML()}</div>`;else if(tab==="groups")el.innerHTML=`<div class="sec">${grpHTML()}</div>`;else if(tab==="bracket")el.innerHTML=brkHTML();else if(tab==="stats")el.innerHTML=statsHTML();else if(tab==="favorites")el.innerHTML=favHTML();else if(tab==="sim")el.innerHTML=simHTML();else if(tab==="league")el.innerHTML=leagueHTML();
 if(tab==="schedule"){const a=document.getElementById("todayAnchor");document.getElementById("todayFab").classList.toggle("show",!!a&&day==="all"&&filter==="all")}else document.getElementById("todayFab").classList.remove("show")}
 
 /* ============ EVENTS ============ */
@@ -670,11 +674,137 @@ async function fetchScores(initial){if(scoresMissing)return;try{const r=await fe
 function normTeam(x){x=(x||"").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");"&.'`-/".split("").forEach(ch=>{x=x.split(ch).join(" ")});x=x.replace(/\s+/g," ").trim();const al={"turkiye":"turkey","korea republic":"south korea","republic of korea":"south korea","ir iran":"iran","united states":"usa","united states of america":"usa","czechia":"czech republic","cote d ivoire":"ivory coast","cabo verde":"cape verde","cape verde islands":"cape verde","bosnia and herzegovina":"bosnia herzegovina","congo dr":"dr congo","democratic republic of congo":"dr congo"};return al[x]||x}
 function findFixtureByTeams(h,a){const H=normTeam(h),A=normTeam(a);return M.find(m=>{if(m.ph)return false;const mh=normTeam(m.h),ma=normTeam(m.a);return(mh===H&&ma===A)||(mh===A&&ma===H)})}
 async function autoLiveFetch(initial){let changed=0;const days=[];for(let i=0;i<3;i++)days.push(new Date(Date.now()-i*864e5).toISOString().slice(0,10));for(const d of days){try{const r=await fetch(`https://www.thesportsdb.com/api/v1/json/3/eventsday.php?d=${d}&s=Soccer`);if(!r.ok)continue;const j=await r.json();const evs=(j.events||[]).filter(e=>/world cup/i.test(e.strLeague||"")&&!/wom|u-?[12]?\d|qualif|youth|futsal|beach/i.test(e.strLeague||""));for(const e of evs){const hs=e.intHomeScore,as=e.intAwayScore;if(hs==null||as==null||hs===""||as==="")continue;const m=findFixtureByTeams(e.strHomeTeam,e.strAwayTeam);if(!m)continue;if(scoresMap[mId(m)]!=null)continue;const sc=normTeam(m.h)===normTeam(e.strHomeTeam)?`${hs}-${as}`:`${as}-${hs}`;if(m.s!==sc){m.s=sc;changed++}}}catch(e){}}if(changed){if(!initial)toast(t().scoresUpdated);refreshDynamic()}return changed}
-async function init(){await fetchScores(true);render();setTimeout(()=>{const a=document.getElementById("todayAnchor");if(a&&tab==="schedule")a.scrollIntoView({block:"center"})},150);setInterval(()=>fetchScores(false),60000);autoLiveFetch(true);setInterval(()=>autoLiveFetch(false),180000);loadNewsTicker();checkPendingReminders();setInterval(checkPendingReminders,60000);}
+async function init(){await fetchScores(true);render();setTimeout(()=>{const a=document.getElementById("todayAnchor");if(a&&tab==="schedule")a.scrollIntoView({block:"center"})},150);setInterval(()=>fetchScores(false),60000);autoLiveFetch(true);setInterval(()=>autoLiveFetch(false),180000);loadNewsTicker();checkPendingReminders();setInterval(checkPendingReminders,60000);handleIncomingPicks();setTimeout(showCookieBanner,1200);if(consentChoice==="accept")loadAdSense();}
 init();
 function updateCountdowns(){if(document.hidden)return;document.querySelectorAll(".nation").forEach(card=>{const team=card.dataset.team,list=M.filter(m=>m.h===team||m.a===team),now=Date.now(),next=list.find(m=>new Date(m.dt)>now);const cd=card.querySelector(".cd");if(!next||!cd)return;const diff=new Date(next.dt)-now;if(diff<=0)return;const bs=cd.querySelectorAll("b");if(bs.length===4){bs[0].textContent=String(Math.floor(diff/864e5)).padStart(2,"0");bs[1].textContent=String(Math.floor(diff%864e5/36e5)).padStart(2,"0");bs[2].textContent=String(Math.floor(diff%36e5/6e4)).padStart(2,"0");bs[3].textContent=String(Math.floor(diff%6e4/1e3)).padStart(2,"0")}})}
 setInterval(updateCountdowns,1000);
 document.addEventListener("visibilitychange",()=>{if(!document.hidden){updateCountdowns();fetchScores(false)}});
+/* ============ PICK'EM LEAGUE ============ */
+const VC={h:"1",d:"2",a:"3"},VCR={"1":"h","2":"d","3":"a"};
+function compactVotes(v){return M.map(m=>VC[v[mId(m)]]||"-").join("")}
+function expandVotes(s){const out={};if(typeof s!=="string")return out;for(let i=0;i<Math.min(s.length,M.length);i++){const v=VCR[s[i]];if(v)out[mId(M[i])]=v}return out}
+function encodePicks(){
+  const name=(store.get("wc_name","")||"").slice(0,20);
+  const payload={v:1,n:name,p:compactVotes(votes),f:favs.slice(0,9)};
+  try{return btoa(unescape(encodeURIComponent(JSON.stringify(payload)))).replace(/=+$/,"")}catch{return""}
+}
+function decodePicks(s){
+  try{const j=JSON.parse(decodeURIComponent(escape(atob(s+"==="))));if(j&&j.v===1)return j}catch{}return null;
+}
+function actualWinner(m){if(!m.s)return null;const[h,a]=m.s.split("-").map(Number);return h>a?"h":h<a?"a":"d"}
+function scoreVotes(v){let pts=0,total=0,decided=0;M.forEach(m=>{const pick=v[mId(m)];if(!pick)return;total++;const w=actualWinner(m);if(w==null)return;decided++;if(w===pick)pts++});return{pts,total,decided}}
+function memberRows(){
+  const rows=[{name:store.get("wc_name","")||t().me,votes:votes,me:true,addedAt:0}];
+  friends.forEach(f=>rows.push({name:f.name,votes:expandVotes(f.p||""),me:false,addedAt:f.t||0,favs:f.f||[]}));
+  return rows.map(r=>{const s=scoreVotes(r.votes);return{...r,...s}}).sort((a,b)=>b.pts-a.pts||b.decided-a.decided||b.total-a.total);
+}
+function leagueHTML(){
+  const isAr=lang==="ar";
+  const myName=store.get("wc_name","")||t().me;
+  const rows=memberRows();
+  const myPicks=Object.keys(votes).length;
+  let h=`<div class="sec"><div class="sim-banner"><div style="font-size:15px;font-weight:800;margin-bottom:3px">🏅 ${t().leagueTitle}</div><div style="font-size:11px;opacity:.9">${t().leagueHint}</div></div>`;
+  h+=`<div style="background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px;margin-bottom:10px;box-shadow:var(--shadow)">`;
+  h+=`<div class="fb-label" style="margin-bottom:6px">${t().myName}</div>`;
+  h+=`<input class="fb-in" id="leagueName" placeholder="${isAr?'مثلاً: أحمد':'e.g. Ahmed'}" value="${escapeHtml(store.get("wc_name",""))}" oninput="saveName(this.value);renderContent()" style="margin-bottom:10px"/>`;
+  h+=`<div style="display:flex;gap:8px;flex-wrap:wrap"><button class="hbtn gold" onclick="shareLeagueLink()" style="flex:1;padding:11px;font-size:13px;min-width:140px">${t().leagueShare}</button><button class="hbtn" onclick="copyLeagueLink()" style="background:var(--green);flex:1;padding:11px;font-size:13px;min-width:120px">${t().leagueCopy}</button></div>`;
+  if(!myPicks)h+=`<div style="margin-top:8px;font-size:12px;color:var(--muted)">${t().noPicks}</div>`;
+  h+=`</div>`;
+  if(rows.length===1){h+=`<div class="empty">${t().emptyLeague}</div></div>`;return h}
+  h+=`<div class="grp-card"><table class="grp-tbl"><thead><tr><th>${t().rank}</th><th>${t().team}</th><th>${t().pts}</th><th>${t().correct}</th><th></th></tr></thead><tbody>`;
+  rows.forEach((r,i)=>{
+    const medal=i===0?"🥇":i===1?"🥈":i===2?"🥉":(i+1);
+    const meTag=r.me?` <span style="font-size:10px;color:var(--green);font-weight:700">(${t().me})</span>`:"";
+    const idx=friends.findIndex(f=>f.name===r.name&&!r.me);
+    const rm=r.me?"":`<button class="chip" style="font-size:10px;padding:3px 8px" onclick="removeFriend(${idx})">${t().removeFriend}</button>`;
+    h+=`<tr class="${r.me?"qual":""}"><td class="pos">${medal}</td><td><b>${escapeHtml(r.name)}</b>${meTag}<div style="font-size:10px;color:var(--muted)">${r.total} ${t().picksMade}</div></td><td class="pts">${r.pts}</td><td>${r.pts}/${r.decided||0}</td><td>${rm}</td></tr>`;
+  });
+  h+=`</tbody></table></div></div>`;
+  return h;
+}
+function leagueURL(){
+  const code=encodePicks();if(!code)return location.href;
+  const u=new URL(location.origin+location.pathname);u.searchParams.set("picks",code);if(lang==="ar")u.searchParams.set("lang","ar");
+  return u.toString();
+}
+window.shareLeagueLink=async function(){
+  const myName=(store.get("wc_name","")||"").trim();
+  if(!myName){toast(lang==="ar"?"أدخل اسمك أولاً":"Enter your name first");const el=document.getElementById("leagueName");if(el)el.focus();return}
+  if(!Object.keys(votes).length){toast(t().noPicks);return}
+  const url=leagueURL();
+  const txt=(lang==="ar"?`انضم لدوري توقعاتي لكأس العالم 2026! 🏆 توقعاتي:`:`Join my World Cup 2026 league! 🏆 My picks:`)+" "+url;
+  if(window.trackEvent)trackEvent("league_share",{picks:Object.keys(votes).length});
+  try{if(navigator.share){await navigator.share({title:"WC 2026 Pick'em",text:txt,url});return}}catch{}
+  try{await navigator.clipboard.writeText(txt);toast(t().linkCopied)}catch{toast(url)}
+};
+window.copyLeagueLink=async function(){
+  if(!Object.keys(votes).length){toast(t().noPicks);return}
+  try{await navigator.clipboard.writeText(leagueURL());toast(t().linkCopied);if(window.trackEvent)trackEvent("league_copy")}catch{}
+};
+window.removeFriend=function(idx){if(idx<0||idx>=friends.length)return;friends.splice(idx,1);store.set("wc_friends",friends);renderContent()};
+function handleIncomingPicks(){
+  try{
+    const u=new URL(location.href),pk=u.searchParams.get("picks");
+    if(!pk)return;
+    const data=decodePicks(pk);
+    if(!data)return;
+    // Clean URL so refresh doesn't re-prompt
+    u.searchParams.delete("picks");history.replaceState(null,"",u);
+    if(!data.n){toast("Invalid pick'em link");return}
+    const friendName=data.n.slice(0,20);
+    const myName=(store.get("wc_name","")||"").trim();
+    if(myName&&friendName.toLowerCase()===myName.toLowerCase())return; // ignore self-share
+    setTimeout(()=>{
+      const msg=t().addFriend.replace("{name}",friendName);
+      if(confirm(msg)){
+        const existing=friends.findIndex(f=>f.name.toLowerCase()===friendName.toLowerCase());
+        if(existing>=0){friends[existing]={name:friendName,p:data.p||"",f:data.f||[],t:Date.now()};toast(t().friendDupe.replace("{name}",friendName))}
+        else{friends.push({name:friendName,p:data.p||"",f:data.f||[],t:Date.now()});toast(t().friendAdded.replace("{name}",friendName))}
+        store.set("wc_friends",friends);
+        if(window.trackEvent)trackEvent("league_friend_added");
+        tab="league";render();
+      }
+    },400);
+  }catch{}
+}
+
+/* ============ COOKIE CONSENT ============ */
+function showCookieBanner(){
+  if(consentChoice)return;
+  const isAr=lang==="ar";
+  const b=document.createElement("div");
+  b.id="cookieBanner";
+  b.style.cssText="position:fixed;bottom:0;left:0;right:0;background:var(--ink);color:var(--bg);padding:14px 16px;z-index:300;box-shadow:0 -4px 20px rgba(0,0,0,.3);font-size:13px;display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:center";
+  b.innerHTML=`<span style="flex:1;min-width:200px;max-width:520px;line-height:1.5">${t().cookieMsg} <a href="privacy.html" style="color:var(--gold);text-decoration:underline">${t().learnMore}</a></span><button onclick="setConsent('decline')" style="background:transparent;color:var(--bg);border:1px solid var(--bg);padding:8px 14px;border-radius:8px;font-weight:700;font-size:12px;cursor:pointer">${t().decline}</button><button onclick="setConsent('accept')" style="background:var(--gold);color:#022c22;border:none;padding:8px 16px;border-radius:8px;font-weight:800;font-size:12px;cursor:pointer">${t().accept}</button>`;
+  document.body.appendChild(b);
+}
+window.setConsent=function(choice){
+  consentChoice=choice;store.set("wc_consent",choice);
+  const b=document.getElementById("cookieBanner");if(b)b.remove();
+  if(window.trackEvent)trackEvent("consent",{choice});
+};
+
+/* ============ ADSENSE SCAFFOLD ============ */
+// To activate: paste your AdSense publisher ID (format: ca-pub-XXXXXXXXXXXXXXXX)
+// AFTER your site is approved by Google AdSense. Until then, nothing renders.
+const ADSENSE_PUB_ID="";
+const ADSENSE_SLOTS={header:"",inline:"",footer:""}; // fill in slot IDs after creating ad units
+function loadAdSense(){
+  if(!ADSENSE_PUB_ID||consentChoice!=="accept")return;
+  if(document.getElementById("adsense-script"))return;
+  const s=document.createElement("script");
+  s.id="adsense-script";s.async=true;s.crossOrigin="anonymous";
+  s.src=`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_PUB_ID}`;
+  document.head.appendChild(s);
+  document.querySelectorAll('.ad-slot').forEach(slot=>{
+    const placement=slot.dataset.placement;
+    const slotId=ADSENSE_SLOTS[placement]||"";
+    if(!slotId)return;
+    slot.innerHTML=`<ins class="adsbygoogle" style="display:block" data-ad-client="${ADSENSE_PUB_ID}" data-ad-slot="${slotId}" data-ad-format="auto" data-full-width-responsive="true"></ins>`;
+    try{(window.adsbygoogle=window.adsbygoogle||[]).push({})}catch{}
+  });
+}
+
 /* ============ SHAREABLE BRACKET IMAGE ============ */
 window.shareBracket=async function(){
   const isAr=lang==="ar";
