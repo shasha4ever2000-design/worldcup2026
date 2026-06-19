@@ -1,0 +1,84 @@
+// Drift guard: the pure logic also lives inline in index.html (and the alias
+// map is duplicated again in update_scores.py). These tests fail loudly if the
+// canonical copy in src/logic.mjs ever diverges from what actually ships.
+import { describe, it, expect } from "vitest";
+import { readFileSync } from "node:fs";
+import { fileURLToPath } from "node:url";
+import { dirname, join } from "node:path";
+import { ALIASES, normTeam } from "../src/logic.mjs";
+import { extractInPageAliases, M, GROUPS, TEAM_INFO } from "./helpers.mjs";
+
+const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
+
+describe("normTeam alias parity", () => {
+  it("index.html's in-page alias map matches src/logic.mjs", () => {
+    expect(extractInPageAliases()).toEqual(ALIASES);
+  });
+
+  it("update_scores.py covers every alias the site uses", () => {
+    const py = readFileSync(join(ROOT, "update_scores.py"), "utf8");
+    // crude but effective: each canonical site name must appear as a python value
+    for (const [from, to] of Object.entries(ALIASES)) {
+      expect(py, `python ALIAS should map "${from}" -> "${to}"`).toContain(`"${to}"`);
+    }
+  });
+});
+
+describe("in-page functions behave like the module", () => {
+  // Extract a named `function foo(...) {...}` body from index.html and rebuild it.
+  function extractFn(name) {
+    const html = readFileSync(join(ROOT, "index.html"), "utf8");
+    const start = html.indexOf(`function ${name}(`);
+    if (start < 0) throw new Error(`function ${name} not found`);
+    let depth = 0,
+      i = html.indexOf("{", start),
+      inStr = null,
+      started = false;
+    for (; i < html.length; i++) {
+      const c = html[i];
+      if (inStr) {
+        if (c === "\\") i++;
+        else if (c === inStr) inStr = null;
+        continue;
+      }
+      if (c === '"' || c === "'" || c === "`") inStr = c;
+      else if (c === "{") {
+        depth++;
+        started = true;
+      } else if (c === "}") {
+        depth--;
+        if (started && depth === 0) {
+          i++;
+          break;
+        }
+      }
+    }
+    const body = html.slice(html.indexOf("(", start), i);
+    // eslint-disable-next-line no-eval
+    return eval(`(function ${name}${body})`);
+  }
+
+  it("normTeam matches for a spread of inputs", () => {
+    const inPage = extractFn("normTeam");
+    const samples = [
+      "Türkiye",
+      "Côte d'Ivoire",
+      "Korea Republic",
+      "United States of America",
+      "Bosnia & Herzegovina",
+      "Curaçao",
+      "Brazil",
+      "",
+      null,
+    ];
+    samples.forEach((s) => expect(inPage(s)).toBe(normTeam(s)));
+  });
+});
+
+describe("extracted data sanity", () => {
+  it("exposes the expected data shapes", () => {
+    expect(Array.isArray(M)).toBe(true);
+    expect(Object.keys(GROUPS)).toHaveLength(12);
+    expect(TEAM_INFO).toHaveProperty("Saudi Arabia");
+  });
+});

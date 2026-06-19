@@ -4,6 +4,7 @@
 // newly finished scores into scores.json. Designed to run from a GitHub Action.
 
 import { readFileSync, writeFileSync, existsSync } from "node:fs";
+import { normTeam } from "./src/logic.mjs";
 
 const HTML = readFileSync("index.html", "utf8");
 const SCORES_PATH = "scores.json";
@@ -33,29 +34,7 @@ const scores = existsSync(SCORES_PATH)
   ? JSON.parse(readFileSync(SCORES_PATH, "utf8"))
   : {};
 
-// --- Team-name normaliser (matches the one in index.html) ------------------
-const COMBINING_MARKS = new RegExp("[\\u0300-\\u036f]", "g");
-function normTeam(x) {
-  x = (x || "").toLowerCase().normalize("NFD").replace(COMBINING_MARKS, "");
-  for (const ch of "&.'`-/") x = x.split(ch).join(" ");
-  x = x.replace(/\s+/g, " ").trim();
-  const al = {
-    "turkiye": "turkey",
-    "korea republic": "south korea",
-    "republic of korea": "south korea",
-    "ir iran": "iran",
-    "united states": "usa",
-    "united states of america": "usa",
-    "czechia": "czech republic",
-    "cote d ivoire": "ivory coast",
-    "cabo verde": "cape verde",
-    "cape verde islands": "cape verde",
-    "bosnia and herzegovina": "bosnia herzegovina",
-    "congo dr": "dr congo",
-    "democratic republic of congo": "dr congo",
-  };
-  return al[x] || x;
-}
+// --- Team-name normaliser is imported from src/logic.mjs (single source) ---
 
 // --- Decide which calendar dates to query ----------------------------------
 // Every fixture whose kickoff is in the past AND has no score yet.

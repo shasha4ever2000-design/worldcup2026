@@ -28,6 +28,25 @@ football-data.org API → GitHub Action (every ~10 min) → scores.json → site
 - `.github/scripts/update_scores.py` — fetches results, matches them to `fixtures.json`, writes `scores.json`
 - Requires a free API token stored in the repo secret `FOOTBALL_DATA_TOKEN`
 
+## Tests
+
+The pure logic (standings, prediction model, team-name normalisation, pick'em
+encode/decode), the fixture data, the service-worker caching strategies, and the
+score-updater scripts are covered by automated tests. CI runs them on every PR
+(`.github/workflows/ci.yml`).
+
+```bash
+npm install            # one-time: installs vitest + playwright
+npm test               # JS unit tests (vitest)
+npm run test:coverage  # JS unit tests + coverage report
+npm run test:e2e       # browser smoke tests (playwright; needs `npx playwright install`)
+pip install pytest && python -m pytest -q   # Python tests for update_scores.py
+```
+
+`src/logic.mjs` is the single, tested source of truth for the site's pure logic;
+`tests/parity.test.mjs` guards the copies still inlined in `index.html` from
+silently drifting from it.
+
 ## Credits
 
 Created and designed by **Ahmed Hussein**, with [Claude AI](https://claude.ai).

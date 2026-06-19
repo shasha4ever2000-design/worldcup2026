@@ -11,13 +11,13 @@ to site visitors. Get a free token at https://www.football-data.org/client/regis
 Use API-Football (https://www.api-football.com, free 100 req/day). Swap the
 fetch() block below for their /fixtures?league=1&season=2026 endpoint and read
 fixture.goals.home / fixture.goals.away. The matching logic stays the same.
+
+The pure helpers (norm/canon/build_lookup/match_scores) are import-safe so they
+can be unit-tested without a token or network access. The script body runs only
+under `python update_scores.py` via the __main__ guard.
 """
 import json, os, sys, unicodedata, urllib.request
 from datetime import datetime, timezone
-
-TOKEN = os.environ.get("FOOTBALL_DATA_TOKEN", "").strip()
-if not TOKEN:
-    print("No FOOTBALL_DATA_TOKEN set — skipping."); sys.exit(0)
 
 # Map the API's team spellings -> the spelling used on the site (normalised form)
 ALIAS = {
@@ -41,58 +41,77 @@ def canon(name):
 def parse_iso(s):
     return datetime.fromisoformat(s.replace("Z","+00:00"))
 
-# Load the fixture map and current scores
-try: fixtures = json.load(open("fixtures.json", encoding="utf-8"))
-except Exception as e: print("Cannot read fixtures.json:", e); sys.exit(1)
-try: scores = json.load(open("scores.json", encoding="utf-8"))
-except Exception: scores = {}
+def build_lookup(fixtures):
+    """Index fixtures by the unordered, canonicalised team pair."""
+    lookup = {}
+    for fx in fixtures:
+        key = frozenset({canon(fx["h"]), canon(fx["a"])})
+        udate = parse_iso(fx["dt"]).astimezone(timezone.utc).date()
+        lookup.setdefault(key, []).append((udate, fx))
+    return lookup
 
-# Index fixtures by the unordered team pair
-lookup = {}
-for fx in fixtures:
-    key = frozenset({canon(fx["h"]), canon(fx["a"])})
-    udate = parse_iso(fx["dt"]).astimezone(timezone.utc).date()
-    lookup.setdefault(key, []).append((udate, fx))
+def match_scores(api_matches, lookup, scores):
+    """
+    Apply finished/in-play API results onto the scores dict (mutated in place).
+    Returns (changed, matched, unmatched). Pure: no IO, no network.
+    """
+    changed = 0; matched = 0; unmatched = []
+    for m in api_matches:
+        status = m.get("status")
+        ft = (m.get("score") or {}).get("fullTime") or {}
+        gh, ga = ft.get("home"), ft.get("away")
+        if status not in ("FINISHED","IN_PLAY","PAUSED") or gh is None or ga is None:
+            continue
+        hn = (m.get("homeTeam") or {}).get("name","")
+        an = (m.get("awayTeam") or {}).get("name","")
+        key = frozenset({canon(hn), canon(an)})
+        cands = lookup.get(key)
+        if not cands:
+            unmatched.append(f"{hn} vs {an}"); continue
+        apidate = parse_iso(m.get("utcDate","2026-01-01T00:00:00Z")).date()
+        _, fx = min(cands, key=lambda c: abs((c[0]-apidate).days))
+        # orient score to the site's home/away
+        sc = f"{gh}-{ga}" if canon(fx["h"]) == canon(hn) else f"{ga}-{gh}"
+        fk = f'{fx["dt"]}|{fx["h"]}|{fx["a"]}'
+        matched += 1
+        if scores.get(fk) != sc:
+            scores[fk] = sc; changed += 1; print(f"  {fk} = {sc} ({status})")
+    return changed, matched, unmatched
 
-# Fetch from football-data.org
-req = urllib.request.Request(
-    "https://api.football-data.org/v4/competitions/WC/matches",
-    headers={"X-Auth-Token": TOKEN})
-try:
-    with urllib.request.urlopen(req, timeout=40) as r:
-        data = json.load(r)
-except Exception as e:
-    print("API request failed:", e); sys.exit(1)
+def main():
+    token = os.environ.get("FOOTBALL_DATA_TOKEN", "").strip()
+    if not token:
+        print("No FOOTBALL_DATA_TOKEN set — skipping."); return 0
 
-api_matches = data.get("matches", [])
-print(f"API returned {len(api_matches)} matches.")
+    try: fixtures = json.load(open("fixtures.json", encoding="utf-8"))
+    except Exception as e: print("Cannot read fixtures.json:", e); return 1
+    try: scores = json.load(open("scores.json", encoding="utf-8"))
+    except Exception: scores = {}
 
-changed = 0; matched = 0; unmatched = []
-for m in api_matches:
-    status = m.get("status")
-    ft = (m.get("score") or {}).get("fullTime") or {}
-    gh, ga = ft.get("home"), ft.get("away")
-    if status not in ("FINISHED","IN_PLAY","PAUSED") or gh is None or ga is None:
-        continue
-    hn = (m.get("homeTeam") or {}).get("name","")
-    an = (m.get("awayTeam") or {}).get("name","")
-    key = frozenset({canon(hn), canon(an)})
-    cands = lookup.get(key)
-    if not cands:
-        unmatched.append(f"{hn} vs {an}"); continue
-    apidate = parse_iso(m.get("utcDate","2026-01-01T00:00:00Z")).date()
-    _, fx = min(cands, key=lambda c: abs((c[0]-apidate).days))
-    # orient score to the site's home/away
-    sc = f"{gh}-{ga}" if canon(fx["h"]) == canon(hn) else f"{ga}-{gh}"
-    fk = f'{fx["dt"]}|{fx["h"]}|{fx["a"]}'
-    matched += 1
-    if scores.get(fk) != sc:
-        scores[fk] = sc; changed += 1; print(f"  {fk} = {sc} ({status})")
+    lookup = build_lookup(fixtures)
 
-print(f"Matched {matched} | updated {changed} | unmatched {len(unmatched)}")
-if unmatched: print("Unmatched (add to ALIAS if real):", unmatched[:20])
+    req = urllib.request.Request(
+        "https://api.football-data.org/v4/competitions/WC/matches",
+        headers={"X-Auth-Token": token})
+    try:
+        with urllib.request.urlopen(req, timeout=40) as r:
+            data = json.load(r)
+    except Exception as e:
+        print("API request failed:", e); return 1
 
-# Write sorted for clean diffs
-out = json.dumps(dict(sorted(scores.items())), ensure_ascii=False, indent=2)
-open("scores.json","w",encoding="utf-8").write(out + "\n")
-print(f"Wrote scores.json with {len(scores)} results.")
+    api_matches = data.get("matches", [])
+    print(f"API returned {len(api_matches)} matches.")
+
+    changed, matched, unmatched = match_scores(api_matches, lookup, scores)
+
+    print(f"Matched {matched} | updated {changed} | unmatched {len(unmatched)}")
+    if unmatched: print("Unmatched (add to ALIAS if real):", unmatched[:20])
+
+    # Write sorted for clean diffs
+    out = json.dumps(dict(sorted(scores.items())), ensure_ascii=False, indent=2)
+    open("scores.json","w",encoding="utf-8").write(out + "\n")
+    print(f"Wrote scores.json with {len(scores)} results.")
+    return 0
+
+if __name__ == "__main__":
+    sys.exit(main())
