@@ -214,3 +214,43 @@ export function scoreVotes(v, M) {
   });
   return { pts, total, decided };
 }
+
+// ------------------------------- SEO schema --------------------------------
+
+/**
+ * Build a schema.org ItemList of SportsEvent entries from the fixture list —
+ * one per real (non-placeholder) match. Injected as JSON-LD for rich results.
+ */
+export function buildMatchSchema(
+  M,
+  VENUES = {},
+  baseUrl = "https://shasha4ever2000-design.github.io/worldcup2026/",
+) {
+  const itemListElement = M.filter((m) => !m.ph && m.h && m.a).map((m, i) => {
+    const venue = VENUES[m.c];
+    return {
+      "@type": "ListItem",
+      position: i + 1,
+      item: {
+        "@type": "SportsEvent",
+        name: `${m.h} vs ${m.a}`,
+        sport: "Football",
+        startDate: m.dt,
+        eventStatus: "https://schema.org/EventScheduled",
+        location: { "@type": "Place", name: (venue ? venue[0] + ", " : "") + (m.c || "") },
+        competitor: [
+          { "@type": "SportsTeam", name: m.h },
+          { "@type": "SportsTeam", name: m.a },
+        ],
+        url: baseUrl,
+      },
+    };
+  });
+  return {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name: "FIFA World Cup 2026 Matches",
+    numberOfItems: itemListElement.length,
+    itemListElement,
+  };
+}

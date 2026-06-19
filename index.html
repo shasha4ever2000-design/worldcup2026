@@ -241,6 +241,16 @@ body.sf .dval-score:hover,body.sf .dval-score:focus{filter:none}
 .gb-name{font-size:13px;font-weight:700}
 .gb-team{font-size:10px;color:var(--muted);margin-top:1px}
 .gb-goals{font-size:20px;font-weight:800;color:var(--green);flex-shrink:0}
+/* Motion layer (Sprint 1) — all gated by the reduced-motion rule below */
+@media (prefers-reduced-motion:no-preference){
+  ::view-transition-old(root),::view-transition-new(root){animation-duration:.28s;animation-timing-function:cubic-bezier(.4,0,.2,1)}
+  .mc,.brk-m,.fav-card,.dcard{transition:transform .18s cubic-bezier(.34,1.56,.64,1),box-shadow .18s ease}
+  .mc:hover,.brk-m:hover,.fav-card:hover{transform:translateY(-2px)}
+  .mc:active,.brk-m:active,.fav-card:active{transform:scale(.985)}
+  #content>.sec,#content>.bracket,#content>.statsv,#content>.myteams{animation:fadeIn .32s cubic-bezier(.4,0,.2,1) both}
+}
+.mc:focus-visible,.brk-m:focus-visible,.fav-card:focus-visible,.tab:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+#confettiCanvas{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:9999}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
 </style>
 </head>
@@ -653,7 +663,7 @@ const tlbl=document.getElementById("t_ticker_lbl");if(tlbl)tlbl.textContent=lang
 const sfb=document.getElementById("sfBar");if(sfb)sfb.textContent=spoilerFree?t().sfBar:"";
 document.getElementById("tabBar").innerHTML=TABS.map(([k,l])=>`<button class="tab${tab===k?" on":""}" onclick="setTab('${k}')" role="tab" aria-selected="${tab===k}">${t()[l]}</button>`).join("");
 document.getElementById("scheduleControls").style.display=tab==="schedule"?"block":"none";document.getElementById("todayFab").classList.toggle("show",false);renderChips();renderNations();renderContent()}
-window.setTab=function(k){tab=k;if(window.trackTab)trackTab(k);render()}
+window.setTab=function(k){tab=k;if(window.trackTab)trackTab(k);if(document.startViewTransition&&matchMedia("(prefers-reduced-motion: no-preference)").matches){document.startViewTransition(()=>render())}else{render()}}
 function renderContent(){const el=document.getElementById("content");if(tab==="schedule")el.innerHTML=`<div class="sec">${schHTML()}</div>`;else if(tab==="groups")el.innerHTML=`<div class="sec">${grpHTML()}</div>`;else if(tab==="bracket")el.innerHTML=brkHTML();else if(tab==="stats")el.innerHTML=statsHTML();else if(tab==="favorites")el.innerHTML=favHTML();else if(tab==="sim")el.innerHTML=simHTML();else if(tab==="league")el.innerHTML=leagueHTML();
 if(tab==="schedule"){const a=document.getElementById("todayAnchor");document.getElementById("todayFab").classList.toggle("show",!!a&&day==="all"&&filter==="all")}else document.getElementById("todayFab").classList.remove("show")}
 
@@ -669,14 +679,38 @@ document.getElementById("installBtn").onclick=async()=>{if(!deferredPrompt)retur
 
 /* ============ INIT ============ */
 function refreshDynamic(){const dl=document.getElementById("dashboard");if(dl)dl.innerHTML=dashHTML();renderNations();renderContent()}
+/* ---- SEO: per-match SportsEvent JSON-LD (mirrors src/logic.mjs) ---------- */
+function buildMatchSchema(M,VENUES={},baseUrl="https://shasha4ever2000-design.github.io/worldcup2026/"){
+  const itemListElement=M.filter(m=>!m.ph&&m.h&&m.a).map((m,i)=>{const venue=VENUES[m.c];return{"@type":"ListItem",position:i+1,item:{"@type":"SportsEvent",name:`${m.h} vs ${m.a}`,sport:"Football",startDate:m.dt,eventStatus:"https://schema.org/EventScheduled",location:{"@type":"Place",name:(venue?venue[0]+", ":"")+(m.c||"")},competitor:[{"@type":"SportsTeam",name:m.h},{"@type":"SportsTeam",name:m.a}],url:baseUrl}}});
+  return{"@context":"https://schema.org","@type":"ItemList","name":"FIFA World Cup 2026 Matches",numberOfItems:itemListElement.length,itemListElement};
+}
+function injectMatchSchema(){try{const s=document.createElement("script");s.type="application/ld+json";s.id="matchSchema";s.textContent=JSON.stringify(buildMatchSchema(M,VENUES));const old=document.getElementById("matchSchema");if(old)old.remove();document.head.appendChild(s)}catch(e){}}
+/* ---- Live goal celebration (zero-dependency, reduced-motion aware) ------- */
+function celebrateGoal(){
+  if(!matchMedia("(prefers-reduced-motion: no-preference)").matches)return;
+  if(document.hidden)return;
+  let c=document.getElementById("confettiCanvas");
+  if(!c){c=document.createElement("canvas");c.id="confettiCanvas";document.body.appendChild(c)}
+  const ctx=c.getContext("2d"),DPR=Math.min(devicePixelRatio||1,2);
+  c.width=innerWidth*DPR;c.height=innerHeight*DPR;ctx.scale(DPR,DPR);
+  const cols=["#16a34a","#facc15","#2563eb","#f43f5e","#ffffff"];
+  const N=Math.min(90,Math.round(innerWidth/6));
+  const P=Array.from({length:N},()=>({x:innerWidth/2+(Math.random()-.5)*120,y:innerHeight*.32,vx:(Math.random()-.5)*9,vy:Math.random()*-9-4,r:4+Math.random()*4,col:cols[Math.random()*cols.length|0],rot:Math.random()*6.28,vr:(Math.random()-.5)*.4,a:1}));
+  const t0=performance.now();
+  (function frame(t){const dt=Math.min(33,t-(frame._l||t));frame._l=t;ctx.clearRect(0,0,innerWidth,innerHeight);let alive=false;
+    for(const p of P){p.vy+=.22;p.x+=p.vx;p.y+=p.vy;p.rot+=p.vr;p.a=Math.max(0,1-(t-t0)/1500);if(p.a>0&&p.y<innerHeight+20){alive=true;ctx.save();ctx.globalAlpha=p.a;ctx.translate(p.x,p.y);ctx.rotate(p.rot);ctx.fillStyle=p.col;ctx.fillRect(-p.r,-p.r/2,p.r*2,p.r);ctx.restore()}}
+    if(alive)requestAnimationFrame(frame);else{ctx.clearRect(0,0,innerWidth,innerHeight);c.remove()}
+  })(t0);
+  vibrate(20);
+}
 let lastScoresRaw="";
 let scoresMap={};
 let scoresMissing=false;
-async function fetchScores(initial){if(scoresMissing)return;try{const r=await fetch("scores.json?_="+Date.now(),{cache:"no-store"});if(r.status===404){scoresMissing=true;return}if(!r.ok)return;const txt=await r.text();if(txt===lastScoresRaw)return;lastScoresRaw=txt;const sc=JSON.parse(txt);scoresMap=sc;let changed=0;M.forEach(m=>{const k=mId(m);if(sc[k]!=null&&m.s!==sc[k]){m.s=sc[k];changed++}});if(!initial&&changed){toast(t().scoresUpdated);refreshDynamic()}}catch(e){}}
+async function fetchScores(initial){if(scoresMissing)return;try{const r=await fetch("scores.json?_="+Date.now(),{cache:"no-store"});if(r.status===404){scoresMissing=true;return}if(!r.ok)return;const txt=await r.text();if(txt===lastScoresRaw)return;lastScoresRaw=txt;const sc=JSON.parse(txt);scoresMap=sc;let changed=0,favGoal=false;M.forEach(m=>{const k=mId(m);if(sc[k]!=null&&m.s!==sc[k]){m.s=sc[k];changed++;if(favs.includes(m.h)||favs.includes(m.a))favGoal=true}});if(!initial&&changed){toast(t().scoresUpdated);refreshDynamic();if(favGoal)celebrateGoal()}}catch(e){}}
 function normTeam(x){x=(x||"").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");"&.'`-/".split("").forEach(ch=>{x=x.split(ch).join(" ")});x=x.replace(/\s+/g," ").trim();const al={"turkiye":"turkey","korea republic":"south korea","republic of korea":"south korea","ir iran":"iran","united states":"usa","united states of america":"usa","czechia":"czech republic","cote d ivoire":"ivory coast","cabo verde":"cape verde","cape verde islands":"cape verde","bosnia and herzegovina":"bosnia herzegovina","congo dr":"dr congo","democratic republic of congo":"dr congo"};return al[x]||x}
 function findFixtureByTeams(h,a){const H=normTeam(h),A=normTeam(a);return M.find(m=>{if(m.ph)return false;const mh=normTeam(m.h),ma=normTeam(m.a);return(mh===H&&ma===A)||(mh===A&&ma===H)})}
 async function autoLiveFetch(initial){let changed=0;const days=[];for(let i=0;i<3;i++)days.push(new Date(Date.now()-i*864e5).toISOString().slice(0,10));for(const d of days){try{const r=await fetch(`https://www.thesportsdb.com/api/v1/json/3/eventsday.php?d=${d}&s=Soccer`);if(!r.ok)continue;const j=await r.json();const evs=(j.events||[]).filter(e=>/world cup/i.test(e.strLeague||"")&&!/wom|u-?[12]?\d|qualif|youth|futsal|beach/i.test(e.strLeague||""));for(const e of evs){const hs=e.intHomeScore,as=e.intAwayScore;if(hs==null||as==null||hs===""||as==="")continue;const m=findFixtureByTeams(e.strHomeTeam,e.strAwayTeam);if(!m)continue;if(scoresMap[mId(m)]!=null)continue;const sc=normTeam(m.h)===normTeam(e.strHomeTeam)?`${hs}-${as}`:`${as}-${hs}`;if(m.s!==sc){m.s=sc;changed++}}}catch(e){}}if(changed){if(!initial)toast(t().scoresUpdated);refreshDynamic()}return changed}
-async function init(){await fetchScores(true);render();setTimeout(()=>{const a=document.getElementById("todayAnchor");if(a&&tab==="schedule")a.scrollIntoView({block:"center"})},150);setInterval(()=>fetchScores(false),60000);autoLiveFetch(true);setInterval(()=>autoLiveFetch(false),180000);loadNewsTicker();checkPendingReminders();setInterval(checkPendingReminders,60000);handleIncomingPicks();setTimeout(showCookieBanner,1200);if(consentChoice==="accept")loadAdSense();}
+async function init(){await fetchScores(true);render();injectMatchSchema();setTimeout(()=>{const a=document.getElementById("todayAnchor");if(a&&tab==="schedule")a.scrollIntoView({block:"center"})},150);setInterval(()=>fetchScores(false),60000);autoLiveFetch(true);setInterval(()=>autoLiveFetch(false),180000);loadNewsTicker();checkPendingReminders();setInterval(checkPendingReminders,60000);handleIncomingPicks();setTimeout(showCookieBanner,1200);if(consentChoice==="accept")loadAdSense();}
 init();
 function updateCountdowns(){if(document.hidden)return;document.querySelectorAll(".nation").forEach(card=>{const team=card.dataset.team,list=M.filter(m=>m.h===team||m.a===team),now=Date.now(),next=list.find(m=>new Date(m.dt)>now);const cd=card.querySelector(".cd");if(!next||!cd)return;const diff=new Date(next.dt)-now;if(diff<=0)return;const bs=cd.querySelectorAll("b");if(bs.length===4){bs[0].textContent=String(Math.floor(diff/864e5)).padStart(2,"0");bs[1].textContent=String(Math.floor(diff%864e5/36e5)).padStart(2,"0");bs[2].textContent=String(Math.floor(diff%36e5/6e4)).padStart(2,"0");bs[3].textContent=String(Math.floor(diff%6e4/1e3)).padStart(2,"0")}})}
 setInterval(updateCountdowns,1000);

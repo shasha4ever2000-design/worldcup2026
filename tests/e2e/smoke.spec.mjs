@@ -35,6 +35,15 @@ test.describe("World Cup 2026 site smoke", () => {
     await expect(page.locator("#content")).toContainText("Brazil");
   });
 
+  test("injects per-match SportsEvent JSON-LD for SEO", async ({ page }) => {
+    await page.goto("/");
+    const raw = await page.locator("#matchSchema").textContent();
+    const schema = JSON.parse(raw);
+    expect(schema["@type"]).toBe("ItemList");
+    expect(schema.numberOfItems).toBeGreaterThan(0);
+    expect(schema.itemListElement[0].item["@type"]).toBe("SportsEvent");
+  });
+
   test("an incoming pick'em link is consumed and the URL is cleaned", async ({ page }) => {
     // Dismiss the "add friend?" confirm that fires shortly after load
     page.on("dialog", (d) => d.dismiss());
