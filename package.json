@@ -1,0 +1,19 @@
+{
+  "name": "worldcup2026",
+  "version": "1.0.0",
+  "description": "FIFA World Cup 2026 hub — schedule, standings, bracket, pick'em league.",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "test:e2e": "playwright test",
+    "test:py": "python3 -m pytest -q"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.49.0",
+    "@vitest/coverage-v8": "^2.1.8",
+    "vitest": "^2.1.8"
+  }
+}

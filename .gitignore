@@ -1,0 +1,9 @@
+node_modules/
+coverage/
+test-results/
+playwright-report/
+.playwright/
+__pycache__/
+*.pyc
+.pytest_cache/
+.DS_Store
