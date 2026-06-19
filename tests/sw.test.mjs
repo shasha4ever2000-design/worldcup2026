@@ -6,6 +6,7 @@ import vm from "node:vm";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const SW_SRC = readFileSync(join(ROOT, "sw.js"), "utf8");
+const VERSION = SW_SRC.match(/const VERSION\s*=\s*"([^"]+)"/)[1];
 
 // ---- Minimal Cache Storage mock ------------------------------------------
 function makeCaches() {
@@ -135,14 +136,15 @@ describe("service worker caching strategies", () => {
 
   it("activate purges caches from older versions", async () => {
     env = loadSW({ fetchImpl: async () => makeResponse("x") });
-    await env.caches.open("wc2026-v1");
-    await env.caches.open("wc2026-v13"); // current VERSION in sw.js
+    await env.caches.open("wc2026-old");
+    await env.caches.open(VERSION); // current VERSION parsed from sw.js
     let done;
     const e = { waitUntil: (p) => (done = p) };
     env.listeners.activate.forEach((cb) => cb(e));
     await done;
     const remaining = await env.caches.keys();
-    expect(remaining).toContain("wc2026-v13");
+    expect(remaining).toContain(VERSION);
+    expect(remaining).not.toContain("wc2026-old");
     expect(remaining).not.toContain("wc2026-v1");
   });
 });
