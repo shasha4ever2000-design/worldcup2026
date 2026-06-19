@@ -922,7 +922,21 @@ window.submitFeedback=async function(){
   }
   toast(t().fbThanks);vibrate(20);openFeedback();
 };
-function openFeedback(){const fb=store.get("wc_feedback",[]),myR=store.get("wc_rating",0),myName=store.get("wc_name","");let stars="";for(let i=1;i<=5;i++)stars+=`<span class="star ${i<=myR?"on":""}" data-v="${i}" onclick="setRating(${i})">★</span>`;const recent=fb.slice(-6).reverse().map(f=>`<div class="cmt"><div class="cmt-h"><b>${escapeHtml(f.name)||(lang==="ar"?"زائر":"Guest")}</b><span class="cmt-stars">${"★".repeat(f.rating)}${"☆".repeat(5-f.rating)}</span></div>${f.msg?`<div class="cmt-b">${escapeHtml(f.msg)}</div>`:""}</div>`).join("")||`<div class="empty" style="padding:14px">${t().noCmts}</div>`;document.getElementById("sheetTitle").textContent="💬 "+t().feedback;document.getElementById("sheetBody").innerHTML=`<div class="fb-label">${t().rateThis}</div><div class="stars" id="starRow">${stars}</div><input class="fb-in" id="fbName" placeholder="${t().yourName}" value="${escapeHtml(myName)}" oninput="saveName(this.value)"/><textarea class="fb-in" id="fbMsg" rows="3" placeholder="${t().yourComment}"></textarea><button class="fb-submit" onclick="submitFeedback()">${t().sendFb}</button><div class="fb-note">${t().fbNote}</div><div style="margin-top:16px" class="fb-label">${t().recentCmts}</div>${recent}`;showSheet()}
+window.submitEmailSignup=async function(){
+  const isAr=lang==="ar";
+  const e=document.getElementById("digestEmail");const v=(e&&e.value||"").trim();
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)){toast(isAr?"بريد غير صحيح":"Invalid email");return}
+  const subs=store.get("wc_digest_subs",[]);
+  if(subs.includes(v.toLowerCase())){toast(isAr?"أنت مشترك بالفعل ✓":"Already subscribed ✓");return}
+  subs.push(v.toLowerCase());store.set("wc_digest_subs",subs);
+  if(window.trackEvent)trackEvent("digest_signup");
+  if(WEB3FORMS_KEY){
+    try{await fetch(WEB3FORMS_URL,{method:"POST",headers:{"Content-Type":"application/json",Accept:"application/json"},body:JSON.stringify({access_key:WEB3FORMS_KEY,subject:"WC2026 digest signup: "+v,email:v,lang,site:"World Cup 2026 Hub"})})}catch{}
+  }
+  e.value="";
+  toast(isAr?"تم الاشتراك! 📧":"Subscribed! 📧");
+};
+function openFeedback(){const fb=store.get("wc_feedback",[]),myR=store.get("wc_rating",0),myName=store.get("wc_name","");let stars="";for(let i=1;i<=5;i++)stars+=`<span class="star ${i<=myR?"on":""}" data-v="${i}" onclick="setRating(${i})">★</span>`;const recent=fb.slice(-6).reverse().map(f=>`<div class="cmt"><div class="cmt-h"><b>${escapeHtml(f.name)||(lang==="ar"?"زائر":"Guest")}</b><span class="cmt-stars">${"★".repeat(f.rating)}${"☆".repeat(5-f.rating)}</span></div>${f.msg?`<div class="cmt-b">${escapeHtml(f.msg)}</div>`:""}</div>`).join("")||`<div class="empty" style="padding:14px">${t().noCmts}</div>`;const digestBlock=`<div style="margin-top:18px;padding:14px;background:var(--green-l);border-radius:12px"><div class="fb-label" style="color:var(--green-d);margin-bottom:6px">📧 ${lang==="ar"?"اشترك في ملخص أسبوعي":"Get weekly match digest"}</div><div style="font-size:12px;color:var(--ink2);margin-bottom:8px">${lang==="ar"?"إيميل واحد كل أسبوع: مباريات الأسبوع + أبرز النتائج. لا سبام، أبداً.":"One email per week: upcoming matches + top results. No spam, ever."}</div><div style="display:flex;gap:6px"><input class="fb-in" id="digestEmail" type="email" placeholder="${lang==="ar"?"بريدك الإلكتروني":"your@email.com"}" style="margin-bottom:0;flex:1"/><button onclick="submitEmailSignup()" style="background:var(--green);color:#fff;border:none;padding:0 16px;border-radius:10px;font-weight:700;font-size:13px;cursor:pointer">${lang==="ar"?"اشتراك":"Subscribe"}</button></div></div>`;document.getElementById("sheetTitle").textContent="💬 "+t().feedback;document.getElementById("sheetBody").innerHTML=`<div class="fb-label">${t().rateThis}</div><div class="stars" id="starRow">${stars}</div><input class="fb-in" id="fbName" placeholder="${t().yourName}" value="${escapeHtml(myName)}" oninput="saveName(this.value)"/><textarea class="fb-in" id="fbMsg" rows="3" placeholder="${t().yourComment}"></textarea><button class="fb-submit" onclick="submitFeedback()">${t().sendFb}</button><div class="fb-note">${t().fbNote}</div>${digestBlock}<div style="margin-top:16px" class="fb-label">${t().recentCmts}</div>${recent}`;showSheet()}
 document.getElementById("fbFab").onclick=openFeedback;
 
 /* spoiler-free toggle */
@@ -961,19 +975,22 @@ ar:[
 
 async function loadNewsTicker(){
   const el=document.getElementById("tickerInner");if(!el)return;
-  const stories=lang==="ar"?NEWS.ar:NEWS.en;
-  if(lang==="ar"){setTickerItems(NEWS.ar);return;}
-  // Try BBC Sport RSS via rss2json (free, CORS-friendly)
+  const fallback=lang==="ar"?NEWS.ar:NEWS.en;
+  // RSS feeds via rss2json (free, CORS-friendly). AR uses Google News Arabic search.
+  const rss=lang==="ar"
+    ? "https://news.google.com/rss/search?q=%D9%83%D8%A3%D8%B3+%D8%A7%D9%84%D8%B9%D8%A7%D9%84%D9%85+2026&hl=ar&gl=SA&ceid=SA:ar"
+    : "https://feeds.bbci.co.uk/sport/football/world-cup/rss.xml";
   try{
-    const bbcUrl=encodeURIComponent("https://feeds.bbci.co.uk/sport/football/world-cup/rss.xml");
-    const r=await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${bbcUrl}&count=12`,{cache:"default"});
+    const r=await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rss)}&count=12`,{cache:"default"});
     if(!r.ok)throw new Error();
     const j=await r.json();
-    if(j.status!=="ok"||!j.items?.length)throw new Error();
-    setTickerItems(j.items.slice(0,10).map(it=>"📰 "+it.title));
+    if(j.status!=="ok"||!j.items||!j.items.length)throw new Error();
+    // Google News titles end with " - Source" — strip it for cleaner display
+    const items=j.items.slice(0,10).map(it=>"📰 "+it.title.replace(/\s+-\s+[^-]+$/,""));
+    setTickerItems(items);
     return;
   }catch(e){}
-  setTickerItems(stories);
+  setTickerItems(fallback);
 }
 
 function setTickerItems(items){
