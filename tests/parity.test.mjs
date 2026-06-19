@@ -5,7 +5,7 @@ import { describe, it, expect } from "vitest";
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
-import { ALIASES, normTeam } from "../src/logic.mjs";
+import { ALIASES, normTeam, encodePicks, decodePicks, mId } from "../src/logic.mjs";
 import { extractInPageAliases, M, GROUPS, TEAM_INFO } from "./helpers.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
@@ -72,6 +72,17 @@ describe("in-page functions behave like the module", () => {
       null,
     ];
     samples.forEach((s) => expect(inPage(s)).toBe(normTeam(s)));
+  });
+
+  it("in-page decodePicks decodes a real shared link (regression: base64 padding)", () => {
+    const inPageDecode = extractFn("decodePicks");
+    // A populated payload whose base64 length is a multiple of 4 — the case the
+    // old `atob(s + "===")` over-padded and threw on in Chromium.
+    const votes = { [mId(M[0])]: "h", [mId(M[1])]: "a" };
+    const code = encodePicks({ votes, name: "TestFriend", favs: ["Brazil"] }, M);
+    const fromPage = inPageDecode(code);
+    expect(fromPage).not.toBeNull();
+    expect(fromPage).toEqual(decodePicks(code));
   });
 });
 

@@ -691,7 +691,7 @@ function encodePicks(){
   try{return btoa(unescape(encodeURIComponent(JSON.stringify(payload)))).replace(/=+$/,"")}catch{return""}
 }
 function decodePicks(s){
-  try{const j=JSON.parse(decodeURIComponent(escape(atob(s+"==="))));if(j&&j.v===1)return j}catch{}return null;
+  try{if(typeof s!=="string"||!s)return null;const pad=s+"=".repeat((4-(s.length%4))%4);const j=JSON.parse(decodeURIComponent(escape(atob(pad))));if(j&&j.v===1)return j}catch{}return null;
 }
 function actualWinner(m){if(!m.s)return null;const[h,a]=m.s.split("-").map(Number);return h>a?"h":h<a?"a":"d"}
 function scoreVotes(v){let pts=0,total=0,decided=0;M.forEach(m=>{const pick=v[mId(m)];if(!pick)return;total++;const w=actualWinner(m);if(w==null)return;decided++;if(w===pick)pts++});return{pts,total,decided}}
