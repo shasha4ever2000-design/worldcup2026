@@ -1,5 +1,5 @@
-/* World Cup 2026 — Service Worker (v10) */
-const VERSION = "wc2026-v10";
+/* World Cup 2026 — Service Worker (v11) */
+const VERSION = "wc2026-v11";
 const CORE = [
   "./index.html", "./manifest.json",
   "./icon-192.png", "./icon-512.png", "./icon-maskable-512.png",
@@ -61,4 +61,27 @@ self.addEventListener("fetch", e => {
       return cached || network;
     })
   );
+});
+
+// Focus existing tab (or open one) when a notification is clicked
+self.addEventListener("notificationclick", e => {
+  e.notification.close();
+  e.waitUntil(
+    self.clients.matchAll({ type: "window", includeUncontrolled: true }).then(list => {
+      for (const c of list) {
+        if (new URL(c.url).pathname.includes("worldcup2026") || new URL(c.url).origin === self.location.origin) {
+          return c.focus();
+        }
+      }
+      return self.clients.openWindow("./index.html");
+    })
+  );
+});
+
+// Allow the page to ask the SW to show a notification (used as a fallback path)
+self.addEventListener("message", e => {
+  const d = e.data || {};
+  if (d.type === "show-notification" && d.title) {
+    self.registration.showNotification(d.title, d.options || {});
+  }
 });
