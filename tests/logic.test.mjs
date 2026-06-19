@@ -14,6 +14,7 @@ import {
   decodePicks,
   actualWinner,
   scoreVotes,
+  buildMatchSchema,
 } from "../src/logic.mjs";
 
 describe("normTeam", () => {
@@ -190,5 +191,35 @@ describe("actualWinner / scoreVotes", () => {
       [mId(M[3])]: "h", // not yet decided
     };
     expect(scoreVotes(votes, M)).toEqual({ pts: 2, total: 4, decided: 3 });
+  });
+});
+
+describe("buildMatchSchema", () => {
+  const M = [
+    { dt: "2026-06-11T20:00:00Z", h: "Mexico", a: "South Korea", c: "Mexico City" },
+    { dt: "2026-07-19T20:00:00Z", h: "W101", a: "W102", c: "New Jersey", ph: true }, // placeholder
+  ];
+  const VENUES = { "Mexico City": ["Estadio Azteca", "87,523"] };
+
+  it("emits a valid schema.org ItemList of SportsEvents, skipping placeholders", () => {
+    const schema = buildMatchSchema(M, VENUES);
+    expect(schema["@context"]).toBe("https://schema.org");
+    expect(schema["@type"]).toBe("ItemList");
+    expect(schema.numberOfItems).toBe(1); // placeholder excluded
+    expect(schema.itemListElement).toHaveLength(1);
+  });
+
+  it("maps team names, venue and start date onto each event", () => {
+    const { item, position } = buildMatchSchema(M, VENUES).itemListElement[0];
+    expect(position).toBe(1);
+    expect(item["@type"]).toBe("SportsEvent");
+    expect(item.name).toBe("Mexico vs South Korea");
+    expect(item.startDate).toBe("2026-06-11T20:00:00Z");
+    expect(item.location.name).toBe("Estadio Azteca, Mexico City");
+    expect(item.competitor.map((c) => c.name)).toEqual(["Mexico", "South Korea"]);
+  });
+
+  it("produces JSON-serialisable output (used as JSON-LD)", () => {
+    expect(() => JSON.stringify(buildMatchSchema(M, VENUES))).not.toThrow();
   });
 });

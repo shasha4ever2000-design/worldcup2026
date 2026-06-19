@@ -5,8 +5,8 @@ import { describe, it, expect } from "vitest";
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
-import { ALIASES, normTeam, encodePicks, decodePicks, mId } from "../src/logic.mjs";
-import { extractInPageAliases, M, GROUPS, TEAM_INFO } from "./helpers.mjs";
+import { ALIASES, normTeam, encodePicks, decodePicks, mId, buildMatchSchema } from "../src/logic.mjs";
+import { extractInPageAliases, M, GROUPS, TEAM_INFO, VENUES } from "./helpers.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 
@@ -30,8 +30,28 @@ describe("in-page functions behave like the module", () => {
     const html = readFileSync(join(ROOT, "index.html"), "utf8");
     const start = html.indexOf(`function ${name}(`);
     if (start < 0) throw new Error(`function ${name} not found`);
+    const paramStart = html.indexOf("(", start);
+    // Walk the parameter list to its matching ")" so default-value braces
+    // (e.g. `VENUES={}`) aren't mistaken for the function body.
+    let pdepth = 0,
+      j = paramStart,
+      pstr = null;
+    for (; j < html.length; j++) {
+      const c = html[j];
+      if (pstr) {
+        if (c === "\\") j++;
+        else if (c === pstr) pstr = null;
+        continue;
+      }
+      if (c === '"' || c === "'" || c === "`") pstr = c;
+      else if (c === "(") pdepth++;
+      else if (c === ")") {
+        pdepth--;
+        if (pdepth === 0) break;
+      }
+    }
     let depth = 0,
-      i = html.indexOf("{", start),
+      i = html.indexOf("{", j),
       inStr = null,
       started = false;
     for (; i < html.length; i++) {
@@ -53,7 +73,7 @@ describe("in-page functions behave like the module", () => {
         }
       }
     }
-    const body = html.slice(html.indexOf("(", start), i);
+    const body = html.slice(paramStart, i);
     // eslint-disable-next-line no-eval
     return eval(`(function ${name}${body})`);
   }
@@ -83,6 +103,22 @@ describe("in-page functions behave like the module", () => {
     const fromPage = inPageDecode(code);
     expect(fromPage).not.toBeNull();
     expect(fromPage).toEqual(decodePicks(code));
+  });
+
+  it("in-page buildMatchSchema matches the module for the real fixture list", () => {
+    const inPage = extractFn("buildMatchSchema");
+    expect(inPage(M, VENUES)).toEqual(buildMatchSchema(M, VENUES));
+  });
+});
+
+describe("SEO schema on the real fixture data", () => {
+  it("emits a valid SportsEvent ItemList for every real match", () => {
+    const schema = buildMatchSchema(M, VENUES);
+    const realMatches = M.filter((m) => !m.ph && m.h && m.a).length;
+    expect(schema["@type"]).toBe("ItemList");
+    expect(schema.numberOfItems).toBe(realMatches);
+    expect(schema.itemListElement.every((e) => e.item["@type"] === "SportsEvent")).toBe(true);
+    expect(() => JSON.stringify(schema)).not.toThrow();
   });
 });
 
