@@ -55,6 +55,10 @@ test.describe("World Cup 2026 site smoke", () => {
     await page.goto("/?lang=fr");
     await expect(page.locator("html")).toHaveAttribute("lang", "fr");
     await expect(page.locator("#t_title")).toHaveText(/Coupe du Monde 2026/i);
+    // Inline (non-dictionary) strings are localized too
+    await expect(page.locator("#t_ticker_lbl")).toHaveText(/ACTUS/i);
+    await page.locator(".tab", { hasText: /Tableau/i }).click();
+    await expect(page.locator(".bracket h3")).toContainText("Tableau du tournoi");
   });
 
   test("search filters the schedule", async ({ page }) => {
