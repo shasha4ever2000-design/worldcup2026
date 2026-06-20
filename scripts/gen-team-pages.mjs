@@ -13,6 +13,17 @@ const BASE = "https://shasha4ever2000-design.github.io/worldcup2026";
 // Teams with their own bespoke landing pages — link to those instead.
 const CUSTOM = { Egypt: "eg.html", "Saudi Arabia": "sa.html" };
 
+// Accurate confederation per nation (data, not guessed) + host nations.
+const CONFED = {
+  Brazil: "CONMEBOL", Argentina: "CONMEBOL", Uruguay: "CONMEBOL", Colombia: "CONMEBOL", Ecuador: "CONMEBOL", Paraguay: "CONMEBOL",
+  Spain: "UEFA", France: "UEFA", England: "UEFA", Germany: "UEFA", Portugal: "UEFA", Netherlands: "UEFA", Belgium: "UEFA", Croatia: "UEFA", Switzerland: "UEFA", Austria: "UEFA", Norway: "UEFA", Sweden: "UEFA", Scotland: "UEFA", "Czech Republic": "UEFA", "Bosnia & Herzegovina": "UEFA", Turkey: "UEFA",
+  USA: "CONCACAF", Canada: "CONCACAF", Mexico: "CONCACAF", Panama: "CONCACAF", Haiti: "CONCACAF", Curacao: "CONCACAF",
+  Morocco: "CAF", Egypt: "CAF", Senegal: "CAF", "Ivory Coast": "CAF", Tunisia: "CAF", Algeria: "CAF", Ghana: "CAF", "Cape Verde": "CAF", "South Africa": "CAF", "DR Congo": "CAF",
+  Japan: "AFC", "South Korea": "AFC", Iran: "AFC", "Saudi Arabia": "AFC", Australia: "AFC", Qatar: "AFC", Uzbekistan: "AFC", Jordan: "AFC", Iraq: "AFC",
+  "New Zealand": "OFC",
+};
+const HOSTS = new Set(["USA", "Canada", "Mexico"]);
+
 const slug = (t) => t.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
 const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 const flagImg = (t, h = 26) => (CODES[t] ? `<img src="https://flagcdn.com/h40/${CODES[t]}.png" width="${h}" height="${Math.round(h * 0.66)}" alt="" loading="lazy" style="vertical-align:middle;border-radius:3px"/>` : "⚽");
@@ -20,6 +31,7 @@ const groupOf = (t) => Object.keys(GROUPS).find((g) => GROUPS[g].includes(t));
 const fmtDate = (iso) => new Date(iso).toLocaleDateString("en-US", { weekday: "short", day: "numeric", month: "short", timeZone: "UTC" });
 const STAGE = { R32: "Round of 32", R16: "Round of 16", QF: "Quarter-final", SF: "Semi-final", "3rd": "Third-place play-off", Final: "Final" };
 const stageLabel = (g) => STAGE[g] || `Group ${g}`;
+
 
 const STYLE = `:root{--ink:#0f172a;--muted:#64748b;--green:#047857;--green-d:#064e3b;--gold:#f59e0b;--line:#e2e8f0}
 *{box-sizing:border-box;margin:0;padding:0}body{font-family:"Segoe UI",Tahoma,Arial,sans-serif;background:#f8fafc;color:var(--ink);line-height:1.7;padding-bottom:env(safe-area-inset-bottom)}
@@ -56,13 +68,27 @@ function teamPage(team) {
       return `<div class="m"><span class="dt">${fmtDate(m.dt)}</span><span class="tm">${ha} ${flagImg(opp, 20)} ${esc(opp)}</span><span class="vn">${esc(m.c)}</span>${score}</div>`;
     })
     .join("");
+  const confed = CONFED[team] || info.conf || "";
+  const host = HOSTS.has(team);
   const infoRows = [
     g ? `<tr><td>Group</td><td>Group ${g}</td></tr>` : "",
+    host ? `<tr><td>Status</td><td>🏠 Host nation</td></tr>` : "",
+    confed ? `<tr><td>Confederation</td><td>${esc(confed)}</td></tr>` : "",
     info.rank ? `<tr><td>FIFA ranking</td><td>#${info.rank}</td></tr>` : "",
     info.coach ? `<tr><td>Coach</td><td>${esc(info.coach)}</td></tr>` : "",
-    info.conf ? `<tr><td>Confederation</td><td>${esc(info.conf)}</td></tr>` : "",
+    info.qual ? `<tr><td>Qualification</td><td>${esc(info.qual)}</td></tr>` : "",
     `<tr><td>Matches</td><td>${matches.length} scheduled</td></tr>`,
   ].join("");
+  // Full group schedule (all six group matches), so visitors see the whole group.
+  const groupMatches = g
+    ? M.filter((m) => m.g === g).sort((a, b) => new Date(a.dt) - new Date(b.dt))
+    : [];
+  const groupRows = groupMatches
+    .map((m) => {
+      const score = m.s ? `<span class="sc">${esc(m.s)}</span>` : `<span class="vn">${fmtDate(m.dt)}</span>`;
+      return `<div class="m"><span class="tm">${flagImg(m.h, 18)} ${esc(m.h)} <span style="color:var(--muted);font-weight:600">v</span> ${esc(m.a)} ${flagImg(m.a, 18)}</span>${score}</div>`;
+    })
+    .join("");
   const jsonld = [
     { "@context": "https://schema.org", "@type": "SportsTeam", name: `${team} national football team`, sport: "Football", memberOf: { "@type": "SportsOrganization", name: "FIFA" }, ...(info.coach ? { coach: { "@type": "Person", name: info.coach } } : {}), url },
     { "@context": "https://schema.org", "@type": "BreadcrumbList", itemListElement: [
@@ -91,8 +117,8 @@ ${jsonld.map((j) => `<script type="application/ld+json">${JSON.stringify(j)}</sc
 <body>
 <header>
   <div class="fl">${flagImg(team, 64)}</div>
-  <h1>${esc(team)} — World Cup 2026</h1>
-  <p>Everything on ${esc(team)} at the FIFA World Cup 2026: Group ${g}, full fixtures, venues, and where to follow every match live.</p>
+  <h1>${esc(team)} — World Cup 2026${host ? " 🏠" : ""}</h1>
+  <p>Everything on ${esc(team)} at the FIFA World Cup 2026: Group ${g}${confed ? ` (${confed})` : ""}${host ? ", a tournament host nation" : ""}, full fixtures, venues, and where to follow every match live.</p>
   <a class="cta" href="../index.html">⚽ Live scores &amp; schedule</a>
 </header>
 <div class="wrap"><main>
@@ -101,6 +127,8 @@ ${jsonld.map((j) => `<script type="application/ld+json">${JSON.stringify(j)}</sc
 
   <h2>${esc(team)}'s match schedule</h2>
   <div class="card">${rows || "<p>Fixtures to be confirmed.</p>"}</div>
+
+  ${g ? `<h2>Full Group ${g} schedule</h2><div class="card">${groupRows}</div>` : ""}
   <p style="font-size:13px;color:var(--muted)">Kick-off times in your local time zone, live scores, predictions and reminders are on the <a href="../index.html">main hub</a>.</p>
 
   ${g ? `<h2>Group ${g} rivals</h2><div class="grid">${rivals.map((r) => `<a href="../${teamHref(r)}">${flagImg(r, 18)} ${esc(r)}</a>`).join("")}</div>` : ""}
