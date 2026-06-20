@@ -1,51 +1,77 @@
-# FIFA World Cup 2026 — Live Companion (EN/AR)
+# FIFA World Cup 2026 — Live Companion
 
 🔗 **Live site:** https://shasha4ever2000-design.github.io/worldcup2026/
 
-A free, bilingual (English / Arabic, full RTL) companion site for the FIFA World Cup 2026 — built especially for fans in 🇪🇬 Egypt, 🇸🇦 Saudi Arabia, and the Gulf. No app to install, no backend, no cost — just open the link.
+A free, fast, multilingual companion for the FIFA World Cup 2026 — live schedule,
+group standings, knockout bracket, predictions and a pick'em league. No app to
+install, no backend, no cost — just open the link.
 
 ## Features
 
-- 🔴 **Live scores** — auto-updates every ~10 minutes via GitHub Actions
+- 🔴 **Live scores** — auto-updated via a scheduled GitHub Action
 - 📊 **Group standings** — calculated automatically as results come in
-- 🏆 **Knockout bracket** + a tap-to-simulate qualification predictor
-- ⭐ **Favorite teams** with reminders for upcoming matches
-- 🌍 **Bilingual** — toggle English ⇄ Arabic, full right-to-left layout
-- 🌙 **Dark mode** + works **offline** as an installable PWA
-- 📱 **Mobile-first** design, built to feel native on a phone
+- 🏆 **Knockout bracket** + a tap-to-simulate group-stage predictor
+- 🔥 **Match to Watch** — surfaces the most attractive upcoming game
+- 📈 **Tournament stats** — KPI grid, results breakdown, golden boot, goals by group
+- 🏅 **Pick'em league** — predict matches and share a link to start a private league
+- ⭐ **Favorite teams** with 15-minute kickoff reminders (+ goal confetti)
+- 🌍 **8 languages** — English · Español · Português · Français · Deutsch · Italiano · 日本語 · العربية (full RTL for Arabic)
+- 🌙 **Dark mode**, **spoiler-free mode**, weather per match city
+- 📱 **Installable PWA** — works offline, app shortcuts, deep-linkable tabs (`?tab=`)
+
+## SEO pages (static, generated from the fixture data)
+
+- `guide.html` — full tournament guide (format, groups, cities, FAQ)
+- `cities.html` + `city/<slug>.html` — all 16 host cities with their schedules
+- `teams.html` + `team/<slug>.html` — all 48 nations (Egypt/Saudi have bespoke `eg.html`/`sa.html`)
+- Per-match `SportsEvent` JSON-LD, `hreflang` for every language, `sitemap.xml`, custom `404.html`
+
+Regenerate the static pages after fixture changes:
+
+```bash
+npm run gen:cities   # rebuilds cities.html + city/*.html
+npm run gen:teams    # rebuilds teams.html + team/*.html
+```
 
 ## Tech
 
-Single-file static site (`index.html`) — vanilla JS, no build step, no framework. Hosted free on GitHub Pages.
+Static site hosted free on GitHub Pages. The app is `index.html` (vanilla JS, no
+framework, no build step required). Pure logic lives in `src/logic.mjs` as the
+single tested source of truth; the in-page copies are kept honest by a parity test.
+
+An **optional** Cloudflare Pages backend is scaffolded under `functions/`
+(AI match previews/recaps + dynamic share images) — dormant until connected;
+see `CONNECT.md`. The front-end works fully without it.
 
 ## How live scores update automatically
 
 ```
-football-data.org API → GitHub Action (every ~10 min) → scores.json → site polls & displays
+football-data.org API → GitHub Action (scheduled) → scores.json → site polls & displays
 ```
 
 - `.github/workflows/update-scores.yml` — scheduled GitHub Action
-- `.github/scripts/update_scores.py` — fetches results, matches them to `fixtures.json`, writes `scores.json`
-- Requires a free API token stored in the repo secret `FOOTBALL_DATA_TOKEN`
+- `update_scores.py` — fetches results, matches them to `fixtures.json`, writes `scores.json`
+- Requires a free API token in the repo secret `FOOTBALL_DATA_TOKEN`
 
-## Tests
+## Tests & CI
 
-The pure logic (standings, prediction model, team-name normalisation, pick'em
-encode/decode), the fixture data, the service-worker caching strategies, and the
-score-updater scripts are covered by automated tests. CI runs them on every PR
-(`.github/workflows/ci.yml`).
+Standings, the prediction model, team-name normalisation, pick'em encode/decode,
+tournament stats, the SEO schema, fixture integrity, i18n completeness, the
+service-worker caching strategies, the generated city/team pages, and the
+score-updater script are all covered. CI runs JS + Python + browser tests on every
+PR (`.github/workflows/ci.yml`).
 
 ```bash
-npm install            # one-time: installs vitest + playwright
+npm install            # vitest + playwright + wrangler
 npm test               # JS unit tests (vitest)
-npm run test:coverage  # JS unit tests + coverage report
-npm run test:e2e       # browser smoke tests (playwright; needs `npx playwright install`)
+npm run test:coverage  # JS unit tests + coverage
+npm run test:e2e       # browser smoke tests (needs `npx playwright install`)
 pip install pytest && python -m pytest -q   # Python tests for update_scores.py
 ```
 
-`src/logic.mjs` is the single, tested source of truth for the site's pure logic;
-`tests/parity.test.mjs` guards the copies still inlined in `index.html` from
-silently drifting from it.
+`tests/parity.test.mjs` guards the logic copied inline in `index.html` from
+drifting from `src/logic.mjs`; `tests/i18n.test.mjs` guarantees every language
+has the full set of UI strings.
 
 ## Credits
 
