@@ -16,6 +16,7 @@ import {
   scoreVotes,
   buildMatchSchema,
   pickFeaturedMatch,
+  tournamentStats,
 } from "../src/logic.mjs";
 
 describe("normTeam", () => {
@@ -251,5 +252,39 @@ describe("pickFeaturedMatch", () => {
 
   it("returns null when there are no matches", () => {
     expect(pickFeaturedMatch([], TEAM_INFO, now)).toBeNull();
+  });
+});
+
+describe("tournamentStats", () => {
+  const M = [
+    { g: "A", h: "A", a: "B", s: "2-0" }, // home win, clean sheet, tot 2, diff 2
+    { g: "A", h: "C", a: "D", s: "1-1" }, // draw, tot 2
+    { g: "B", h: "E", a: "F", s: "0-3" }, // away win, clean sheet, tot 3, diff 3
+    { g: "B", h: "G", a: "H" }, // unplayed, ignored
+  ];
+  it("aggregates counts, goals and averages over played matches", () => {
+    const s = tournamentStats(M);
+    expect(s.count).toBe(3);
+    expect(s.goals).toBe(7);
+    expect(s.avg).toBeCloseTo(2.33, 2);
+    expect(s).toMatchObject({ homeWins: 1, draws: 1, awayWins: 1, clean: 2 });
+  });
+  it("identifies the highest-scoring and biggest-win matches", () => {
+    const s = tournamentStats(M);
+    expect(s.high.tot).toBe(3);
+    expect(s.high.m.s).toBe("0-3");
+    expect(s.big.diff).toBe(3);
+  });
+  it("is all-zero with no played matches", () => {
+    expect(tournamentStats([{ g: "A", h: "A", a: "B" }])).toMatchObject({
+      count: 0,
+      goals: 0,
+      avg: 0,
+      homeWins: 0,
+      draws: 0,
+      awayWins: 0,
+      high: null,
+      big: null,
+    });
   });
 });

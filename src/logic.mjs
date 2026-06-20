@@ -242,6 +242,36 @@ export function pickFeaturedMatch(M, TEAM_INFO = {}, now = Date.now()) {
   return best;
 }
 
+/**
+ * Aggregate tournament statistics from played matches. Pure & testable.
+ * Returns counts plus the highest-scoring and biggest-win matches.
+ */
+export function tournamentStats(M) {
+  const played = M.filter((m) => m.s);
+  let goals = 0, clean = 0, homeWins = 0, draws = 0, awayWins = 0, high = null, big = null;
+  for (const m of played) {
+    const [h, a] = m.s.split("-").map(Number);
+    goals += h + a;
+    if (h === 0 || a === 0) clean++;
+    if (h > a) homeWins++;
+    else if (h < a) awayWins++;
+    else draws++;
+    if (!high || h + a > high.tot) high = { m, tot: h + a };
+    if (!big || Math.abs(h - a) > big.diff) big = { m, diff: Math.abs(h - a) };
+  }
+  return {
+    count: played.length,
+    goals,
+    avg: played.length ? Math.round((goals / played.length) * 100) / 100 : 0,
+    clean,
+    homeWins,
+    draws,
+    awayWins,
+    high,
+    big,
+  };
+}
+
 // ------------------------------- SEO schema --------------------------------
 
 /**
