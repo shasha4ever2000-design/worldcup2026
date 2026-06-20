@@ -1,104 +1,103 @@
-# Connect the backend (Cloudflare Pages + Workers)
+# Turn on the AI features — beginner guide (no coding, all clicks)
 
-This scaffold adds a serverless API to the site **without changing the front-end**:
+Your live site already works great without this. This **optional** step switches on the
+AI extras (match previews/recaps + auto-generated share images). It takes ~10 minutes,
+done entirely in your web browser — **no terminal, no commands**.
 
-| Route | What it does |
-|---|---|
-| `GET /api/preview?home=Egypt&away=Belgium&lang=en` | AI 2-paragraph match preview (cached 24h) |
-| `GET /api/recap?home=Egypt&away=Belgium&score=2-1&lang=en` | AI match recap (cached 30d) |
-| `GET /api/og?home=Egypt&away=Belgium&when=Jun%2017` | 1200×630 branded share image (PNG) |
-| `GET /api/health` | Reports whether the API key + cache are configured |
+> 💳 One cost to know: the AI is provided by Anthropic and needs a small prepaid credit
+> (about **$5**). Cloudflare (the hosting) is **free**. If you don't want to pay, just skip
+> this — nothing else is affected.
 
-The Anthropic API key lives **only** as a server secret — it is never shipped to the browser
-(same pattern as your existing `FOOTBALL_DATA_TOKEN`).
+You'll do two things: (A) get an AI key, (B) put the site on Cloudflare and paste that key.
 
 ---
 
-## What I can't do for you (≈5 minutes, in your browser)
+## Part A — Get your Anthropic AI key (≈3 min)
 
-I scaffolded and tested everything, but creating the account and pasting secret keys requires
-your login. Do these once:
-
-### 1. Get an Anthropic API key
-- Go to **https://console.anthropic.com** → API Keys → Create key. Copy it.
-
-### 2. Create the Cloudflare project (choose ONE path)
-
-**Path A — Git integration (recommended, auto-deploys on every push):**
-1. Create a free account at **https://dash.cloudflare.com**.
-2. **Workers & Pages → Create → Pages → Connect to Git** → pick `shasha4ever2000-design/worldcup2026`.
-3. Build settings: **Framework preset = None**, **Build command = (empty)**,
-   **Build output directory = `/`** (the site is plain static files at the repo root).
-4. Deploy. You'll get a `*.pages.dev` URL.
-
-**Path B — CLI deploy from your machine:**
-```bash
-npm install
-npx wrangler login
-npm run cf:deploy        # wrangler pages deploy .
-```
-
-### 3. Create the KV cache namespace
-```bash
-npx wrangler kv namespace create WC_CACHE
-```
-Copy the printed `id` into **`wrangler.toml`** (replace `REPLACE_WITH_KV_NAMESPACE_ID`).
-For Path A, also bind it in the dashboard: **Pages project → Settings → Functions → KV namespace
-bindings → Add**, Variable name `WC_CACHE`, select the namespace.
-
-### 4. Add the API key secret
-```bash
-npx wrangler pages secret put ANTHROPIC_API_KEY     # paste your key
-```
-(Or dashboard: **Settings → Environment variables → Add → Encrypt**, name `ANTHROPIC_API_KEY`.)
-
-### 5. Verify
-Open `https://<your-project>.pages.dev/api/health` — you should see
-`{"ok":true,"aiConfigured":true,"cacheConfigured":true,...}`.
+1. Go to **https://console.anthropic.com** and sign up / log in.
+2. Add a little credit: **Settings → Billing → Add credits** → add **$5**.
+3. Open **API keys** (left menu) → **Create key** → name it `worldcup` → **Copy** it.
+   - It looks like `sk-ant-...`. Paste it somewhere safe for a minute — you'll need it in Part B.
+   - ⚠️ Treat it like a password. Don't share it or put it in the website code.
 
 ---
 
-## Local development
-```bash
-cp .dev.vars.example .dev.vars     # then paste your real key into .dev.vars (git-ignored)
-npm run cf:dev                     # serves the site + /api/* at http://localhost:8788
+## Part B — Put the site on Cloudflare and add the key (≈7 min)
+
+### B1. Create a free Cloudflare account
+- Go to **https://dash.cloudflare.com/sign-up**, sign up, and verify your email.
+
+### B2. Connect your GitHub project
+1. In the Cloudflare dashboard left menu: **Compute (Workers) → Workers & Pages**
+   (older menus call it just **Workers & Pages**).
+2. Click **Create** → choose the **Pages** tab → **Connect to Git**.
+3. Click **Connect GitHub**, authorize Cloudflare, and pick the repository
+   **`shasha4ever2000-design/worldcup2026`**. Click **Begin setup**.
+
+### B3. Build settings (leave almost everything blank)
+On the setup screen:
+- **Project name:** `worldcup2026` (or anything you like)
+- **Production branch:** `main`
+- **Framework preset:** `None`
+- **Build command:** *(leave empty)*
+- **Build output directory:** type `/`
+- Click **Save and Deploy**.
+
+Wait ~1–2 minutes. You'll get a live address like **`https://worldcup2026.pages.dev`** 🎉
+
+### B4. Paste your AI key (this is the important one)
+1. Open your new project → **Settings** → **Variables and Secrets**
+   (may be under **Settings → Environment variables**).
+2. Under **Production**, click **Add variable**:
+   - **Variable name:** `ANTHROPIC_API_KEY`
+   - **Value:** paste your `sk-ant-...` key
+   - Click the **Encrypt** button (so it's stored as a secret), then **Save**.
+3. Go to the **Deployments** tab → on the latest deployment click **⋯ → Retry deployment**
+   (so it picks up the new key).
+
+### B5. Check that it worked ✅
+Open this in your browser (replace the name with your actual `.pages.dev` address):
+
 ```
+https://worldcup2026.pages.dev/api/health
+```
+
+You want to see:
+```json
+{ "ok": true, "aiConfigured": true, "cacheConfigured": false, "model": "claude-haiku-4-5" }
+```
+
+- `aiConfigured: true` → 🎉 the AI key is working. **You're done — paste that result to me.**
+- `aiConfigured: false` → the key wasn't saved/encrypted; redo **B4** and retry the deploy.
+- `cacheConfigured: false` is **fine** — caching is optional (see below).
+
+### B6. (Optional) Try a real AI preview
+Open (any two teams):
+```
+https://worldcup2026.pages.dev/api/preview?home=Egypt&away=Belgium
+```
+You should get a short AI-written match preview. If yes — everything works!
 
 ---
 
-## Wiring it into the UI (next step — I can do this once it's live)
-
-The front-end currently makes **no** calls to these endpoints, so nothing breaks while you're
-setting up. Once `/api/health` is green, I'll add progressive-enhancement to the match detail
-sheet — it stays invisible if the API isn't reachable (e.g. on the GitHub Pages mirror):
-
-```js
-// Inside openSheet(m), after the existing content is rendered:
-const AI_BASE = location.origin;            // same-origin on Cloudflare Pages
-fetch(`${AI_BASE}/api/preview?home=${encodeURIComponent(m.h)}&away=${encodeURIComponent(m.a)}&lang=${lang}`)
-  .then(r => r.ok ? r.json() : null)
-  .then(d => { if (d && d.preview) injectPreviewInto(sheetBody, d.preview); })
-  .catch(() => {});                          // silent no-op if endpoint absent
-```
-
-And the dynamic share image becomes the per-match Open Graph tag:
-```html
-<meta property="og:image"
-      content="https://<project>.pages.dev/api/og?home=Egypt&away=Belgium&when=Jun%2017"/>
-```
+## Optional later: turn on caching (saves money)
+Caching stores each AI answer so the same match isn't paid for twice. Not required.
+1. Cloudflare dashboard → **Workers & Pages → KV** → **Create a namespace** → name it `WC_CACHE`.
+2. Your Pages project → **Settings → Functions → KV namespace bindings → Add binding**:
+   - **Variable name:** `WC_CACHE` → select the `WC_CACHE` namespace → **Save**.
+3. **Deployments → Retry deployment**. Now `/api/health` shows `cacheConfigured: true`.
 
 ---
 
-## Hosting note
-GitHub Pages can't run server code, so the AI/OG routes only work on **Cloudflare Pages**
-(or another compute host). You can keep GitHub Pages as a static mirror, but point your primary
-domain at the Cloudflare project so the API routes resolve same-origin.
+## When you're done
+Paste me the result of the `/api/health` link (or any error / screenshot of where you got
+stuck). Once I see `aiConfigured: true`, I'll wire the previews & recaps into the match
+detail screen, add per-match share images, and build the "Ask the Oracle" chat — all tested.
 
-## Costs
-- Cloudflare Pages + Workers + KV: generous **free tier** (plenty for this traffic).
-- Anthropic: pay-per-use; previews/recaps use **claude-haiku-4-5** (cheap) and are **cached**,
-  so each unique match is generated once. Switch models via `CLAUDE_MODEL` in `wrangler.toml`.
-
-## Tell me when `/api/health` is green
-I'll then wire the preview/recap into the match sheet, set per-match OG share images, and add
-the "Ask the Oracle" chat — all behind tests.
+### Quick troubleshooting
+- **Build failed:** make sure **Build output directory** is exactly `/` and **Framework preset** is `None`.
+- **`/api/health` shows a 404:** the deploy may still be running — wait a minute and refresh.
+- **`aiConfigured: false`:** the secret name must be exactly `ANTHROPIC_API_KEY` and you must
+  click **Encrypt** before saving, then **retry the deployment**.
+- **Preview returns an error about credits:** add credit in the Anthropic console (Part A2).
+- Stuck anywhere? Copy the message you see and send it to me — I'll tell you the exact next click.

@@ -1,12 +1,9 @@
-# Cloudflare Pages + Workers config for the World Cup 2026 hub.
+# Cloudflare Pages config for the World Cup 2026 hub.
 # The static site (index.html, etc.) is served from the repo root; the
 # functions/ directory becomes serverless API routes (/api/*).
 #
-# First-time setup (see CONNECT.md for the full walkthrough):
-#   1. npx wrangler login
-#   2. npx wrangler kv namespace create WC_CACHE   # paste the id below
-#   3. npx wrangler pages secret put ANTHROPIC_API_KEY
-#   4. npm run cf:deploy
+# Easiest setup is 100% in the Cloudflare dashboard — see CONNECT.md.
+# You only NEED to add one secret (ANTHROPIC_API_KEY) to get AI working.
 
 name = "worldcup2026"
 compatibility_date = "2025-01-01"
@@ -15,13 +12,15 @@ compatibility_flags = ["nodejs_compat"]
 # Static assets live at the repo root.
 pages_build_output_dir = "."
 
-# KV namespace used to cache AI output (previews/recaps) and live scores so we
-# never pay for the same generation twice. Create it with the command above and
-# replace the placeholder id.
-[[kv_namespaces]]
-binding = "WC_CACHE"
-id = "REPLACE_WITH_KV_NAMESPACE_ID"
-
 [vars]
 # Cheap + fast default for match previews/recaps. Override per-environment.
 CLAUDE_MODEL = "claude-haiku-4-5"
+
+# OPTIONAL (do this later for cheaper caching): a KV namespace lets us store AI
+# output so the same match is generated only once. The code works fine without
+# it. To enable: create a KV namespace named "WC_CACHE" in the Cloudflare
+# dashboard, then bind it under Pages → Settings → Functions → KV bindings as
+# variable name WC_CACHE. (No need to edit this file when using the dashboard.)
+# [[kv_namespaces]]
+# binding = "WC_CACHE"
+# id = "YOUR_KV_NAMESPACE_ID"
