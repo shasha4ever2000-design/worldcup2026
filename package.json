@@ -9,11 +9,15 @@
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
     "test:e2e": "playwright test",
-    "test:py": "python3 -m pytest -q"
+    "test:py": "python3 -m pytest -q",
+    "cf:dev": "wrangler pages dev .",
+    "cf:deploy": "wrangler pages deploy ."
   },
   "devDependencies": {
     "@playwright/test": "^1.49.0",
     "@vitest/coverage-v8": "^2.1.8",
-    "vitest": "^2.1.8"
+    "vitest": "^2.1.8",
+    "workers-og": "^0.0.27",
+    "wrangler": "^4.103.0"
   }
 }
