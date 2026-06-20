@@ -28,7 +28,7 @@ test.describe("World Cup 2026 site smoke", () => {
     await expect(page.locator(".bracket")).toBeVisible();
   });
 
-  test("cycles languages English → Spanish → Portuguese → French → German → Arabic", async ({ page }) => {
+  test("cycles languages English → Spanish → Portuguese → French → German → Italian → Arabic", async ({ page }) => {
     await page.goto("/");
     await expect(page.locator("html")).toHaveAttribute("lang", "en");
     const btn = page.locator("#langBtn");
@@ -44,6 +44,9 @@ test.describe("World Cup 2026 site smoke", () => {
     await btn.click();
     await expect(page.locator("html")).toHaveAttribute("lang", "de");
     await expect(page.locator("#t_title")).toHaveText(/Weltmeisterschaft 2026/i);
+    await btn.click();
+    await expect(page.locator("html")).toHaveAttribute("lang", "it");
+    await expect(page.locator("#t_title")).toHaveText(/Mondiali 2026/i);
     await expect(page.locator("html")).toHaveAttribute("dir", "ltr");
     await btn.click();
     await expect(page.locator("html")).toHaveAttribute("lang", "ar");
@@ -66,6 +69,12 @@ test.describe("World Cup 2026 site smoke", () => {
     await page.goto("/?lang=de");
     await expect(page.locator("html")).toHaveAttribute("lang", "de");
     await expect(page.locator("#t_title")).toHaveText(/Weltmeisterschaft 2026/i);
+  });
+
+  test("opens directly in Italian via ?lang=it", async ({ page }) => {
+    await page.goto("/?lang=it");
+    await expect(page.locator("html")).toHaveAttribute("lang", "it");
+    await expect(page.locator("#t_title")).toHaveText(/Mondiali 2026/i);
   });
 
   test("opens directly in French via ?lang=fr", async ({ page }) => {
