@@ -20,6 +20,16 @@ test.describe("World Cup 2026 site smoke", () => {
     await expect(page.locator(".rbar")).toBeVisible();
   });
 
+  test("theme toggle switches data-theme (Stadium Night dark mode)", async ({ page }) => {
+    await page.goto("/");
+    const html = page.locator("html");
+    const before = await html.getAttribute("data-theme");
+    await page.locator("#themeBtn").click();
+    const after = await html.getAttribute("data-theme");
+    expect(after).not.toBe(before);
+    expect(["dark", "light"]).toContain(after);
+  });
+
   test("has a skip-to-content link for keyboard users", async ({ page }) => {
     await page.goto("/");
     const skip = page.locator("a.skip");

@@ -75,7 +75,24 @@ window.trackEvent= function(n,p){ if(window.gtag) gtag('event',n,p||{}); };
 </script>
 <style>
 :root{--bg:#f1f5f9;--card:#fff;--ink:#0f172a;--ink2:#334155;--muted:#64748b;--green:#047857;--green-d:#064e3b;--green-l:#d1fae5;--gold:#f59e0b;--line:#e2e8f0;--rose:#e11d48;--chip:#f1f5f9;--shadow:0 1px 3px rgba(15,23,42,.06);--r:13px;--blue:#2563eb}
-[data-theme="dark"]{--bg:#0b1220;--card:#1a2434;--ink:#f1f5f9;--ink2:#cbd5e1;--muted:#94a3b8;--line:#2c3a4f;--chip:#243044;--shadow:0 1px 3px rgba(0,0,0,.4);--green-l:#0b5e44}
+[data-theme="dark"]{--bg:#070d18;--card:#141d2c;--ink:#f1f5f9;--ink2:#cbd5e1;--muted:#94a3b8;--line:#243149;--chip:#1c2638;--shadow:0 1px 3px rgba(0,0,0,.4);--green-l:#0b5e44}
+/* ===== Stadium Night (dark mode only) — faint neon pitch backdrop ===== */
+[data-theme="dark"] body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;
+  background:
+    radial-gradient(circle at 50% 30%, rgba(16,185,129,.11) 0 1.5px, transparent 2.5px),
+    radial-gradient(circle at 50% 30%, transparent 70px, rgba(16,185,129,.07) 71px 72px, transparent 73px),
+    linear-gradient(90deg, transparent calc(50% - 1px), rgba(16,185,129,.06) 50%, transparent calc(50% + 1px)),
+    radial-gradient(130% 70% at 50% -5%, rgba(16,185,129,.07), transparent 55%),
+    radial-gradient(120% 60% at 50% 105%, rgba(245,158,11,.05), transparent 55%);
+  background-repeat:no-repeat}
+/* Neon glow on live elements (both themes) */
+.tag.now{box-shadow:0 0 12px rgba(225,29,72,.55)}
+.live-dot{box-shadow:0 0 8px rgba(255,255,255,.85)}
+[data-theme="dark"] .hbtn.rose{box-shadow:0 0 12px rgba(225,29,72,.45)}
+/* Gold-glow active tab + richer cards in dark */
+[data-theme="dark"] .tab.on{color:var(--gold);border-bottom-color:var(--gold);text-shadow:0 0 10px rgba(245,158,11,.5)}
+[data-theme="dark"] .grp-card,[data-theme="dark"] .stat-card,[data-theme="dark"] .mc{background:linear-gradient(180deg,#16202f,#121a28)}
+[data-theme="dark"] .sc{box-shadow:0 0 10px rgba(255,255,255,.18)}
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
 body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.5;-webkit-font-smoothing:antialiased;transition:background .3s,color .3s;padding-bottom:env(safe-area-inset-bottom)}
