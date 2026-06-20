@@ -52,4 +52,15 @@ describe("team pages", () => {
       expect(read(`team/${slug}.html`)).toContain("Host nation");
     }
   });
+
+  it("every team page carries full social/discovery meta", () => {
+    for (const f of files) {
+      const html = read(`team/${f}`);
+      expect(html, `${f} twitter:card`).toContain('name="twitter:card" content="summary_large_image"');
+      expect(html, `${f} twitter:title`).toContain('name="twitter:title"');
+      expect(html, `${f} twitter:image`).toContain('name="twitter:image"');
+      expect(html, `${f} og:site_name`).toContain('property="og:site_name"');
+      expect(html, `${f} og:locale`).toContain('property="og:locale"');
+    }
+  });
 });

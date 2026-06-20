@@ -81,10 +81,16 @@ function cityPage(city, meta, matches) {
 <meta name="theme-color" content="#064e3b"/>
 <link rel="icon" href="../icon-192.png"/>
 <meta property="og:type" content="article"/>
+<meta property="og:site_name" content="World Cup 2026 Hub"/>
+<meta property="og:locale" content="en_US"/>
 <meta property="og:title" content="${esc(title)}"/>
 <meta property="og:description" content="${esc(meta.blurb)}"/>
 <meta property="og:image" content="${BASE}/og-image.png"/>
 <meta property="og:url" content="${url}"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:title" content="${esc(title)}"/>
+<meta name="twitter:description" content="${esc(meta.blurb)}"/>
+<meta name="twitter:image" content="${BASE}/og-image.png"/>
 ${jsonld.map((j) => `<script type="application/ld+json">${JSON.stringify(j)}</script>`).join("\n")}
 <style>${STYLE}</style>
 </head>
@@ -137,10 +143,16 @@ function citiesIndex(list) {
 <meta name="theme-color" content="#064e3b"/>
 <link rel="icon" href="icon-192.png"/>
 <meta property="og:type" content="website"/>
+<meta property="og:site_name" content="World Cup 2026 Hub"/>
+<meta property="og:locale" content="en_US"/>
 <meta property="og:title" content="FIFA World Cup 2026 Host Cities &amp; Stadiums"/>
 <meta property="og:description" content="All 16 host cities and stadiums across the USA, Canada and Mexico."/>
 <meta property="og:image" content="${BASE}/og-image.png"/>
 <meta property="og:url" content="${url}"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:title" content="FIFA World Cup 2026 Host Cities &amp; Stadiums"/>
+<meta name="twitter:description" content="All 16 host cities and stadiums across the USA, Canada and Mexico."/>
+<meta name="twitter:image" content="${BASE}/og-image.png"/>
 <script type="application/ld+json">${JSON.stringify({ "@context": "https://schema.org", "@type": "BreadcrumbList", itemListElement: [{ "@type": "ListItem", position: 1, name: "World Cup 2026", item: `${BASE}/` }, { "@type": "ListItem", position: 2, name: "Host cities", item: url }] })}</script>
 <style>${STYLE}
 .cities{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px}

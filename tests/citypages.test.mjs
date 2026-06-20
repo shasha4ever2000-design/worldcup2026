@@ -31,6 +31,17 @@ describe("host-city pages", () => {
     }
   });
 
+  it("every city page carries full social/discovery meta", () => {
+    for (const f of cityFiles) {
+      const html = read(`city/${f}`);
+      expect(html, `${f} twitter:card`).toContain('name="twitter:card" content="summary_large_image"');
+      expect(html, `${f} twitter:title`).toContain('name="twitter:title"');
+      expect(html, `${f} twitter:image`).toContain('name="twitter:image"');
+      expect(html, `${f} og:site_name`).toContain('property="og:site_name"');
+      expect(html, `${f} og:locale`).toContain('property="og:locale"');
+    }
+  });
+
   it("each city page is a valid doc with the right match count", () => {
     let totalRows = 0;
     for (const f of cityFiles) {

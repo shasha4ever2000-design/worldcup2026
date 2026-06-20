@@ -134,26 +134,6 @@
     <xhtml:link rel="alternate" hreflang="ar" href="https://shasha4ever2000-design.github.io/worldcup2026/sa.html"/>
   </url>
   <url>
-    <loc>https://shasha4ever2000-design.github.io/worldcup2026/#groups</loc>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://shasha4ever2000-design.github.io/worldcup2026/#bracket</loc>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://shasha4ever2000-design.github.io/worldcup2026/#league</loc>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://shasha4ever2000-design.github.io/worldcup2026/#stats</loc>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
     <loc>https://shasha4ever2000-design.github.io/worldcup2026/privacy.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
