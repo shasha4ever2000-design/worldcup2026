@@ -1,7 +1,7 @@
-/* World Cup 2026 — Service Worker (v23) */
-const VERSION = "wc2026-v23";
+/* World Cup 2026 — Service Worker (v24) */
+const VERSION = "wc2026-v24";
 const CORE = [
-  "./index.html", "./privacy.html", "./eg.html", "./sa.html", "./guide.html", "./cities.html", "./manifest.json",
+  "./index.html", "./privacy.html", "./eg.html", "./sa.html", "./guide.html", "./cities.html", "./teams.html", "./manifest.json",
   "./icon-192.png", "./icon-512.png", "./icon-maskable-512.png",
   "./apple-touch-icon.png", "./og-image.png"
 ];

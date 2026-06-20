@@ -46,6 +46,7 @@ export const M = extractAssignment("M");
 export const I = extractAssignment("I");
 export const GROUPS = extractAssignment("GROUPS");
 export const TEAM_INFO = extractAssignment("TEAM_INFO");
+export const CODES = extractAssignment("CODES");
 export const VENUES = extractAssignment("VENUES");
 export const COORDS = extractAssignment("COORDS");
 
