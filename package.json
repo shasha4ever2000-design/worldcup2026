@@ -11,7 +11,8 @@
     "test:e2e": "playwright test",
     "test:py": "python3 -m pytest -q",
     "cf:dev": "wrangler pages dev .",
-    "cf:deploy": "wrangler pages deploy ."
+    "cf:deploy": "wrangler pages deploy .",
+    "gen:cities": "node scripts/gen-city-pages.mjs"
   },
   "devDependencies": {
     "@playwright/test": "^1.49.0",
