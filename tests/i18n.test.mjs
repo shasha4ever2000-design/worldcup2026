@@ -5,13 +5,13 @@ import { I } from "./helpers.mjs";
 // defines must also exist in Arabic and Spanish, with no empty values and no
 // stray/typo'd keys. Catches a forgotten translation before it ships.
 describe("i18n dictionaries", () => {
-  it("ships English, Arabic, Spanish, Portuguese, French, German and Italian", () => {
-    expect(Object.keys(I).sort()).toEqual(["ar", "de", "en", "es", "fr", "it", "pt"]);
+  it("ships 8 languages incl. Japanese", () => {
+    expect(Object.keys(I).sort()).toEqual(["ar", "de", "en", "es", "fr", "it", "ja", "pt"]);
   });
 
   const enKeys = () => Object.keys(I.en).sort();
 
-  for (const locale of ["ar", "es", "pt", "fr", "de", "it"]) {
+  for (const locale of ["ar", "es", "pt", "fr", "de", "it", "ja"]) {
     it(`${locale} has exactly the same keys as English`, () => {
       expect(Object.keys(I[locale]).sort()).toEqual(enKeys());
     });
@@ -60,5 +60,11 @@ describe("i18n dictionaries", () => {
     expect(I.it.title).toBe("Mondiali 2026");
     expect(I.it.goals).toBe("Gol");
     expect(I.it.draw).toBe("Pareggio");
+  });
+
+  it("Japanese translates key labels (not left as English)", () => {
+    expect(I.ja.title).toBe("ワールドカップ2026");
+    expect(I.ja.goals).toBe("得点");
+    expect(I.ja.draw).toBe("引き分け");
   });
 });
