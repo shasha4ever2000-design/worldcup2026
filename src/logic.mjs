@@ -111,6 +111,10 @@ export function predict(h, a, TEAM_INFO, M) {
   let H = Math.round((x / tot) * 100),
     D = Math.round((y / tot) * 100),
     A = 100 - H - D;
+  if (A < 0) {
+    D += A; // keep the three values summing to 100 without a negative away %
+    A = 0;
+  }
   return [H, D, A];
 }
 
