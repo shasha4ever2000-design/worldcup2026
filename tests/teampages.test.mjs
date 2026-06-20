@@ -38,4 +38,18 @@ describe("team pages", () => {
     expect(files).not.toContain("egypt.html");
     expect(files).not.toContain("saudi-arabia.html");
   });
+
+  it("enriches every page with a confederation and the full group schedule", () => {
+    for (const f of files) {
+      const html = read(`team/${f}`);
+      expect(html, `${f} confederation`).toContain("Confederation");
+      expect(html, `${f} full group`).toMatch(/Full Group [A-L] schedule/);
+    }
+  });
+
+  it("flags the three host nations", () => {
+    for (const slug of ["usa", "canada", "mexico"]) {
+      expect(read(`team/${slug}.html`)).toContain("Host nation");
+    }
+  });
 });
