@@ -88,6 +88,15 @@ test.describe("World Cup 2026 site smoke", () => {
     await expect(page.locator("#groups .grp")).toHaveCount(12);
   });
 
+  test("teams hub and a team page load", async ({ page }) => {
+    await page.goto("/teams.html");
+    await expect(page).toHaveTitle(/Teams/i);
+    await expect(page.locator(".tcard")).toHaveCount(48);
+    await page.goto("/team/brazil.html");
+    await expect(page.locator("h1")).toContainText("Brazil");
+    await expect(page.locator(".m").first()).toBeVisible();
+  });
+
   test("host-city hub and a city page load", async ({ page }) => {
     await page.goto("/cities.html");
     await expect(page).toHaveTitle(/Host Cities/i);
