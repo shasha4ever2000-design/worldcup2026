@@ -19,6 +19,7 @@ import {
   tournamentStats,
   parseInitialTab,
   anyLiveNow,
+  pickScore,
 } from "../src/logic.mjs";
 
 describe("normTeam", () => {
@@ -60,6 +61,26 @@ describe("mSt", () => {
   });
   it("reports full-time after the window", () => {
     expect(mSt(kickoff, at(115))).toBe("ft");
+  });
+});
+
+describe("pickScore", () => {
+  it("prefers the live feed while a match is in play (beats stale scores.json)", () => {
+    // Regression: a stale committed "1-0" must not freeze a live "3-1".
+    expect(pickScore("now", "1-0", "3-1")).toBe("3-1");
+  });
+  it("falls back to the server file when there is no live value mid-match", () => {
+    expect(pickScore("now", "2-2", null)).toBe("2-2");
+  });
+  it("treats the committed file as authoritative once the match is final", () => {
+    expect(pickScore("ft", "2-1", "2-0")).toBe("2-1");
+  });
+  it("uses the live value at full-time only when the file has none yet", () => {
+    expect(pickScore("ft", null, "0-0")).toBe("0-0");
+  });
+  it("returns null when neither source has a score (keep current)", () => {
+    expect(pickScore("now", null, null)).toBe(null);
+    expect(pickScore("up", null, null)).toBe(null);
   });
 });
 

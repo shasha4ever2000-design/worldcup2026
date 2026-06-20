@@ -5,7 +5,7 @@ import { describe, it, expect } from "vitest";
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
-import { ALIASES, normTeam, encodePicks, decodePicks, mId, buildMatchSchema, pickFeaturedMatch, tournamentStats, parseInitialTab } from "../src/logic.mjs";
+import { ALIASES, normTeam, encodePicks, decodePicks, mId, buildMatchSchema, pickFeaturedMatch, tournamentStats, parseInitialTab, pickScore } from "../src/logic.mjs";
 import { extractInPageAliases, M, GROUPS, TEAM_INFO, VENUES } from "./helpers.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
@@ -128,6 +128,17 @@ describe("in-page functions behave like the module", () => {
     const valid = ["schedule", "groups", "bracket", "stats"];
     for (const [s, h] of [["?tab=bracket", "#groups"], ["", "#stats"], ["?tab=nope", ""], ["", ""]]) {
       expect(inPage(s, h, valid)).toEqual(parseInitialTab(s, h, valid));
+    }
+  });
+
+  it("in-page pickScore matches the module across source/status combos", () => {
+    const inPage = extractFn("pickScore");
+    for (const status of ["now", "ft", "up"]) {
+      for (const server of [null, "1-0", "2-2"]) {
+        for (const live of [null, "3-1", "2-2"]) {
+          expect(inPage(status, server, live)).toEqual(pickScore(status, server, live));
+        }
+      }
     }
   });
 });

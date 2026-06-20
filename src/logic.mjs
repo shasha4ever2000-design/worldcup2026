@@ -60,6 +60,21 @@ export function anyLiveNow(M, now = Date.now()) {
   return M.some((m) => !m.ph && mSt(new Date(m.dt), now) === "now");
 }
 
+/**
+ * Reconcile a fixture's score from the two client sources:
+ *   - `server`: the committed scores.json (durable, but delayed by GitHub Pages
+ *     redeploys, which are throttled and can lag minutes→hours).
+ *   - `live`: TheSportsDB, fetched directly by the browser (real-time, no lag).
+ *
+ * While a match is in play we trust the live feed so users see goals within
+ * seconds; once it's finished the committed file is authoritative. Returns the
+ * score string to show, or null when neither source has one (keep current).
+ */
+export function pickScore(status, server, live) {
+  if (status === "now") return live != null ? live : server != null ? server : null;
+  return server != null ? server : live != null ? live : null; // "ft" / "up"
+}
+
 /** Subsequence fuzzy match used by the search box. */
 export function fuzzy(q, s) {
   q = q.toLowerCase();
