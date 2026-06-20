@@ -20,12 +20,25 @@ test.describe("World Cup 2026 site smoke", () => {
     await expect(page.locator(".bracket")).toBeVisible();
   });
 
-  test("toggles language to Arabic (RTL)", async ({ page }) => {
+  test("cycles languages English → Spanish → Arabic", async ({ page }) => {
     await page.goto("/");
+    await expect(page.locator("html")).toHaveAttribute("lang", "en");
     await expect(page.locator("html")).toHaveAttribute("dir", "ltr");
+    // First click → Spanish (still LTR)
     await page.locator("#langBtn").click();
-    await expect(page.locator("html")).toHaveAttribute("dir", "rtl");
+    await expect(page.locator("html")).toHaveAttribute("lang", "es");
+    await expect(page.locator("html")).toHaveAttribute("dir", "ltr");
+    await expect(page.locator("#t_title")).toHaveText(/Copa Mundial 2026/i);
+    // Second click → Arabic (RTL)
+    await page.locator("#langBtn").click();
     await expect(page.locator("html")).toHaveAttribute("lang", "ar");
+    await expect(page.locator("html")).toHaveAttribute("dir", "rtl");
+  });
+
+  test("opens directly in Spanish via ?lang=es", async ({ page }) => {
+    await page.goto("/?lang=es");
+    await expect(page.locator("html")).toHaveAttribute("lang", "es");
+    await expect(page.locator("#t_title")).toHaveText(/Copa Mundial 2026/i);
   });
 
   test("search filters the schedule", async ({ page }) => {
