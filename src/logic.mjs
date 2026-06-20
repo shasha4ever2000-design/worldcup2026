@@ -272,6 +272,21 @@ export function tournamentStats(M) {
   };
 }
 
+/**
+ * Resolve the initial tab from a URL: ?tab=<id> takes precedence, then #<id>.
+ * Returns the matching tab id from `valid`, or null. Pure & testable.
+ */
+export function parseInitialTab(search, hash, valid) {
+  let q = "";
+  try {
+    q = new URLSearchParams(search || "").get("tab") || "";
+  } catch {}
+  const h = (hash || "").replace(/^#/, "");
+  if (valid.includes(q)) return q;
+  if (valid.includes(h)) return h;
+  return null;
+}
+
 // ------------------------------- SEO schema --------------------------------
 
 /**

@@ -17,6 +17,7 @@ import {
   buildMatchSchema,
   pickFeaturedMatch,
   tournamentStats,
+  parseInitialTab,
 } from "../src/logic.mjs";
 
 describe("normTeam", () => {
@@ -286,5 +287,20 @@ describe("tournamentStats", () => {
       high: null,
       big: null,
     });
+  });
+});
+
+describe("parseInitialTab", () => {
+  const valid = ["schedule", "groups", "bracket", "stats", "league"];
+  it("prefers ?tab= over the hash", () => {
+    expect(parseInitialTab("?tab=bracket", "#groups", valid)).toBe("bracket");
+  });
+  it("falls back to the hash", () => {
+    expect(parseInitialTab("", "#stats", valid)).toBe("stats");
+    expect(parseInitialTab("?x=1", "#league", valid)).toBe("league");
+  });
+  it("returns null for unknown or missing tabs", () => {
+    expect(parseInitialTab("?tab=nope", "#nope", valid)).toBeNull();
+    expect(parseInitialTab("", "", valid)).toBeNull();
   });
 });

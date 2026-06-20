@@ -20,6 +20,13 @@ test.describe("World Cup 2026 site smoke", () => {
     await expect(page.locator(".rbar")).toBeVisible();
   });
 
+  test("deep-links open the right tab (?tab= and #hash)", async ({ page }) => {
+    await page.goto("/?tab=bracket");
+    await expect(page.locator(".bracket")).toBeVisible();
+    await page.goto("/#groups");
+    await expect(page.locator(".grp-tbl").first()).toBeVisible();
+  });
+
   test("switches tabs", async ({ page }) => {
     await page.goto("/");
     await page.locator('.tab', { hasText: /Groups/i }).click();
