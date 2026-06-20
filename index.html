@@ -275,10 +275,14 @@ body.sf .dval-score:hover,body.sf .dval-score:focus{filter:none}
 }
 .mc:focus-visible,.brk-m:focus-visible,.fav-card:focus-visible,.tab:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
 #confettiCanvas{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:9999}
+.skip{position:fixed;left:50%;top:-60px;transform:translateX(-50%);z-index:10000;background:var(--gold);color:#022c22;font-weight:800;padding:10px 18px;border-radius:0 0 10px 10px;text-decoration:none;transition:top .2s ease}
+.skip:focus{top:0;outline:3px solid #022c22;outline-offset:2px}
+#content:focus{outline:none}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
 </style>
 </head>
 <body>
+<a href="#content" class="skip">Skip to main content</a>
 <noscript>
 <div style="max-width:720px;margin:0 auto;padding:20px;font-family:system-ui,sans-serif;color:#0f172a">
 <h1 style="font-size:22px;margin-bottom:10px">🏆 FIFA World Cup 2026 — Schedule, Standings & Bracket</h1>
@@ -312,7 +316,7 @@ L: England, Croatia, Ghana, Panama
       <button class="hbtn gold" id="installBtn" style="display:none" aria-label="Install app"></button>
       <a class="hbtn yt" id="ytBtn" href="https://www.youtube.com/live/2lJZPT6OljI" target="_blank" rel="noopener" aria-label="Watch live on YouTube" title="Watch live on YouTube"><svg width="14" height="14" viewBox="0 0 24 24" fill="#fff" aria-hidden="true" focusable="false"><path d="M8 5v14l11-7z"/></svg></a>
       <button class="hbtn" id="shareApp" aria-label="Share">↗</button>
-      <button class="hbtn" id="spoilerBtn" title="Hide scores">👁️</button>
+      <button class="hbtn" id="spoilerBtn" title="Hide scores" aria-label="Toggle spoiler-free mode">👁️</button>
       <button class="hbtn" id="themeBtn" aria-label="Toggle dark mode">🌙</button>
       <button class="hbtn" id="langBtn" aria-label="Switch language"></button>
     </div>
@@ -343,7 +347,7 @@ L: England, Croatia, Ghana, Panama
 </div>
 
 <div class="ad-slot" data-placement="header" aria-hidden="true" style="min-height:0"></div>
-<div id="content" aria-live="polite"></div>
+<div id="content" aria-live="polite" tabindex="-1"></div>
 <div class="ad-slot" data-placement="footer" aria-hidden="true" style="min-height:0;margin:8px 0"></div>
 <footer id="t_footer"></footer>
 </div>
