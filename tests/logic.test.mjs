@@ -18,6 +18,7 @@ import {
   pickFeaturedMatch,
   tournamentStats,
   parseInitialTab,
+  anyLiveNow,
 } from "../src/logic.mjs";
 
 describe("normTeam", () => {
@@ -287,6 +288,20 @@ describe("tournamentStats", () => {
       high: null,
       big: null,
     });
+  });
+});
+
+describe("anyLiveNow", () => {
+  const base = new Date("2026-06-15T20:00:00Z").getTime();
+  const M = [{ dt: "2026-06-15T20:00:00Z", h: "A", a: "B" }];
+  it("is true while a real match is in its live window", () => {
+    expect(anyLiveNow(M, base + 10 * 60000)).toBe(true);
+    expect(anyLiveNow(M, base + 114 * 60000)).toBe(true);
+  });
+  it("is false before kickoff, after full-time, and for placeholders", () => {
+    expect(anyLiveNow(M, base - 60000)).toBe(false);
+    expect(anyLiveNow(M, base + 120 * 60000)).toBe(false);
+    expect(anyLiveNow([{ dt: "2026-06-15T20:00:00Z", h: "W1", a: "W2", ph: true }], base + 10 * 60000)).toBe(false);
   });
 });
 
