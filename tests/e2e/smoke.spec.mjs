@@ -12,6 +12,14 @@ test.describe("World Cup 2026 site smoke", () => {
     await expect(page.locator(".dcard").first()).toBeVisible();
   });
 
+  test("stats tab shows the KPI grid and results breakdown", async ({ page }) => {
+    await page.goto("/");
+    await page.locator(".tab", { hasText: /Stats/i }).click();
+    await expect(page.locator(".kpi-grid")).toBeVisible();
+    await expect(page.locator(".kpi")).toHaveCount(4);
+    await expect(page.locator(".rbar")).toBeVisible();
+  });
+
   test("switches tabs", async ({ page }) => {
     await page.goto("/");
     await page.locator('.tab', { hasText: /Groups/i }).click();
