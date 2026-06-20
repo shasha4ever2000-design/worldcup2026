@@ -43,6 +43,7 @@ function extractAssignment(name) {
 }
 
 export const M = extractAssignment("M");
+export const I = extractAssignment("I");
 export const GROUPS = extractAssignment("GROUPS");
 export const TEAM_INFO = extractAssignment("TEAM_INFO");
 export const VENUES = extractAssignment("VENUES");
