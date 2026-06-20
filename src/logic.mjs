@@ -215,6 +215,33 @@ export function scoreVotes(v, M) {
   return { pts, total, decided };
 }
 
+// --------------------------- Match to Watch --------------------------------
+
+/**
+ * Pick the most attention-worthy upcoming match — soonest + strongest teams,
+ * weighted up for knockout stages. Returns null when nothing is upcoming.
+ * Pure: `now` is injected for testability.
+ */
+export function pickFeaturedMatch(M, TEAM_INFO = {}, now = Date.now()) {
+  const rank = (tm) => (TEAM_INFO[tm] && TEAM_INFO[tm].rank ? TEAM_INFO[tm].rank : 50);
+  const stageBonus = { Final: 60, SF: 45, QF: 35, "3rd": 28, R16: 25, R32: 18 };
+  const upcoming = M.filter((m) => !m.ph && m.h && m.a && new Date(m.dt).getTime() >= now);
+  let best = null,
+    bestScore = -Infinity;
+  for (const m of upcoming) {
+    const hoursAway = (new Date(m.dt).getTime() - now) / 3.6e6;
+    const quality = 100 - rank(m.h) + (100 - rank(m.a)); // higher = stronger teams
+    const stage = stageBonus[m.g] || 0;
+    const proximity = hoursAway <= 36 ? 40 : Math.max(0, 30 - hoursAway / 24);
+    const score = quality + stage + proximity;
+    if (score > bestScore) {
+      bestScore = score;
+      best = m;
+    }
+  }
+  return best;
+}
+
 // ------------------------------- SEO schema --------------------------------
 
 /**

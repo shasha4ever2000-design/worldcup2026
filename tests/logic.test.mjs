@@ -15,6 +15,7 @@ import {
   actualWinner,
   scoreVotes,
   buildMatchSchema,
+  pickFeaturedMatch,
 } from "../src/logic.mjs";
 
 describe("normTeam", () => {
@@ -221,5 +222,34 @@ describe("buildMatchSchema", () => {
 
   it("produces JSON-serialisable output (used as JSON-LD)", () => {
     expect(() => JSON.stringify(buildMatchSchema(M, VENUES))).not.toThrow();
+  });
+});
+
+describe("pickFeaturedMatch", () => {
+  const now = new Date("2026-06-15T00:00:00Z").getTime();
+  const TEAM_INFO = { Brazil: { rank: 5 }, Spain: { rank: 8 }, Haiti: { rank: 90 }, Panama: { rank: 80 } };
+  const M = [
+    { g: "C", dt: "2026-06-10T20:00:00Z", h: "Brazil", a: "Spain" }, // past — ignored
+    { g: "C", dt: "2026-06-16T20:00:00Z", h: "Brazil", a: "Spain" }, // soon + elite
+    { g: "L", dt: "2026-06-16T20:00:00Z", h: "Haiti", a: "Panama" }, // soon + weak
+    { g: "L", dt: "2026-07-01T20:00:00Z", h: "Brazil", a: "Spain", ph: false }, // far
+    { g: "R32", dt: "2026-06-30T20:00:00Z", h: "W1", a: "W2", ph: true }, // placeholder
+  ];
+
+  it("prefers a soon, high-quality match over weak or distant ones", () => {
+    const m = pickFeaturedMatch(M, TEAM_INFO, now);
+    expect(m).toMatchObject({ h: "Brazil", a: "Spain", dt: "2026-06-16T20:00:00Z" });
+  });
+
+  it("ignores past matches and placeholders", () => {
+    const onlyPastAndPlaceholder = [
+      { g: "C", dt: "2026-06-10T20:00:00Z", h: "Brazil", a: "Spain" },
+      { g: "R32", dt: "2026-06-30T20:00:00Z", h: "W1", a: "W2", ph: true },
+    ];
+    expect(pickFeaturedMatch(onlyPastAndPlaceholder, TEAM_INFO, now)).toBeNull();
+  });
+
+  it("returns null when there are no matches", () => {
+    expect(pickFeaturedMatch([], TEAM_INFO, now)).toBeNull();
   });
 });

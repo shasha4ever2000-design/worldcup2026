@@ -14,6 +14,12 @@
     <priority>0.9</priority>
   </url>
   <url>
+    <loc>https://shasha4ever2000-design.github.io/worldcup2026/guide.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://shasha4ever2000-design.github.io/worldcup2026/guide.html"/>
+  </url>
+  <url>
     <loc>https://shasha4ever2000-design.github.io/worldcup2026/eg.html</loc>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
