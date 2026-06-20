@@ -17,7 +17,9 @@
     { "src": "icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
   ],
   "shortcuts": [
-    { "name": "Saudi Arabia", "short_name": "KSA", "url": "./index.html" },
-    { "name": "Standings", "url": "./index.html" }
+    { "name": "Today's matches", "short_name": "Today", "url": "./index.html", "icons": [{ "src": "icon-192.png", "sizes": "192x192" }] },
+    { "name": "Group standings", "short_name": "Groups", "url": "./?tab=groups", "icons": [{ "src": "icon-192.png", "sizes": "192x192" }] },
+    { "name": "Knockout bracket", "short_name": "Bracket", "url": "./?tab=bracket", "icons": [{ "src": "icon-192.png", "sizes": "192x192" }] },
+    { "name": "Teams", "short_name": "Teams", "url": "./teams.html", "icons": [{ "src": "icon-192.png", "sizes": "192x192" }] }
   ]
 }
