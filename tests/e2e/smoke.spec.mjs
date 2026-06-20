@@ -80,6 +80,15 @@ test.describe("World Cup 2026 site smoke", () => {
     await expect(page.locator("#groups .grp")).toHaveCount(12);
   });
 
+  test("host-city hub and a city page load", async ({ page }) => {
+    await page.goto("/cities.html");
+    await expect(page).toHaveTitle(/Host Cities/i);
+    await expect(page.locator(".ccard")).toHaveCount(16);
+    await page.goto("/city/miami.html");
+    await expect(page.locator("h1")).toContainText("Miami");
+    await expect(page.locator(".m").first()).toBeVisible();
+  });
+
   test("injects per-match SportsEvent JSON-LD for SEO", async ({ page }) => {
     await page.goto("/");
     const raw = await page.locator("#matchSchema").textContent();

@@ -35,6 +35,27 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://shasha4ever2000-design.github.io/worldcup2026/guide.html"/>
   </url>
   <url>
+    <loc>https://shasha4ever2000-design.github.io/worldcup2026/cities.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url><loc>https://shasha4ever2000-design.github.io/worldcup2026/city/atlanta.html</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://shasha4ever2000-design.github.io/worldcup2026/city/boston.html</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://shasha4ever2000-design.github.io/worldcup2026/city/dallas.html</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://shasha4ever2000-design.github.io/worldcup2026/city/guadalajara.html</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://shasha4ever2000-design.github.io/worldcup2026/city/houston.html</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://shasha4ever2000-design.github.io/worldcup2026/city/kansas-city.html</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://shasha4ever2000-design.github.io/worldcup2026/city/los-angeles.html</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://shasha4ever2000-design.github.io/worldcup2026/city/mexico-city.html</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://shasha4ever2000-design.github.io/worldcup2026/city/miami.html</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://shasha4ever2000-design.github.io/worldcup2026/city/monterrey.html</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://shasha4ever2000-design.github.io/worldcup2026/city/new-york-new-jersey.html</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://shasha4ever2000-design.github.io/worldcup2026/city/philadelphia.html</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://shasha4ever2000-design.github.io/worldcup2026/city/san-francisco-bay-area.html</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://shasha4ever2000-design.github.io/worldcup2026/city/seattle.html</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://shasha4ever2000-design.github.io/worldcup2026/city/toronto.html</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://shasha4ever2000-design.github.io/worldcup2026/city/vancouver.html</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url>
     <loc>https://shasha4ever2000-design.github.io/worldcup2026/eg.html</loc>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
