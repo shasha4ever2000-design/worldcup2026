@@ -35,6 +35,18 @@ test.describe("World Cup 2026 site smoke", () => {
     await expect(page.locator("#content")).toContainText("Brazil");
   });
 
+  test("shows a Match to Watch card and a Guide link", async ({ page }) => {
+    await page.goto("/");
+    await expect(page.locator(".motd")).toBeVisible();
+    await expect(page.locator("#t_guide")).toHaveAttribute("href", "guide.html");
+  });
+
+  test("guide.html loads with its own content", async ({ page }) => {
+    await page.goto("/guide.html");
+    await expect(page).toHaveTitle(/World Cup 2026 Guide/i);
+    await expect(page.locator("#groups .grp")).toHaveCount(12);
+  });
+
   test("injects per-match SportsEvent JSON-LD for SEO", async ({ page }) => {
     await page.goto("/");
     const raw = await page.locator("#matchSchema").textContent();

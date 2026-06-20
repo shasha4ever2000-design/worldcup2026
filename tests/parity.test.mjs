@@ -5,7 +5,7 @@ import { describe, it, expect } from "vitest";
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
-import { ALIASES, normTeam, encodePicks, decodePicks, mId, buildMatchSchema } from "../src/logic.mjs";
+import { ALIASES, normTeam, encodePicks, decodePicks, mId, buildMatchSchema, pickFeaturedMatch } from "../src/logic.mjs";
 import { extractInPageAliases, M, GROUPS, TEAM_INFO, VENUES } from "./helpers.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
@@ -108,6 +108,14 @@ describe("in-page functions behave like the module", () => {
   it("in-page buildMatchSchema matches the module for the real fixture list", () => {
     const inPage = extractFn("buildMatchSchema");
     expect(inPage(M, VENUES)).toEqual(buildMatchSchema(M, VENUES));
+  });
+
+  it("in-page pickFeaturedMatch matches the module across the tournament window", () => {
+    const inPage = extractFn("pickFeaturedMatch");
+    for (const iso of ["2026-06-01T00:00:00Z", "2026-06-20T00:00:00Z", "2026-07-15T00:00:00Z"]) {
+      const now = new Date(iso).getTime();
+      expect(inPage(M, TEAM_INFO, now)).toEqual(pickFeaturedMatch(M, TEAM_INFO, now));
+    }
   });
 });
 
