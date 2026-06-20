@@ -107,10 +107,16 @@ function teamPage(team) {
 <meta name="theme-color" content="#064e3b"/>
 <link rel="icon" href="../icon-192.png"/>
 <meta property="og:type" content="article"/>
+<meta property="og:site_name" content="World Cup 2026 Hub"/>
+<meta property="og:locale" content="en_US"/>
 <meta property="og:title" content="${esc(title)}"/>
 <meta property="og:description" content="${esc(`${team} — Group ${g} at the FIFA World Cup 2026. Fixtures, venues and more.`)}"/>
 <meta property="og:image" content="${BASE}/og-image.png"/>
 <meta property="og:url" content="${url}"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:title" content="${esc(title)}"/>
+<meta name="twitter:description" content="${esc(desc)}"/>
+<meta name="twitter:image" content="${BASE}/og-image.png"/>
 ${jsonld.map((j) => `<script type="application/ld+json">${JSON.stringify(j)}</script>`).join("\n")}
 <style>${STYLE}</style>
 </head>
@@ -163,10 +169,16 @@ function teamsHub() {
 <meta name="theme-color" content="#064e3b"/>
 <link rel="icon" href="icon-192.png"/>
 <meta property="og:type" content="website"/>
+<meta property="og:site_name" content="World Cup 2026 Hub"/>
+<meta property="og:locale" content="en_US"/>
 <meta property="og:title" content="FIFA World Cup 2026 Teams — All 48 Nations"/>
 <meta property="og:description" content="All 48 nations by group, with links to each team's full schedule."/>
 <meta property="og:image" content="${BASE}/og-image.png"/>
 <meta property="og:url" content="${url}"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:title" content="FIFA World Cup 2026 Teams — All 48 Nations"/>
+<meta name="twitter:description" content="All 48 nations by group, with links to each team's full schedule."/>
+<meta name="twitter:image" content="${BASE}/og-image.png"/>
 <script type="application/ld+json">${JSON.stringify({ "@context": "https://schema.org", "@type": "BreadcrumbList", itemListElement: [{ "@type": "ListItem", position: 1, name: "World Cup 2026", item: `${BASE}/` }, { "@type": "ListItem", position: 2, name: "Teams", item: url }] })}</script>
 <style>${STYLE}
 .grp{margin-bottom:18px}.grp h3{font-size:15px;color:var(--green-d);margin-bottom:8px}
