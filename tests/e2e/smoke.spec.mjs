@@ -20,6 +20,15 @@ test.describe("World Cup 2026 site smoke", () => {
     await expect(page.locator(".rbar")).toBeVisible();
   });
 
+  test("fires GA4 events on interaction (analytics wiring)", async ({ page }) => {
+    await page.goto("/");
+    await page.locator("#themeBtn").click();
+    const fired = await page.evaluate(() =>
+      JSON.stringify((window.dataLayer || []).map((a) => Array.from(a))),
+    );
+    expect(fired).toContain("theme_toggle");
+  });
+
   test("theme toggle switches data-theme (Stadium Night dark mode)", async ({ page }) => {
     await page.goto("/");
     const html = page.locator("html");
