@@ -55,6 +55,11 @@ export function mSt(d, now = Date.now()) {
   return now >= x + 115 * 6e4 ? "ft" : "up";
 }
 
+/** True if any real match is in its live window right now — drives faster polling. */
+export function anyLiveNow(M, now = Date.now()) {
+  return M.some((m) => !m.ph && mSt(new Date(m.dt), now) === "now");
+}
+
 /** Subsequence fuzzy match used by the search box. */
 export function fuzzy(q, s) {
   q = q.toLowerCase();
