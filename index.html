@@ -317,6 +317,19 @@ body.sf .dval-score:hover,body.sf .dval-score:focus{filter:none}
 .skip{position:fixed;left:50%;top:-60px;transform:translateX(-50%);z-index:10000;background:var(--gold);color:#022c22;font-weight:800;padding:10px 18px;border-radius:0 0 10px 10px;text-decoration:none;transition:top .2s ease}
 .skip:focus{top:0;outline:3px solid #022c22;outline-offset:2px}
 #content:focus{outline:none}
+/* Head-to-head compare */
+.cmp-pickers{display:flex;gap:8px;align-items:center;margin-bottom:14px}
+.cmp-sel{flex:1;min-width:0;padding:9px 8px;height:auto}
+.cmp-head{display:grid;grid-template-columns:1fr auto 1fr;gap:8px;align-items:center;text-align:center;margin-bottom:8px}
+.cmp-head .cf{font-size:36px;line-height:1}
+.cmp-head .cn{font-size:13px;font-weight:800;margin-top:4px}
+.cmp-head .cvs{font-size:12px;font-weight:800;color:var(--muted)}
+.cmp-row{display:grid;grid-template-columns:1fr auto 1fr;gap:10px;align-items:center;padding:9px 0;border-bottom:1px solid var(--line);font-size:14px}
+.cmp-row:last-of-type{border-bottom:none}
+.cmp-row .cl{text-align:center;font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.03em;font-weight:700;white-space:nowrap}
+.cmp-row .cmp-a{text-align:end;font-weight:700;font-variant-numeric:tabular-nums}
+.cmp-row .cmp-b{text-align:start;font-weight:700;font-variant-numeric:tabular-nums}
+.cmp-row .win{color:var(--green)}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
 </style>
 </head>
@@ -717,13 +730,51 @@ function brkHTML(){let h="";[{k:"R32",l:t().r32},{k:"R16",l:t().r16},{k:"QF",l:t
 
 /* ============ STATS ============ */
 function tournamentStats(M){const played=M.filter(m=>m.s);let goals=0,clean=0,homeWins=0,draws=0,awayWins=0,high=null,big=null;for(const m of played){const[h,a]=m.s.split("-").map(Number);goals+=h+a;if(h===0||a===0)clean++;if(h>a)homeWins++;else if(h<a)awayWins++;else draws++;if(!high||h+a>high.tot)high={m,tot:h+a};if(!big||Math.abs(h-a)>big.diff)big={m,diff:Math.abs(h-a)}}return{count:played.length,goals,avg:played.length?Math.round(goals/played.length*100)/100:0,clean,homeWins,draws,awayWins,high,big}}
+function teamTournament(team,M){let played=0,w=0,d=0,l=0,gf=0,ga=0;for(const m of M){if(m.ph||!m.s)continue;if(m.h!==team&&m.a!==team)continue;const[h,a]=m.s.split("-").map(Number);const isH=m.h===team;const f=isH?h:a,against=isH?a:h;played++;gf+=f;ga+=against;if(f>against)w++;else if(f<against)l++;else d++}return{played,w,d,l,gf,ga,gd:gf-ga}}
 function statsHTML(){const played=M.filter(m=>m.s);if(!played.length)return`<div class="statsv"><h3>${t().statTitle}</h3><div class="empty">${t().noStat}</div></div>`;const S=tournamentStats(M);const mlabel=x=>`${fl(x.h)} ${tn(x.h)} ${x.s} ${tn(x.a)} ${fl(x.a)}`;const gbg={};Object.keys(GROUPS).forEach(g=>{gbg[g]=0});played.forEach(m=>{if(gbg[m.g]!=null){const[h,a]=m.s.split("-").map(Number);gbg[m.g]+=h+a}});const maxg=Math.max(1,...Object.values(gbg));const kpi=(v,l)=>`<div class="kpi"><b>${v}</b><span>${l}</span></div>`;const row=(l,v)=>`<div class="stat-card"><div class="sl">${l}</div><div class="sv">${v}</div></div>`;let h=`<div class="statsv"><h3>${t().statTitle}</h3>`;h+=`<div class="kpi-grid">${kpi(S.count,t().played)}${kpi(S.goals,t().goals)}${kpi(S.avg.toFixed(2),t().stAvg)}${kpi(S.clean,t().stClean)}</div>`;const tot=Math.max(1,S.homeWins+S.draws+S.awayWins);const seg=(n,c)=>n?`<span class="rseg" style="width:${n/tot*100}%;background:${c}"></span>`:"";h+=`<div class="stat-card"><div class="sl">${t().stResults}</div><div class="rbar">${seg(S.homeWins,"var(--green)")}${seg(S.draws,"#94a3b8")}${seg(S.awayWins,"var(--blue)")}</div><div class="rlegend"><span><i style="background:var(--green)"></i>${t().homeWins} ${S.homeWins}</span><span><i style="background:#94a3b8"></i>${t().draw} ${S.draws}</span><span><i style="background:var(--blue)"></i>${t().awayWins} ${S.awayWins}</span></div></div>`;if(S.high)h+=row(t().stHigh,mlabel(S.high.m)+" ("+S.high.tot+")");if(S.big&&S.big.diff>0)h+=row(t().stBig,mlabel(S.big.m));h+=gbHTML();h+=`<div class="stat-card"><div class="sl">${t().stByGroup}</div>${Object.keys(gbg).map(g=>`<div class="gbar"><span class="gt">${t().grp} ${g}</span><span class="gtrack"><span class="gfill" style="width:${gbg[g]/maxg*100}%"></span></span><b>${gbg[g]}</b></div>`).join("")}</div>`;return h+"</div>"}
 
 /* ============ FAVOURITES ============ */
 function favHTML(){if(!favs.length)return`<div class="myteams"><h3>${t().tabFav}</h3><div class="empty">${t().noFav}</div><div style="text-align:center;margin-top:18px"><button class="hbtn gold" onclick="shareBracket()" style="padding:10px 20px;font-size:13px">📸 ${L("Share my predictions","شارك توقعاتي","Compartir mis pronósticos","Compartilhar meus palpites","Partager mes pronostics","Meine Tipps teilen","Condividi i miei pronostici","予想を共有")}</button></div></div>`;let h=`<div class="myteams"><h3>${t().tabFav}</h3><div class="fav-grid">`;favs.forEach(tm=>h+=`<div class="fav-card" onclick="showTeam('${esc(tm)}')" role="button" tabindex="0"><div class="ff">${fl(tm)}</div><div class="fn">${tn(tm)}</div></div>`);h+=`</div>`;h+=`<div style="text-align:center;margin:6px 0 18px"><button class="hbtn gold" onclick="shareBracket()" style="padding:10px 20px;font-size:13px">📸 ${L("Share my predictions","شارك توقعاتي","Compartir mis pronósticos","Compartilhar meus palpites","Partager mes pronostics","Meine Tipps teilen","Condividi i miei pronostici","予想を共有")}</button></div>`;const my=M.filter(m=>favs.includes(m.h)||favs.includes(m.a));my.forEach(m=>{const d=new Date(m.dt),idx=M.indexOf(m);h+=`<div class="mc hi" onclick="openSheetByIdx(${idx})" role="button" tabindex="0"><div class="mtop"><div><div class="time">${fT(d)}</div><div class="et">${fDay(d)} · <span class="tag stg">${stgL(m.g)}</span></div></div><div class="venue">📍 ${tc(m.c)}</div></div><div class="teams">${tmHTML(m.h,m.ph,0)}${midHTML(m)}${tmHTML(m.a,m.ph,1)}</div></div>`});return h+"</div>"}
 
 /* ============ TEAM SHEET ============ */
-window.showTeam=function(team){const info=TEAM_INFO[team]||{},grp=Object.keys(GROUPS).find(g=>GROUPS[g].includes(team)),row=(l,v)=>`<div class="info-row"><span class="info-lbl">${l}</span><span class="info-val">${v}</span></div>`;let b="";if(grp)b+=row(t().grp,grp);if(info.rank)b+=row(t().rank,"#"+info.rank);if(info.coach)b+=row(t().coach,info.coach);if(info.conf)b+=row(t().conf,info.conf);if(info.qual)b+=row(t().qual,info.qual);const fm=teamForm(team);if(fm.length)b+=row(t().form,`<span class="form">${fm.map(x=>`<span class="fdot ${x}">${x}</span>`).join("")}</span>`);if(info.stars){b+=`<div style="margin-top:12px;font-weight:700;font-size:13px;margin-bottom:6px">${t().keyPlayers}</div>`+info.stars.map(s=>`<div style="padding:4px 0;font-size:13px">⭐ ${s}</div>`).join("")}const tms=M.filter(m=>m.h===team||m.a===team);if(tms.length){b+=`<div style="margin-top:14px;font-weight:700;font-size:13px;margin-bottom:6px">${t().teamMatches}</div>`+tms.map(m=>{const d=new Date(m.dt),o=m.h===team?m.a:m.h;return`<div class="info-row"><span>${fl(o)} ${t().vs} ${tn(o)}</span><span style="color:var(--muted)">${m.s||fT(d)+" · "+fDay(d)}</span></div>`}).join("")}const isF=favs.includes(team);b+=`<button class="act ${isF?"":"on"}" style="margin-top:14px;width:100%;padding:11px" onclick="toggleFav('${esc(team)}')">${isF?L("❌ Remove favourite","❌ إزالة من المفضلة","❌ Quitar de favoritos","❌ Remover dos favoritos","❌ Retirer des favoris","❌ Favorit entfernen","❌ Rimuovi preferito","❌ お気に入りを削除"):L("⭐ Add to favourites","⭐ أضف للمفضلة","⭐ Añadir a favoritos","⭐ Adicionar aos favoritos","⭐ Ajouter aux favoris","⭐ Zu Favoriten hinzufügen","⭐ Aggiungi ai preferiti","⭐ お気に入りに追加")}</button>`;document.getElementById("sheetTitle").innerHTML=`${fl(team)} ${tn(team)}`;document.getElementById("sheetBody").innerHTML=b;showSheet()}
+window.showTeam=function(team){const info=TEAM_INFO[team]||{},grp=Object.keys(GROUPS).find(g=>GROUPS[g].includes(team)),row=(l,v)=>`<div class="info-row"><span class="info-lbl">${l}</span><span class="info-val">${v}</span></div>`;let b="";if(grp)b+=row(t().grp,grp);if(info.rank)b+=row(t().rank,"#"+info.rank);if(info.coach)b+=row(t().coach,info.coach);if(info.conf)b+=row(t().conf,info.conf);if(info.qual)b+=row(t().qual,info.qual);const fm=teamForm(team);if(fm.length)b+=row(t().form,`<span class="form">${fm.map(x=>`<span class="fdot ${x}">${x}</span>`).join("")}</span>`);if(info.stars){b+=`<div style="margin-top:12px;font-weight:700;font-size:13px;margin-bottom:6px">${t().keyPlayers}</div>`+info.stars.map(s=>`<div style="padding:4px 0;font-size:13px">⭐ ${s}</div>`).join("")}const tms=M.filter(m=>m.h===team||m.a===team);if(tms.length){b+=`<div style="margin-top:14px;font-weight:700;font-size:13px;margin-bottom:6px">${t().teamMatches}</div>`+tms.map(m=>{const d=new Date(m.dt),o=m.h===team?m.a:m.h;return`<div class="info-row"><span>${fl(o)} ${t().vs} ${tn(o)}</span><span style="color:var(--muted)">${m.s||fT(d)+" · "+fDay(d)}</span></div>`}).join("")}const isF=favs.includes(team);b+=`<button class="act ${isF?"":"on"}" style="margin-top:14px;width:100%;padding:11px" onclick="toggleFav('${esc(team)}')">${isF?L("❌ Remove favourite","❌ إزالة من المفضلة","❌ Quitar de favoritos","❌ Remover dos favoritos","❌ Retirer des favoris","❌ Favorit entfernen","❌ Rimuovi preferito","❌ お気に入りを削除"):L("⭐ Add to favourites","⭐ أضف للمفضلة","⭐ Añadir a favoritos","⭐ Adicionar aos favoritos","⭐ Ajouter aux favoris","⭐ Zu Favoriten hinzufügen","⭐ Aggiungi ai preferiti","⭐ お気に入りに追加")}</button>`;b+=`<button class="act" style="margin-top:8px;width:100%;padding:11px" onclick="openCompare('${esc(team)}')">⚔️ ${L("Compare this team","⚔️ قارن هذا المنتخب","Comparar este equipo","Comparar esta seleção","Comparer cette équipe","Dieses Team vergleichen","Confronta questa squadra","このチームを比較")}</button>`;document.getElementById("sheetTitle").innerHTML=`${fl(team)} ${tn(team)}`;document.getElementById("sheetBody").innerHTML=b;showSheet()}
+
+/* ============ HEAD-TO-HEAD COMPARE ============ */
+const ALL_TEAMS=()=>Object.values(GROUPS).flat();
+window.openCompare=function(teamA,teamB){
+  const teams=ALL_TEAMS().slice().sort((a,b)=>tn(a).localeCompare(tn(b),lang==="ar"?"ar":"en"));
+  if(!teamA||!teams.includes(teamA))teamA=teams[0];
+  if(!teamB||teamB===teamA||!teams.includes(teamB))teamB=teams.find(x=>x!==teamA);
+  const opts=sel=>teams.map(x=>`<option value="${escapeHtml(x)}"${x===sel?" selected":""}>${tn(x)}</option>`).join("");
+  document.getElementById("sheetTitle").innerHTML="⚔️ "+L("Compare Teams","مقارنة المنتخبات","Comparar equipos","Comparar seleções","Comparer les équipes","Teams vergleichen","Confronta squadre","チーム比較");
+  const b=`<div class="cmp-pickers"><select class="tz cmp-sel" id="cmpA" onchange="cmpUpdate()">${opts(teamA)}</select><span style="font-weight:800;color:var(--muted)">⚔️</span><select class="tz cmp-sel" id="cmpB" onchange="cmpUpdate()">${opts(teamB)}</select></div><div id="cmpBody"></div>`;
+  document.getElementById("sheetBody").innerHTML=b;
+  renderCompare(teamA,teamB);
+  showSheet();
+  if(window.trackEvent)trackEvent("compare_open");
+};
+window.cmpUpdate=function(){const a=document.getElementById("cmpA"),b=document.getElementById("cmpB");if(a&&b)renderCompare(a.value,b.value)};
+function renderCompare(a,b){
+  const body=document.getElementById("cmpBody");if(!body)return;
+  if(a===b){body.innerHTML=`<div class="empty">${L("Pick two different teams","اختر منتخبين مختلفين","Elige dos equipos diferentes","Escolha duas seleções diferentes","Choisissez deux équipes différentes","Wähle zwei verschiedene Teams","Scegli due squadre diverse","異なる2チームを選択")}</div>`;return}
+  const sa=teamTournament(a,M),sb=teamTournament(b,M);
+  const rk=x=>(TEAM_INFO[x]&&TEAM_INFO[x].rank)?TEAM_INFO[x].rank:null;
+  const ra=rk(a),rb=rk(b),fa=teamForm(a),fb=teamForm(b);
+  const dots=f=>f.length?`<span class="form">${f.map(x=>`<span class="fdot ${x}">${x}</span>`).join("")}</span>`:"—";
+  // better: 'a' | 'b' | '' — which column is stronger (lit green)
+  const row=(lbl,va,vb,better)=>`<div class="cmp-row"><span class="cmp-a${better==="a"?" win":""}">${va}</span><span class="cl">${lbl}</span><span class="cmp-b${better==="b"?" win":""}">${vb}</span></div>`;
+  const cmpNum=(x,y,hi)=>x===y?"":hi?(x>y?"a":"b"):(x<y?"a":"b"); // hi=true → higher wins
+  let h=`<div class="cmp-head"><div><div class="cf">${fl(a)}</div><div class="cn">${tn(a)}</div></div><div class="cvs">${t().vs}</div><div><div class="cf">${fl(b)}</div><div class="cn">${tn(b)}</div></div></div>`;
+  h+=row(t().rank,ra?"#"+ra:"—",rb?"#"+rb:"—",(ra&&rb)?cmpNum(ra,rb,false):"");
+  h+=row(t().played,sa.played,sb.played,"");
+  h+=row("✅ "+t().w+" / "+t().d+" / "+t().l,`${sa.w}-${sa.d}-${sa.l}`,`${sb.w}-${sb.d}-${sb.l}`,cmpNum(sa.w,sb.w,true));
+  h+=row("⚽ "+t().goals,sa.gf,sb.gf,cmpNum(sa.gf,sb.gf,true));
+  h+=row(t().gd,(sa.gd>0?"+":"")+sa.gd,(sb.gd>0?"+":"")+sb.gd,cmpNum(sa.gd,sb.gd,true));
+  h+=row(t().form,dots(fa),dots(fb),"");
+  const[pH,pD,pA]=predict(a,b);
+  h+=`<div class="fb-label" style="margin-top:14px">${t().winProb}</div><div class="prob"><div class="prob-row"><span class="pl">${fl(a)} ${tn(a)}</span><span class="prob-track"><span class="prob-fill" style="width:${pH}%;background:var(--green)"></span></span><span class="pv">${pH}%</span></div><div class="prob-row"><span class="pl">${t().draw}</span><span class="prob-track"><span class="prob-fill" style="width:${pD}%;background:#94a3b8"></span></span><span class="pv">${pD}%</span></div><div class="prob-row"><span class="pl">${fl(b)} ${tn(b)}</span><span class="prob-track"><span class="prob-fill" style="width:${pA}%;background:var(--blue)"></span></span><span class="pv">${pA}%</span></div></div><div class="fb-note" style="text-align:start">${t().predNote}</div>`;
+  body.innerHTML=h;
+}
 
 /* ============ MATCH SHEET ============ */
 let openMatch=null;

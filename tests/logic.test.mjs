@@ -20,6 +20,7 @@ import {
   parseInitialTab,
   anyLiveNow,
   pickScore,
+  teamTournament,
 } from "../src/logic.mjs";
 
 describe("normTeam", () => {
@@ -338,5 +339,24 @@ describe("parseInitialTab", () => {
   it("returns null for unknown or missing tabs", () => {
     expect(parseInitialTab("?tab=nope", "#nope", valid)).toBeNull();
     expect(parseInitialTab("", "", valid)).toBeNull();
+  });
+});
+
+describe("teamTournament", () => {
+  const fx = [
+    { g: "A", dt: "2026-06-12T01:00:00Z", h: "Mexico", a: "South Africa", s: "2-0" },
+    { g: "A", dt: "2026-06-18T01:00:00Z", h: "South Korea", a: "Mexico", s: "1-1" },
+    { g: "A", dt: "2026-06-25T01:00:00Z", h: "Mexico", a: "Czech Republic", s: "0-3" },
+    { g: "A", dt: "2026-07-01T01:00:00Z", h: "Mexico", a: "X", s: null }, // unplayed → ignored
+    { g: "R32", dt: "2026-07-05T01:00:00Z", h: "1A", a: "2B", ph: 1 }, // placeholder → ignored
+  ];
+  it("aggregates W/D/L, goals and goal difference for a team", () => {
+    expect(teamTournament("Mexico", fx)).toEqual({ played: 3, w: 1, d: 1, l: 1, gf: 3, ga: 4, gd: -1 });
+  });
+  it("counts away appearances correctly", () => {
+    expect(teamTournament("South Africa", fx)).toEqual({ played: 1, w: 0, d: 0, l: 1, gf: 0, ga: 2, gd: -2 });
+  });
+  it("returns an all-zero record for a team with no played matches", () => {
+    expect(teamTournament("Brazil", fx)).toEqual({ played: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, gd: 0 });
   });
 });
