@@ -78,6 +78,20 @@ def match_scores(api_matches, lookup, scores):
             scores[fk] = sc; changed += 1; print(f"  {fk} = {sc} ({status})")
     return changed, matched, unmatched
 
+def apply_overrides(scores, overrides):
+    """
+    Apply manual score corrections on top of the feed (mutated in place).
+    The free football-data.org feed is occasionally wrong (e.g. a VAR-disallowed
+    goal left in the full-time tally). overrides.json lets us pin the correct
+    result so the auto-updater can't clobber it back. Returns the count applied.
+    Pure: no IO, no network.
+    """
+    applied = 0
+    for k, v in (overrides or {}).items():
+        if scores.get(k) != v:
+            scores[k] = v; applied += 1; print(f"  OVERRIDE {k} = {v}")
+    return applied
+
 def main():
     token = os.environ.get("FOOTBALL_DATA_TOKEN", "").strip()
     if not token:
@@ -106,6 +120,11 @@ def main():
 
     print(f"Matched {matched} | updated {changed} | unmatched {len(unmatched)}")
     if unmatched: print("Unmatched (add to ALIAS if real):", unmatched[:20])
+
+    # Manual corrections win over the (occasionally wrong) free feed.
+    try: overrides = json.load(open("overrides.json", encoding="utf-8"))
+    except Exception: overrides = {}
+    changed += apply_overrides(scores, overrides)
 
     # Write sorted for clean diffs
     out = json.dumps(dict(sorted(scores.items())), ensure_ascii=False, indent=2)
