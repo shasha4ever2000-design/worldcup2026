@@ -115,13 +115,15 @@ header::before{content:"";position:absolute;inset:-40% -10% auto -10%;height:170
 .hbtn{display:inline-flex;align-items:center;gap:4px;font-size:12px;font-weight:700;padding:5px 11px;border-radius:8px;background:rgba(255,255,255,.12);color:#fff}
 .hbtn:hover{background:rgba(255,255,255,.22)}.hbtn.rose{background:var(--rose)}.hbtn.gold{background:var(--gold);color:#022c22}.hbtn.yt{background:#FF0000}.hbtn.yt:hover{background:#cc0000}
 .live-dot{width:7px;height:7px;border-radius:50%;background:#fff;animation:pulse 1.4s infinite}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}@keyframes rspin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
 .sub{font-size:12px;color:#a7f3d0;margin-top:4px}
 .hlinks{display:flex;gap:7px;margin-top:12px;flex-wrap:wrap}
 .hlinks a,.hlinks button{font-size:12px;font-weight:700;text-decoration:none;color:#022c22;background:var(--gold);padding:7px 14px;border-radius:8px}
 .hlinks .ghost{background:rgba(255,255,255,.12);color:#fff}
 .hright{margin-inline-start:auto;display:flex;gap:6px;align-items:center}
 .dash{display:grid;grid-template-columns:repeat(auto-fit,minmax(92px,1fr));gap:7px;margin-top:14px}
+.lu{text-align:center;font-size:.72rem;color:var(--muted);margin-top:4px;min-height:1em;opacity:.8;display:flex;align-items:center;justify-content:center;gap:6px}
+.refresh-btn{border:none;background:none;color:var(--green);font-size:1rem;cursor:pointer;padding:2px 6px;border-radius:50%;transition:transform .3s,background .2s}.refresh-btn:hover{background:rgba(22,163,74,.1)}.refresh-btn.spin{animation:rspin .6s ease}
 .dcard{background:rgba(255,255,255,.08);border-radius:10px;padding:8px;text-align:center}
 .dcard b{font-size:16px;display:block;font-variant-numeric:tabular-nums}.dcard span{font-size:9px;text-transform:uppercase;letter-spacing:.05em;color:#a7f3d0}
 .nation{margin:14px 14px 12px;border-radius:16px;color:#fff;padding:14px;box-shadow:0 8px 24px rgba(0,0,0,.2)}
@@ -163,7 +165,7 @@ header::before{content:"";position:absolute;inset:-40% -10% auto -10%;height:170
 .tm{display:flex;align-items:center;gap:6px;min-width:0}.tm.aw{justify-content:flex-end}
 .tm .fl{font-size:20px;line-height:1;flex-shrink:0;display:inline-flex;align-items:center;min-width:24px}
 .flag{height:1.05em;width:auto;border-radius:2px;vertical-align:-.15em;display:inline-block;box-shadow:0 0 0 .5px rgba(0,0,0,.12)}.tm .nm{font-weight:600;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1;min-width:0}.tm .nm.ph{color:var(--muted);font-size:12px}
-.sc{font-weight:800;font-size:15px;font-variant-numeric:tabular-nums;background:var(--chip);color:var(--ink);padding:2px 9px;border-radius:7px}
+.sc{font-weight:800;font-size:15px;font-variant-numeric:tabular-nums;background:var(--chip);color:var(--ink);padding:2px 9px;border-radius:7px}.sc.live-sc{background:var(--rose);color:#fff;position:relative}.min-lbl{display:block;font-size:9px;font-weight:600;text-align:center;opacity:.85;animation:pulse 1.4s infinite}
 [data-theme="dark"] .sc{background:#fff;color:#0f172a}
 .vs-t{font-size:11px;font-weight:700;color:#94a3b8}
 .tag{font-size:9px;font-weight:700;padding:2px 6px;border-radius:999px}.tag.ft{background:var(--chip);color:var(--muted)}.tag.now{background:var(--rose);color:#fff;animation:pulse 1.4s infinite}.tag.stg{background:#eef2ff;color:#4338ca}
@@ -266,6 +268,13 @@ footer{text-align:center;font-size:11px;color:var(--muted);padding:8px 14px 40px
 .cmt-h{display:flex;justify-content:space-between;align-items:center;font-size:12px;gap:8px}
 .cmt-stars{color:var(--gold);font-size:11px;white-space:nowrap}.cmt-b{font-size:13px;margin-top:5px;color:var(--ink2)}
 .fb-label{font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.live-strip{display:none;overflow-x:auto;gap:8px;padding:6px 12px;background:linear-gradient(90deg,#0f172a,#1e293b);border-bottom:2px solid var(--rose);scrollbar-width:none}
+.live-strip::-webkit-scrollbar{display:none}
+.live-strip.on{display:flex}
+.ls-card{flex-shrink:0;display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.06);border-radius:8px;padding:4px 10px;font-size:.75rem;color:#e2e8f0;cursor:pointer;transition:background .2s}
+.ls-card:hover{background:rgba(255,255,255,.12)}
+.ls-sc{font-weight:700;color:#fff;font-size:.85rem;min-width:32px;text-align:center}
+.ls-live{width:6px;height:6px;border-radius:50%;background:var(--rose);animation:pulse 1.4s infinite;margin-right:2px}
 .ticker-wrap{background:var(--green-d);overflow:hidden;height:30px;display:flex;align-items:center;border-bottom:2px solid var(--gold);flex-shrink:0}
 .ticker-lbl{flex-shrink:0;background:var(--gold);color:#022c22;font-size:10px;font-weight:900;padding:0 10px;height:100%;display:flex;align-items:center;letter-spacing:.06em;z-index:2;white-space:nowrap}
 .ticker-scroll{flex:1;overflow:hidden;height:100%;position:relative;-webkit-mask-image:linear-gradient(to right,transparent 0%,#000 5%,#000 95%,transparent 100%);mask-image:linear-gradient(to right,transparent 0%,#000 5%,#000 95%,transparent 100%)}
@@ -375,6 +384,7 @@ L: England, Croatia, Ghana, Panama
   </div>
   <div class="sub" id="t_sub"></div>
   <div class="dash" id="dashboard"></div>
+  <div class="lu" id="lastUpdated"><button class="refresh-btn" id="refreshBtn" onclick="manualRefresh()" aria-label="Refresh scores">↻</button></div>
   <div class="hlinks">
     <a href="https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026" target="_blank" rel="noopener" id="t_scores"></a>
     <a class="ghost" href="https://news.google.com/search?q=FIFA%20World%20Cup%202026" target="_blank" rel="noopener" id="t_news"></a>
@@ -384,6 +394,7 @@ L: England, Croatia, Ghana, Panama
 <div class="sf-bar" id="sfBar"></div>
 <div class="ticker-wrap"><span class="ticker-lbl" id="t_ticker_lbl">⚽ LATEST</span><div class="ticker-scroll"><div class="ticker-inner" id="tickerInner"><span class="tick-item">Loading…</span></div></div></div>
 <div id="nationCards"></div>
+<div class="live-strip" id="liveStrip"></div>
 <div class="tabs" id="tabBar" role="tablist"></div>
 
 <div id="scheduleControls" class="ctrls" style="display:none">
@@ -712,7 +723,7 @@ function renderNation(cfg){const team=cfg.team,players=cfg.players;const list=M.
 function renderNations(){document.getElementById("nationCards").innerHTML=FEATURED.map(renderNation).join("")}
 /* ============ MATCH PARTS ============ */
 function tmHTML(n,ph,aw){if(ph)return`<div class="tm${aw?" aw":""}"><span class="nm ph">${n}</span></div>`;return`<div class="tm${aw?" aw":""}">${aw?"":`<span class="fl">${fl(n)}</span>`}<span class="nm">${tn(n)}</span>${aw?`<span class="fl">${fl(n)}</span>`:""}</div>`}
-function midHTML(m){if(m.s)return`<span class="sc">${m.s.replace("-"," – ")}</span>`;const st=mSt(new Date(m.dt));if(st==="now")return`<span class="tag now">${t().liveLbl}</span>`;if(st==="ft")return`<span class="tag ft">${t().ft}</span>`;return`<span class="vs-t">${t().vs}</span>`}
+function midHTML(m){if(m.s){const st=mSt(new Date(m.dt));if(st==="now"){const min=Math.min(90,Math.floor((Date.now()-new Date(m.dt).getTime())/60000)+1);return`<span class="sc live-sc">${m.s.replace("-"," – ")}<span class="min-lbl">${min}'</span></span>`}return`<span class="sc">${m.s.replace("-"," – ")}</span>`}const st=mSt(new Date(m.dt));if(st==="now")return`<span class="tag now">${t().liveLbl}</span>`;if(st==="ft")return`<span class="tag ft">${t().ft}</span>`;return`<span class="vs-t">${t().vs}</span>`}
 
 /* ============ SCHEDULE ============ */
 function passes(m){if(query){const q=query.toLowerCase();if(!(fuzzy(q,m.h||"")||fuzzy(q,m.a||"")||fuzzy(q,TEAM_AR[m.h]||"")||fuzzy(q,TEAM_AR[m.a]||"")))return false}if(filter==="eg")return m.h==="Egypt"||m.a==="Egypt";if(filter==="ksa")return m.h==="Saudi Arabia"||m.a==="Saudi Arabia";if(filter==="ko")return KO_S.includes(m.g);if(filter!=="all")return m.g===filter;if(day!=="all")return dKey(new Date(m.dt))===day;return true}
@@ -809,7 +820,7 @@ const sb=document.getElementById("spoilerBtn");if(sb){sb.textContent=spoilerFree
 const tlbl=document.getElementById("t_ticker_lbl");if(tlbl)tlbl.textContent=L("⚽ LATEST","⚽ آخر الأخبار","⚽ ÚLTIMAS","⚽ ÚLTIMAS","⚽ ACTUS","⚽ NEUESTE","⚽ ULTIME","⚽ 最新");
 const sfb=document.getElementById("sfBar");if(sfb)sfb.textContent=spoilerFree?t().sfBar:"";
 document.getElementById("tabBar").innerHTML=TABS.map(([k,l])=>`<button class="tab${tab===k?" on":""}" onclick="setTab('${k}')" role="tab" aria-selected="${tab===k}">${t()[l]}</button>`).join("");
-document.getElementById("scheduleControls").style.display=tab==="schedule"?"block":"none";document.getElementById("todayFab").classList.toggle("show",false);renderChips();renderNations();renderContent()}
+document.getElementById("scheduleControls").style.display=tab==="schedule"?"block":"none";document.getElementById("todayFab").classList.toggle("show",false);renderLiveStrip();renderChips();renderNations();renderContent()}
 window.setTab=function(k){tab=k;if(window.trackTab)trackTab(k);if(document.startViewTransition&&matchMedia("(prefers-reduced-motion: no-preference)").matches){document.startViewTransition(()=>render())}else{render()}}
 function renderContent(){const el=document.getElementById("content");if(tab==="schedule")el.innerHTML=`<div class="sec">${motdHTML()}${schHTML()}</div>`;else if(tab==="groups")el.innerHTML=`<div class="sec">${grpHTML()}</div>`;else if(tab==="bracket")el.innerHTML=brkHTML();else if(tab==="stats")el.innerHTML=statsHTML();else if(tab==="favorites")el.innerHTML=favHTML();else if(tab==="sim")el.innerHTML=simHTML();else if(tab==="league")el.innerHTML=leagueHTML();
 if(tab==="schedule"){const a=document.getElementById("todayAnchor");document.getElementById("todayFab").classList.toggle("show",!!a&&day==="all"&&filter==="all")}else document.getElementById("todayFab").classList.remove("show")}
@@ -823,9 +834,12 @@ document.getElementById("shareApp").onclick=shareApp;
 document.getElementById("todayFab").onclick=()=>{const a=document.getElementById("todayAnchor");if(a)a.scrollIntoView({behavior:"smooth",block:"start"})};
 window.addEventListener("beforeinstallprompt",e=>{e.preventDefault();deferredPrompt=e;document.getElementById("installBtn").style.display="inline-flex"});
 document.getElementById("installBtn").onclick=async()=>{if(!deferredPrompt)return;deferredPrompt.prompt();const c=await deferredPrompt.userChoice;if(window.trackEvent)trackEvent("pwa_install_prompt",{outcome:c&&c.outcome});deferredPrompt=null;document.getElementById("installBtn").style.display="none"};
+document.addEventListener("keydown",e=>{if(e.target.tagName==="INPUT"||e.target.tagName==="TEXTAREA"||e.target.tagName==="SELECT")return;const n=parseInt(e.key);if(n>=1&&n<=TABS.length){e.preventDefault();setTab(TABS[n-1][0])}});
+window.manualRefresh=async function(){const btn=document.getElementById("refreshBtn");if(btn){btn.classList.remove("spin");void btn.offsetWidth;btn.classList.add("spin")}await fetchScores(false);await autoLiveFetch(false);vibrate(10);toast(t().scoresUpdated)};
 
 /* ============ INIT ============ */
-function refreshDynamic(){const dl=document.getElementById("dashboard");if(dl)dl.innerHTML=dashHTML();renderNations();renderContent()}
+function renderLiveStrip(){const el=document.getElementById("liveStrip");if(!el)return;const now=Date.now();const live=M.filter(m=>!m.ph&&m.h&&m.a&&mSt(new Date(m.dt),now)==="now");if(!live.length){el.classList.remove("on");el.innerHTML="";return}el.classList.add("on");el.innerHTML=live.map(m=>{const idx=M.indexOf(m);const sc=m.s?m.s.replace("-"," – "):"– –";return`<div class="ls-card" onclick="openSheetByIdx(${idx})"><span class="ls-live"></span>${fl(m.h)} <span class="ls-sc">${sc}</span> ${fl(m.a)}</div>`}).join("")}
+function refreshDynamic(){const dl=document.getElementById("dashboard");if(dl)dl.innerHTML=dashHTML();renderLiveStrip();renderNations();renderContent()}
 /* ---- SEO: per-match SportsEvent JSON-LD (mirrors src/logic.mjs) ---------- */
 function buildMatchSchema(M,VENUES={},baseUrl="https://shasha4ever2000-design.github.io/worldcup2026/"){
   const itemListElement=M.filter(m=>!m.ph&&m.h&&m.a).map((m,i)=>{const venue=VENUES[m.c];return{"@type":"ListItem",position:i+1,item:{"@type":"SportsEvent",name:`${m.h} vs ${m.a}`,sport:"Football",startDate:m.dt,eventStatus:"https://schema.org/EventScheduled",location:{"@type":"Place",name:(venue?venue[0]+", ":"")+(m.c||"")},competitor:[{"@type":"SportsTeam",name:m.h},{"@type":"SportsTeam",name:m.a}],url:baseUrl}}});
@@ -866,24 +880,25 @@ function celebrateGoal(){
   vibrate(20);
 }
 let lastScoresRaw="";
-let scoresMap={},liveMap={};
+let scoresMap={},liveMap={},lastUpdateTime=0;
 function pickScore(status,server,live){if(status==="now")return live!=null?live:(server!=null?server:null);return server!=null?server:(live!=null?live:null)}
 /* Reconcile both score sources into the fixture list. The live feed wins while a
    match is in play (it has no GitHub Pages redeploy lag); scores.json wins once
    the match is final. Both fetchers funnel through here so they never fight. */
-function applyScores(initial){let changed=0,favGoal=false;const now=Date.now();M.forEach(m=>{const ps=pickScore(mSt(new Date(m.dt),now),scoresMap[mId(m)],liveMap[mId(m)]);if(ps!=null&&m.s!==ps){m.s=ps;changed++;if(favs.includes(m.h)||favs.includes(m.a))favGoal=true}});if(!initial&&changed){toast(t().scoresUpdated);refreshDynamic();if(favGoal)celebrateGoal()}return changed}
-async function fetchScores(initial){try{const r=await fetch("scores.json?_="+Date.now(),{cache:"no-store"});if(!r.ok)return;const txt=await r.text();if(txt===lastScoresRaw)return;lastScoresRaw=txt;scoresMap=JSON.parse(txt)||{};applyScores(initial)}catch(e){}}
+function applyScores(initial){let changed=0,favGoal=false,favMatch=null;const now=Date.now();M.forEach(m=>{const ps=pickScore(mSt(new Date(m.dt),now),scoresMap[mId(m)],liveMap[mId(m)]);if(ps!=null&&m.s!==ps){m.s=ps;changed++;if(favs.includes(m.h)||favs.includes(m.a)){favGoal=true;favMatch=m}}});if(changed)lastUpdateTime=now;if(!initial&&changed){toast(t().scoresUpdated);refreshDynamic();if(favGoal){celebrateGoal();if(document.hidden&&favMatch&&"Notification"in window&&Notification.permission==="granted"){const title="⚽ "+tn(favMatch.h)+" "+favMatch.s+" "+tn(favMatch.a);try{if(navigator.serviceWorker&&navigator.serviceWorker.controller){navigator.serviceWorker.controller.postMessage({type:"show-notification",title,options:{body:L("Score update","تحديث النتيجة","Actualización","Atualização","Mise à jour","Tor-Update","Aggiornamento","スコア更新"),icon:"icon-192.png",badge:"icon-192.png",tag:"goal-"+mId(favMatch)}})}else{new Notification(title,{icon:"icon-192.png"})}}catch(e){}}}}updateLastUpdated();return changed}
+function updateLastUpdated(){const el=document.getElementById("lastUpdated");if(!el)return;if(!lastUpdateTime){el.textContent="";return}const sec=Math.round((Date.now()-lastUpdateTime)/1000);if(sec<10)el.textContent=L("Updated just now","تم التحديث الآن","Actualizado ahora","Atualizado agora","Mis à jour","Gerade aktualisiert","Aggiornato ora","更新済み");else if(sec<60)el.textContent=L(`Updated ${sec}s ago`,`محدث منذ ${sec} ث`,`Hace ${sec}s`,`Há ${sec}s`,`Il y a ${sec}s`,`Vor ${sec}s`,`${sec}s fa`,`${sec}秒前`);else{const min=Math.round(sec/60);el.textContent=L(`Updated ${min}m ago`,`محدث منذ ${min} د`,`Hace ${min}m`,`Há ${min}m`,`Il y a ${min}m`,`Vor ${min}m`,`${min}m fa`,`${min}分前`)}}
+async function fetchScores(initial){const RAW="https://raw.githubusercontent.com/shasha4ever2000-design/worldcup2026/main/scores.json";let updated=false;try{const r=await fetch("scores.json?_="+Date.now(),{cache:"no-store"});if(r.ok){const txt=await r.text();if(txt!==lastScoresRaw){lastScoresRaw=txt;scoresMap=JSON.parse(txt)||{};updated=true}}}catch(e){}try{const r2=await fetch(RAW+"?_="+Date.now(),{cache:"no-store"});if(r2.ok){const txt2=await r2.text();if(txt2!==lastScoresRaw){lastScoresRaw=txt2;scoresMap=JSON.parse(txt2)||{};updated=true}}}catch(e){}if(updated)applyScores(initial)}
 function normTeam(x){x=(x||"").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");"&.'`-/".split("").forEach(ch=>{x=x.split(ch).join(" ")});x=x.replace(/\s+/g," ").trim();const al={"turkiye":"turkey","korea republic":"south korea","republic of korea":"south korea","ir iran":"iran","united states":"usa","united states of america":"usa","czechia":"czech republic","cote d ivoire":"ivory coast","cabo verde":"cape verde","cape verde islands":"cape verde","bosnia and herzegovina":"bosnia herzegovina","congo dr":"dr congo","democratic republic of congo":"dr congo"};return al[x]||x}
 function findFixtureByTeams(h,a){const H=normTeam(h),A=normTeam(a);return M.find(m=>{if(m.ph)return false;const mh=normTeam(m.h),ma=normTeam(m.a);return(mh===H&&ma===A)||(mh===A&&ma===H)})}
 async function autoLiveFetch(initial){const days=[];for(let i=0;i<3;i++)days.push(new Date(Date.now()-i*864e5).toISOString().slice(0,10));for(const d of days){try{const r=await fetch(`https://www.thesportsdb.com/api/v1/json/3/eventsday.php?d=${d}&s=Soccer`);if(!r.ok)continue;const j=await r.json();const evs=(j.events||[]).filter(e=>/world cup/i.test(e.strLeague||"")&&!/wom|u-?[12]?\d|qualif|youth|futsal|beach/i.test(e.strLeague||""));for(const e of evs){const hs=e.intHomeScore,as=e.intAwayScore;if(hs==null||as==null||hs===""||as==="")continue;const m=findFixtureByTeams(e.strHomeTeam,e.strAwayTeam);if(!m)continue;const sc=normTeam(m.h)===normTeam(e.strHomeTeam)?`${hs}-${as}`:`${as}-${hs}`;liveMap[mId(m)]=sc}}catch(e){}}return applyScores(initial)}
 function parseInitialTab(search,hash,valid){let q="";try{q=new URLSearchParams(search||"").get("tab")||""}catch{}const h=(hash||"").replace(/^#/,"");if(valid.includes(q))return q;if(valid.includes(h))return h;return null}
 function anyLiveNow(arr,now=Date.now()){return arr.some(m=>!m.ph&&mSt(new Date(m.dt),now)==="now")}
 let liveT=null;
-function schedulePoll(){const live=anyLiveNow(M);liveT=setTimeout(async()=>{await fetchScores(false);if(live)await autoLiveFetch(false);schedulePoll()},live?30000:90000)}
+function schedulePoll(){const live=anyLiveNow(M);liveT=setTimeout(async()=>{await fetchScores(false);if(live)await autoLiveFetch(false);schedulePoll()},live?20000:60000)}
 async function init(){const it0=parseInitialTab(location.search,location.hash,TABS.map(x=>x[0]));if(it0)tab=it0;await fetchScores(true);render();injectMatchSchema();setTimeout(()=>{const a=document.getElementById("todayAnchor");if(a&&tab==="schedule")a.scrollIntoView({block:"center"})},150);autoLiveFetch(true);schedulePoll();loadNewsTicker();checkPendingReminders();setInterval(checkPendingReminders,60000);handleIncomingPicks();setTimeout(showCookieBanner,1200);if(consentChoice==="accept")loadAdSense();}
 init();
 function updateCountdowns(){if(document.hidden)return;document.querySelectorAll(".nation").forEach(card=>{const team=card.dataset.team,list=M.filter(m=>m.h===team||m.a===team),now=Date.now(),next=list.find(m=>new Date(m.dt)>now);const cd=card.querySelector(".cd");if(!next||!cd)return;const diff=new Date(next.dt)-now;if(diff<=0)return;const bs=cd.querySelectorAll("b");if(bs.length===4){bs[0].textContent=String(Math.floor(diff/864e5)).padStart(2,"0");bs[1].textContent=String(Math.floor(diff%864e5/36e5)).padStart(2,"0");bs[2].textContent=String(Math.floor(diff%36e5/6e4)).padStart(2,"0");bs[3].textContent=String(Math.floor(diff%6e4/1e3)).padStart(2,"0")}})}
-setInterval(updateCountdowns,1000);
+setInterval(()=>{updateCountdowns();updateLastUpdated()},1000);
 document.addEventListener("visibilitychange",()=>{if(!document.hidden){updateCountdowns();fetchScores(false)}});
 /* ============ PICK'EM LEAGUE ============ */
 const VC={h:"1",d:"2",a:"3"},VCR={"1":"h","2":"d","3":"a"};
