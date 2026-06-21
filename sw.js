@@ -1,5 +1,5 @@
 /* World Cup 2026 — Service Worker (v39) */
-const VERSION = "wc2026-v40";
+const VERSION = "wc2026-v41";
 const CORE = [
   "./index.html", "./privacy.html", "./eg.html", "./sa.html", "./guide.html", "./cities.html", "./teams.html", "./manifest.json",
   "./icon-192.png", "./icon-512.png", "./icon-maskable-512.png",
@@ -79,8 +79,13 @@ self.addEventListener("notificationclick", e => {
 });
 
 // Allow the page to ask the SW to show a notification (used as a fallback path)
+// or to activate a freshly installed version immediately (auto-update).
 self.addEventListener("message", e => {
   const d = e.data || {};
+  if (d.type === "skip-waiting") {
+    self.skipWaiting();
+    return;
+  }
   if (d.type === "show-notification" && d.title) {
     self.registration.showNotification(d.title, d.options || {});
   }
