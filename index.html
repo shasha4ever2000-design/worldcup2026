@@ -1247,7 +1247,21 @@ function setTickerItems(items){
   const totalChars=safe.join("").length;
   el.style.animationDuration=Math.max(30,Math.round(totalChars*0.28))+"s";
 }
-if("serviceWorker"in navigator)navigator.serviceWorker.register("sw.js").catch(()=>{});
+if("serviceWorker"in navigator){
+  let refreshing=false;
+  const hadController=!!navigator.serviceWorker.controller;
+  // When a NEW version takes control of an already-loaded page, reload once so the
+  // freshest page/assets show. Skipped on first-ever visit (no prior controller).
+  navigator.serviceWorker.addEventListener("controllerchange",()=>{if(refreshing||!hadController)return;refreshing=true;location.reload()});
+  navigator.serviceWorker.register("sw.js").then(reg=>{
+    // Check for a new version on load, on focus, and every 30 min.
+    reg.update().catch(()=>{});
+    const trigger=()=>{const w=reg.installing||reg.waiting;if(w)w.postMessage&&w.postMessage({type:"skip-waiting"})};
+    reg.addEventListener("updatefound",()=>{const nw=reg.installing;if(!nw)return;nw.addEventListener("statechange",()=>{if(nw.state==="installed"&&navigator.serviceWorker.controller){nw.postMessage({type:"skip-waiting"})}})});
+    document.addEventListener("visibilitychange",()=>{if(!document.hidden)reg.update().catch(()=>{})});
+    setInterval(()=>reg.update().catch(()=>{}),18e5);
+  }).catch(()=>{});
+}
 /* ============ VISITOR ANALYTICS ============ */
 // Local-only visit tracking + GA4 events (real counter lives in GA dashboard).
 (function trackVisit(){
