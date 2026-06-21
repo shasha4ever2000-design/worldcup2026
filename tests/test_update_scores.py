@@ -4,7 +4,7 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from update_scores import norm, canon, parse_iso, build_lookup, match_scores
+from update_scores import norm, canon, parse_iso, build_lookup, match_scores, apply_overrides
 
 
 def test_norm_strips_accents_punctuation_and_case():
@@ -80,3 +80,18 @@ def test_match_scores_is_idempotent():
     match_scores(api, lookup, scores)
     changed_again, _, _ = match_scores(api, lookup, scores)
     assert changed_again == 0  # no new write on identical re-run
+
+
+def test_apply_overrides_wins_over_feed():
+    # Feed wrote a wrong score; the manual override must correct it.
+    scores = {"2026-06-11T20:00:00Z|Mexico|South Korea": "5-0"}
+    applied = apply_overrides(scores, {"2026-06-11T20:00:00Z|Mexico|South Korea": "4-0"})
+    assert applied == 1
+    assert scores["2026-06-11T20:00:00Z|Mexico|South Korea"] == "4-0"
+
+
+def test_apply_overrides_idempotent_and_tolerates_empty():
+    scores = {"k": "4-0"}
+    assert apply_overrides(scores, {"k": "4-0"}) == 0  # already correct, no rewrite
+    assert apply_overrides(scores, {}) == 0
+    assert apply_overrides(scores, None) == 0
