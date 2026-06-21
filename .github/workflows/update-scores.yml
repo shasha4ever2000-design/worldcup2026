@@ -38,7 +38,11 @@ jobs:
             python update_scores.py || true
             if ! git diff --quiet -- scores.json; then
               git add scores.json
-              git commit -m "Auto-update scores [skip ci]" || true
+              # No "[skip ci]": we WANT GitHub Pages to redeploy so the same-origin
+              # scores.json refreshes for every visitor (even cached/old clients).
+              # The test suite (ci.yml) ignores scores.json-only commits via
+              # paths-ignore, so this does not run vitest/pytest/playwright per goal.
+              git commit -m "Auto-update scores" || true
               # absorb any concurrent commits (e.g. PR merges) before pushing
               git pull --rebase --autostash origin main || true
               git push || true
