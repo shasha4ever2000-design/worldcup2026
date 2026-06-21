@@ -5,7 +5,7 @@ import { describe, it, expect } from "vitest";
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
-import { ALIASES, normTeam, encodePicks, decodePicks, mId, buildMatchSchema, pickFeaturedMatch, tournamentStats, parseInitialTab, pickScore } from "../src/logic.mjs";
+import { ALIASES, normTeam, encodePicks, decodePicks, mId, buildMatchSchema, pickFeaturedMatch, tournamentStats, parseInitialTab, pickScore, teamTournament } from "../src/logic.mjs";
 import { extractInPageAliases, M, GROUPS, TEAM_INFO, VENUES } from "./helpers.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
@@ -121,6 +121,13 @@ describe("in-page functions behave like the module", () => {
   it("in-page tournamentStats matches the module for the real fixture list", () => {
     const inPage = extractFn("tournamentStats");
     expect(inPage(M)).toEqual(tournamentStats(M));
+  });
+
+  it("in-page teamTournament matches the module for a spread of teams", () => {
+    const inPage = extractFn("teamTournament");
+    for (const team of ["Mexico", "Germany", "Brazil", "Saudi Arabia", "Nonexistent"]) {
+      expect(inPage(team, M)).toEqual(teamTournament(team, M));
+    }
   });
 
   it("in-page parseInitialTab matches the module", () => {

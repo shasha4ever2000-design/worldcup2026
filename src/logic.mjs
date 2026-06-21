@@ -297,6 +297,28 @@ export function tournamentStats(M) {
 }
 
 /**
+ * Per-team tournament record from played matches: matches, W/D/L, goals for /
+ * against and goal difference. Powers the head-to-head comparison tool. Pure.
+ */
+export function teamTournament(team, M) {
+  let played = 0, w = 0, d = 0, l = 0, gf = 0, ga = 0;
+  for (const m of M) {
+    if (m.ph || !m.s) continue;
+    if (m.h !== team && m.a !== team) continue;
+    const [h, a] = m.s.split("-").map(Number);
+    const isH = m.h === team;
+    const f = isH ? h : a, against = isH ? a : h;
+    played++;
+    gf += f;
+    ga += against;
+    if (f > against) w++;
+    else if (f < against) l++;
+    else d++;
+  }
+  return { played, w, d, l, gf, ga, gd: gf - ga };
+}
+
+/**
  * Resolve the initial tab from a URL: ?tab=<id> takes precedence, then #<id>.
  * Returns the matching tab id from `valid`, or null. Pure & testable.
  */
