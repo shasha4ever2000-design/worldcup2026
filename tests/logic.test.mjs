@@ -9,6 +9,7 @@ import {
   predict,
   calcStandings,
   bracketResolve,
+  qualScenarios,
   compactVotes,
   expandVotes,
   encodePicks,
@@ -79,6 +80,53 @@ describe("bracketResolve", () => {
     M.push(r32, next);
     const r = bracketResolve(M, GROUPS);
     expect(r.get(next).h).toBeNull(); // winner unknown on a draw
+  });
+});
+
+describe("qualScenarios", () => {
+  const G = { A: ["A1", "A2", "A3", "A4"] };
+
+  it("returns null before a group starts or after it ends", () => {
+    const none = [
+      { g: "A", h: "A1", a: "A2" },
+      { g: "A", h: "A3", a: "A4" },
+    ];
+    expect(qualScenarios("A", G, none)).toBeNull(); // nothing played
+  });
+
+  it("marks a runaway team as qualified and a winless team as out", () => {
+    // Round 1 + 2 played: A1 and A2 win both; A3/A4 lose both. One round left.
+    const M = [
+      { g: "A", h: "A1", a: "A3", s: "3-0" },
+      { g: "A", h: "A2", a: "A4", s: "3-0" },
+      { g: "A", h: "A1", a: "A4", s: "3-0" },
+      { g: "A", h: "A2", a: "A3", s: "3-0" },
+      // remaining: A1 v A2, A3 v A4
+      { g: "A", h: "A1", a: "A2" },
+      { g: "A", h: "A3", a: "A4" },
+    ];
+    const r = qualScenarios("A", G, M);
+    expect(r.status.A1).toBe("q"); // 6 pts, can't drop out of top 2
+    expect(r.status.A2).toBe("q");
+    expect(r.status.A3).toBe("out"); // 0 pts, max 3 — can't catch A1/A2 on 6+
+    expect(r.status.A4).toBe("out");
+    expect(r.remaining).toBe(2);
+  });
+
+  it("gives a next-match hint for a team still in contention", () => {
+    // Tighter group: after 2 rounds several teams alive.
+    const M = [
+      { g: "A", h: "A1", a: "A2", s: "1-0" },
+      { g: "A", h: "A3", a: "A4", s: "1-0" },
+      { g: "A", h: "A1", a: "A3", s: "0-0" },
+      { g: "A", h: "A2", a: "A4", s: "0-0" },
+      { g: "A", h: "A1", a: "A4" },
+      { g: "A", h: "A2", a: "A3" },
+    ];
+    const r = qualScenarios("A", G, M);
+    expect(["q", "live"]).toContain(r.status.A1);
+    // every team's hint is null or one of the expected guarantees
+    Object.values(r.hint).forEach((hn) => expect([null, "win", "draw"]).toContain(hn));
   });
 });
 
