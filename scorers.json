@@ -1,20 +1,122 @@
 [
-  {"n": "Lionel Messi", "t": "Argentina", "g": 5, "a": 2},
-  {"n": "Erling Haaland", "t": "Norway", "g": 4, "a": 1},
-  {"n": "Kylian Mbappé", "t": "France", "g": 4, "a": 0},
-  {"n": "Jonathan David", "t": "Canada", "g": 3, "a": 1},
-  {"n": "Jamal Musiala", "t": "Germany", "g": 3, "a": 1},
-  {"n": "Viktor Gyökeres", "t": "Sweden", "g": 3, "a": 0},
-  {"n": "Folarin Balogun", "t": "USA", "g": 3, "a": 0},
-  {"n": "Cody Gakpo", "t": "Netherlands", "g": 3, "a": 1},
-  {"n": "Ayase Ueda", "t": "Japan", "g": 2, "a": 1},
-  {"n": "Harry Kane", "t": "England", "g": 2, "a": 0},
-  {"n": "Mohamed Salah", "t": "Egypt", "g": 2, "a": 1},
-  {"n": "Florian Wirtz", "t": "Germany", "g": 2, "a": 2},
-  {"n": "Vinícius Jr.", "t": "Brazil", "g": 2, "a": 0},
-  {"n": "Lautaro Martínez", "t": "Argentina", "g": 2, "a": 0},
-  {"n": "Memphis Depay", "t": "Netherlands", "g": 2, "a": 1},
-  {"n": "Breel Embolo", "t": "Switzerland", "g": 2, "a": 0},
-  {"n": "Cole Palmer", "t": "England", "g": 1, "a": 2},
-  {"n": "Lamine Yamal", "t": "Spain", "g": 1, "a": 2}
+  {
+    "n": "Lionel Messi",
+    "t": "Argentina",
+    "g": 5,
+    "a": 0
+  },
+  {
+    "n": "Erling Haaland",
+    "t": "Norway",
+    "g": 4,
+    "a": 0
+  },
+  {
+    "n": "Kylian Mbappé",
+    "t": "France",
+    "g": 4,
+    "a": 0
+  },
+  {
+    "n": "Deniz Undav",
+    "t": "Germany",
+    "g": 3,
+    "a": 2
+  },
+  {
+    "n": "Jonathan David",
+    "t": "Canada",
+    "g": 3,
+    "a": 0
+  },
+  {
+    "n": "Cody Gakpo",
+    "t": "Netherlands",
+    "g": 2,
+    "a": 1
+  },
+  {
+    "n": "Crysencio Summerville",
+    "t": "Netherlands",
+    "g": 2,
+    "a": 1
+  },
+  {
+    "n": "Maximiliano Araújo",
+    "t": "Uruguay",
+    "g": 2,
+    "a": 1
+  },
+  {
+    "n": "Vinicius Junior",
+    "t": "Brazil",
+    "g": 2,
+    "a": 1
+  },
+  {
+    "n": "Brian Brobbey",
+    "t": "Netherlands",
+    "g": 2,
+    "a": 0
+  },
+  {
+    "n": "Cyle Larin",
+    "t": "Canada",
+    "g": 2,
+    "a": 0
+  },
+  {
+    "n": "Daichi Kamada",
+    "t": "Japan",
+    "g": 2,
+    "a": 0
+  },
+  {
+    "n": "Elijah Just",
+    "t": "New Zealand",
+    "g": 2,
+    "a": 0
+  },
+  {
+    "n": "Folarin Balogun",
+    "t": "USA",
+    "g": 2,
+    "a": 0
+  },
+  {
+    "n": "Harry Kane",
+    "t": "England",
+    "g": 2,
+    "a": 0
+  },
+  {
+    "n": "Ismael Saibari",
+    "t": "Morocco",
+    "g": 2,
+    "a": 0
+  },
+  {
+    "n": "Johan Manzambi",
+    "t": "Switzerland",
+    "g": 2,
+    "a": 0
+  },
+  {
+    "n": "Kai Havertz",
+    "t": "Germany",
+    "g": 2,
+    "a": 0
+  },
+  {
+    "n": "Matheus Cunha",
+    "t": "Brazil",
+    "g": 2,
+    "a": 0
+  },
+  {
+    "n": "Yasin Ayari",
+    "t": "Sweden",
+    "g": 2,
+    "a": 0
+  }
 ]
