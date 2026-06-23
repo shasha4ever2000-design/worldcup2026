@@ -513,6 +513,29 @@ export function tournamentStats(M) {
 }
 
 /**
+ * Clean sheets per team across played group/knockout matches — a team earns one
+ * for every match in which it conceded zero (0-0 gives both a clean sheet).
+ * Returns [{ t, cs }] sorted by clean sheets, then alphabetically. Pure.
+ * Mirrors cleanSheetsByTeam in index.html.
+ */
+export function cleanSheetsByTeam(M) {
+  const cs = {};
+  for (const m of M) {
+    if (!m.s || m.ph || !m.h || !m.a) continue;
+    const [gh, ga] = m.s.split("-").map(Number);
+    if (Number.isNaN(gh) || Number.isNaN(ga)) continue;
+    cs[m.h] = cs[m.h] || 0;
+    cs[m.a] = cs[m.a] || 0;
+    if (ga === 0) cs[m.h]++;
+    if (gh === 0) cs[m.a]++;
+  }
+  return Object.entries(cs)
+    .map(([t, n]) => ({ t, cs: n }))
+    .filter((r) => r.cs > 0)
+    .sort((a, b) => b.cs - a.cs || a.t.localeCompare(b.t));
+}
+
+/**
  * Per-team tournament record from played matches: matches, W/D/L, goals for /
  * against and goal difference. Powers the head-to-head comparison tool. Pure.
  */

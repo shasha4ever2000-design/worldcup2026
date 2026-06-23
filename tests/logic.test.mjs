@@ -10,6 +10,7 @@ import {
   calcStandings,
   bracketResolve,
   qualScenarios,
+  cleanSheetsByTeam,
   compactVotes,
   expandVotes,
   encodePicks,
@@ -127,6 +128,29 @@ describe("qualScenarios", () => {
     expect(["q", "live"]).toContain(r.status.A1);
     // every team's hint is null or one of the expected guarantees
     Object.values(r.hint).forEach((hn) => expect([null, "win", "draw"]).toContain(hn));
+  });
+});
+
+describe("cleanSheetsByTeam", () => {
+  it("counts shut-outs, credits both teams on a 0-0, and ignores placeholders/unplayed", () => {
+    const M = [
+      { h: "A", a: "B", s: "2-0" }, // A clean sheet
+      { h: "C", a: "A", s: "0-0" }, // both clean sheets
+      { h: "A", a: "D", s: "3-1" }, // no clean sheet
+      { h: "B", a: "C", s: "1-2" }, // none
+      { h: "E", a: "F", ph: 1, s: "1-0" }, // placeholder → ignored
+      { h: "G", a: "H" }, // unplayed → ignored
+    ];
+    const r = cleanSheetsByTeam(M);
+    const map = Object.fromEntries(r.map((x) => [x.t, x.cs]));
+    expect(map.A).toBe(2); // shut out B, then 0-0 vs C
+    expect(map.C).toBe(1); // the 0-0
+    expect(map.B).toBeUndefined(); // never kept a clean sheet
+    expect(r[0].t).toBe("A"); // sorted by count desc
+  });
+
+  it("returns an empty list when nothing has been played", () => {
+    expect(cleanSheetsByTeam([{ h: "A", a: "B" }])).toEqual([]);
   });
 });
 
