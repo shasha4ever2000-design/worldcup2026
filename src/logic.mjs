@@ -168,6 +168,125 @@ export function calcStandings(grp, GROUPS, M) {
   return ts.sort((a, b) => b.pts - a.pts || b.gf - b.ga - (a.gf - a.ga) || b.gf - a.gf);
 }
 
+/**
+ * Resolve the knockout bracket's placeholder slots into real teams as results
+ * come in. Mirrors bracketResolve in index.html.
+ *
+ * Slot codes used in the fixture list:
+ *   "1A".."2L"  group winner / runner-up (resolved once that group is complete)
+ *   "3·ABCDF"   one of the eight best third-placed teams (eligible groups listed)
+ *   "W73"/"L101" winner / loser of knockout match #73 / #101
+ *
+ * Returns a Map keyed by the knockout match object → { h, a, num } where h/a are
+ * resolved team names (or null if not yet known), plus `.thirdsProvisional`
+ * (true when best-third slots were filled by ranking — the exact slotting follows
+ * FIFA's official allocation table). Knockout matches keep FIFA's 73..104 numbering
+ * in fixture order.
+ */
+export function bracketResolve(M, GROUPS) {
+  const ko = M.filter((m) => m.ph);
+  const byNum = new Map();
+  let n = 73;
+  for (const m of ko) {
+    m.__num = n;
+    byNum.set(n, m);
+    n++;
+  }
+
+  const groups = Object.keys(GROUPS);
+  const standings = {};
+  const complete = {};
+  groups.forEach((g) => {
+    standings[g] = calcStandings(g, GROUPS, M);
+    const teams = GROUPS[g].length;
+    complete[g] = M.filter((m) => m.g === g && m.s).length >= (teams * (teams - 1)) / 2;
+  });
+
+  // Best third-placed teams, ranked, once every group has finished.
+  const allComplete = groups.every((g) => complete[g]);
+  const thirdSlot = {}; // slot code -> team name
+  let thirdsProvisional = false;
+  if (allComplete) {
+    const thirds = groups
+      .map((g) => ({ g, ...standings[g][2] }))
+      .sort((a, b) => b.pts - a.pts || b.gf - b.ga - (a.gf - a.ga) || b.gf - a.gf || a.g.localeCompare(b.g));
+    const qualified = thirds.slice(0, 8);
+    const qSet = new Set(qualified.map((x) => x.g));
+    const byGroup = {};
+    qualified.forEach((x) => (byGroup[x.g] = x.t));
+    // The eight third-place slots, each eligible for a fixed set of groups.
+    const slots = ko
+      .map((m) => [m.h, m.a])
+      .flat()
+      .filter((c) => typeof c === "string" && c.indexOf("3·") === 0);
+    const uniqueSlots = [...new Set(slots)];
+    // Assign each slot a still-unused qualified group from its eligible list
+    // (constrained matching). Exact official slotting follows FIFA's table.
+    const used = new Set();
+    const assign = (i) => {
+      if (i >= uniqueSlots.length) return true;
+      const code = uniqueSlots[i];
+      const eligible = code.slice(code.indexOf("·") + 1).split("");
+      for (const g of eligible) {
+        if (qSet.has(g) && !used.has(g)) {
+          used.add(g);
+          thirdSlot[code] = byGroup[g];
+          if (assign(i + 1)) return true;
+          used.delete(g);
+          thirdSlot[code] = undefined;
+        }
+      }
+      return false;
+    };
+    if (uniqueSlots.length) {
+      assign(0);
+      thirdsProvisional = true;
+    }
+  }
+
+  const cache = new Map();
+  const resolveCode = (code) => {
+    if (typeof code !== "string") return code || null;
+    if (cache.has(code)) return cache.get(code);
+    cache.set(code, null); // guard against cycles
+    let team = null;
+    if (/^[12][A-L]$/.test(code)) {
+      const g = code[1];
+      if (complete[g]) team = standings[g][code[0] === "1" ? 0 : 1].t;
+    } else if (code.indexOf("3·") === 0) {
+      team = thirdSlot[code] || null;
+    } else if (/^[WL]\d+$/.test(code)) {
+      const mm = byNum.get(+code.slice(1));
+      team = code[0] === "W" ? winnerOf(mm) : loserOf(mm);
+    }
+    cache.set(code, team);
+    return team;
+  };
+  const side = (m, s) => (m.ph ? resolveCode(m[s]) : m[s]);
+  function decided(m) {
+    if (!m || !m.s) return null;
+    const h = side(m, "h");
+    const a = side(m, "a");
+    if (!h || !a) return null;
+    const [gh, ga] = m.s.split("-").map(Number);
+    if (gh === ga) return null; // level after 90/ET → penalties, undeterminable here
+    return { win: gh > ga ? h : a, lose: gh > ga ? a : h };
+  }
+  function winnerOf(m) {
+    const d = decided(m);
+    return d ? d.win : null;
+  }
+  function loserOf(m) {
+    const d = decided(m);
+    return d ? d.lose : null;
+  }
+
+  const out = new Map();
+  ko.forEach((m) => out.set(m, { h: side(m, "h"), a: side(m, "a"), num: m.__num }));
+  out.thirdsProvisional = thirdsProvisional;
+  return out;
+}
+
 // ----------------------------- Pick'em league ------------------------------
 
 export const VC = { h: "1", d: "2", a: "3" };

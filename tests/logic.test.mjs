@@ -8,6 +8,7 @@ import {
   teamForm,
   predict,
   calcStandings,
+  bracketResolve,
   compactVotes,
   expandVotes,
   encodePicks,
@@ -22,6 +23,64 @@ import {
   pickScore,
   teamTournament,
 } from "../src/logic.mjs";
+
+describe("bracketResolve", () => {
+  const GROUPS = { A: ["A1", "A2", "A3", "A4"], B: ["B1", "B2", "B3", "B4"] };
+  // Round-robin so each group can be "complete" (6 games each).
+  const groupGames = (g) => {
+    const [t1, t2, t3, t4] = GROUPS[g];
+    return [
+      { g, h: t1, a: t2 },
+      { g, h: t3, a: t4 },
+      { g, h: t1, a: t3 },
+      { g, h: t2, a: t4 },
+      { g, h: t1, a: t4 },
+      { g, h: t2, a: t3 },
+    ];
+  };
+
+  it("resolves group winners and runners-up only once a group is complete", () => {
+    const M = [...groupGames("A"), ...groupGames("B")];
+    M.forEach((m) => (m.s = "1-0")); // home always wins
+    M.push({ g: "R32", ph: 1, h: "1A", a: "2B" });
+    const r = bracketResolve(M, GROUPS);
+    const ko = M[M.length - 1];
+    // A1 wins all → winner; B-runner-up is the team with the 2nd-most points.
+    expect(r.get(ko).h).toBe("A1");
+    expect(typeof r.get(ko).a).toBe("string");
+    expect(r.get(ko).num).toBe(73);
+  });
+
+  it("leaves a slot unresolved while its group is still in progress", () => {
+    const M = [...groupGames("A").map((m, i) => ({ ...m, s: i === 0 ? null : "1-0" }))];
+    M.push({ g: "R32", ph: 1, h: "1A", a: "2A" });
+    const r = bracketResolve(M, GROUPS);
+    expect(r.get(M[M.length - 1]).h).toBeNull(); // group A not complete
+  });
+
+  it("resolves W/L slots recursively from knockout results", () => {
+    const M = [...groupGames("A"), ...groupGames("B")];
+    M.forEach((m) => (m.s = "1-0"));
+    const r32a = { g: "R16", ph: 1, h: "1A", a: "2B", s: "2-1" }; // #73
+    const r32b = { g: "R16", ph: 1, h: "1B", a: "2A", s: "0-3" }; // #74
+    const final = { g: "Final", ph: 1, h: "W73", a: "W74" }; // #75
+    M.push(r32a, r32b, final);
+    const r = bracketResolve(M, GROUPS);
+    expect(r.get(r32a).num).toBe(73);
+    expect(r.get(final).h).toBe(r.get(r32a).h); // home of #73 won 2-1
+    expect(r.get(final).a).toBe(r.get(r32b).a); // away of #74 won 0-3
+  });
+
+  it("does not crash on a level knockout score (penalties undeterminable)", () => {
+    const M = [...groupGames("A"), ...groupGames("B")];
+    M.forEach((m) => (m.s = "1-0"));
+    const r32 = { g: "R16", ph: 1, h: "1A", a: "2B", s: "1-1" };
+    const next = { g: "Final", ph: 1, h: "W73", a: "1B" };
+    M.push(r32, next);
+    const r = bracketResolve(M, GROUPS);
+    expect(r.get(next).h).toBeNull(); // winner unknown on a draw
+  });
+});
 
 describe("normTeam", () => {
   it("lowercases, strips accents and collapses whitespace", () => {
