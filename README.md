@@ -43,15 +43,19 @@ An **optional** Cloudflare Pages backend is scaffolded under `functions/`
 (AI match previews/recaps + dynamic share images) — dormant until connected;
 see `CONNECT.md`. The front-end works fully without it.
 
-## How live scores update automatically
+## How live scores & the Golden Boot update automatically
 
 ```
-football-data.org API → GitHub Action (scheduled) → scores.json → site polls & displays
+football-data.org API → GitHub Action (scheduled) → scores.json  → site polls & displays
+                                                   → scorers.json → site polls & displays
 ```
 
-- `.github/workflows/update-scores.yml` — scheduled GitHub Action
+- `.github/workflows/update-scores.yml` — scheduled GitHub Action (one loop runs both updaters)
 - `update_scores.py` — fetches results, matches them to `fixtures.json`, writes `scores.json`
-- Requires a free API token in the repo secret `FOOTBALL_DATA_TOKEN`
+- `update_scorers.py` — fetches the top scorers (`/competitions/WC/scorers`), maps the API's
+  team spellings to the site's names, writes `scorers.json` (the `{n,t,g,a}` Golden Boot list)
+- Both use the same free API token in the repo secret `FOOTBALL_DATA_TOKEN`
+- The front-end polls `scorers.json` and falls back to the inline `SCORERS` seed if it's absent
 
 ## Tests & CI
 
