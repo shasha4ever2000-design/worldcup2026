@@ -169,6 +169,103 @@ export function calcStandings(grp, GROUPS, M) {
 }
 
 /**
+ * Group qualification scenarios. Brute-forces every remaining-result combination
+ * (each remaining game treated as a generic win/draw/loss) to classify each team:
+ *   "q"    mathematically through to the top 2 in every scenario
+ *   "out"  cannot reach the top 2 in any scenario
+ *   "live" still in contention
+ * and, for live teams, the simplest guarantee from their next match
+ * ("win" or "draw"). Mirrors qualScenarios in index.html.
+ *
+ * Returns null when the group hasn't started or is already complete (no drama to
+ * project). A simplified projection — it ignores goal-margin and head-to-head
+ * tiebreakers, matching the "for fun, not betting" spirit of the predictions.
+ */
+export function qualScenarios(grp, GROUPS, M) {
+  const teams = GROUPS[grp];
+  const played = M.filter((m) => m.g === grp && m.s && !m.ph && m.h && m.a);
+  const remaining = M.filter((m) => m.g === grp && !m.s && !m.ph && m.h && m.a);
+  if (!remaining.length || !played.length) return null;
+
+  const apply = (tbl, h, a, gh, ga) => {
+    tbl[h].gf += gh;
+    tbl[h].ga += ga;
+    tbl[a].gf += ga;
+    tbl[a].ga += gh;
+    if (gh > ga) tbl[h].pts += 3;
+    else if (ga > gh) tbl[a].pts += 3;
+    else {
+      tbl[h].pts++;
+      tbl[a].pts++;
+    }
+  };
+  const base = () => {
+    const tbl = {};
+    teams.forEach((x) => (tbl[x] = { t: x, pts: 0, gf: 0, ga: 0 }));
+    played.forEach((m) => {
+      const [gh, ga] = m.s.split("-").map(Number);
+      apply(tbl, m.h, m.a, gh, ga);
+    });
+    return tbl;
+  };
+  const top2 = (tbl) => {
+    const arr = Object.values(tbl).sort(
+      (a, b) => b.pts - a.pts || b.gf - b.ga - (a.gf - a.ga) || b.gf - a.gf
+    );
+    return new Set([arr[0].t, arr[1].t]);
+  };
+
+  const n = remaining.length;
+  const total = 3 ** n;
+  const sets = [];
+  const outcomes = [];
+  for (let mask = 0; mask < total; mask++) {
+    const tbl = base();
+    const os = [];
+    let mm = mask;
+    for (let j = 0; j < n; j++) {
+      const o = mm % 3;
+      mm = Math.floor(mm / 3);
+      os.push(o);
+      const g = remaining[j];
+      apply(tbl, g.h, g.a, o === 0 ? 1 : 0, o === 2 ? 1 : 0);
+    }
+    sets.push(top2(tbl));
+    outcomes.push(os);
+  }
+
+  const status = {};
+  const hint = {};
+  teams.forEach((x) => {
+    let inAll = true;
+    let inAny = false;
+    for (const s of sets) {
+      if (s.has(x)) inAny = true;
+      else inAll = false;
+    }
+    status[x] = inAll ? "q" : !inAny ? "out" : "live";
+    hint[x] = null;
+    if (status[x] === "live") {
+      const j = remaining.findIndex((m) => m.h === x || m.a === x);
+      if (j >= 0) {
+        const winO = remaining[j].h === x ? 0 : 2;
+        const guarantees = (o) => {
+          let any = false;
+          for (let k = 0; k < total; k++) {
+            if (outcomes[k][j] !== o) continue;
+            any = true;
+            if (!sets[k].has(x)) return false;
+          }
+          return any;
+        };
+        hint[x] = guarantees(winO) ? "win" : guarantees(1) ? "draw" : null;
+      }
+    }
+  });
+  return { status, hint, remaining: n };
+}
+
+/**
  * Resolve the knockout bracket's placeholder slots into real teams as results
  * come in. Mirrors bracketResolve in index.html.
  *
