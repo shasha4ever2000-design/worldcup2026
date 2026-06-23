@@ -66,11 +66,18 @@ npm run cf:dev                     # serves the site + /api/* at http://localhos
 
 ---
 
-## Wiring it into the UI (next step — I can do this once it's live)
+## Wiring it into the UI — ✅ DONE (progressive enhancement)
 
-The front-end currently makes **no** calls to these endpoints, so nothing breaks while you're
-setting up. Once `/api/health` is green, I'll add progressive-enhancement to the match detail
-sheet — it stays invisible if the API isn't reachable (e.g. on the GitHub Pages mirror):
+The match detail sheet **already calls these endpoints**. On open it probes `/api/health`
+once: if the backend isn't connected (e.g. on the static GitHub Pages mirror) it stays
+completely invisible and never errors. Once you connect Cloudflare and `/api/health` reports
+`aiConfigured:true`, an **AI Preview** (upcoming matches) or **AI Recap** (finished matches)
+card appears automatically in the sheet — no further front-end work needed.
+
+Still pending (I'll add once the backend is live so I can verify it): per-match `og:image`
+share cards via a Cloudflare `_middleware` that rewrites the meta tag for `?match=` deep links.
+
+The implementation mirrors this pattern:
 
 ```js
 // Inside openSheet(m), after the existing content is rendered:
