@@ -1,0 +1,20 @@
+[
+  {"n": "Lionel Messi", "t": "Argentina", "g": 5, "a": 2},
+  {"n": "Erling Haaland", "t": "Norway", "g": 4, "a": 1},
+  {"n": "Kylian Mbappé", "t": "France", "g": 4, "a": 0},
+  {"n": "Jonathan David", "t": "Canada", "g": 3, "a": 1},
+  {"n": "Jamal Musiala", "t": "Germany", "g": 3, "a": 1},
+  {"n": "Viktor Gyökeres", "t": "Sweden", "g": 3, "a": 0},
+  {"n": "Folarin Balogun", "t": "USA", "g": 3, "a": 0},
+  {"n": "Cody Gakpo", "t": "Netherlands", "g": 3, "a": 1},
+  {"n": "Ayase Ueda", "t": "Japan", "g": 2, "a": 1},
+  {"n": "Harry Kane", "t": "England", "g": 2, "a": 0},
+  {"n": "Mohamed Salah", "t": "Egypt", "g": 2, "a": 1},
+  {"n": "Florian Wirtz", "t": "Germany", "g": 2, "a": 2},
+  {"n": "Vinícius Jr.", "t": "Brazil", "g": 2, "a": 0},
+  {"n": "Lautaro Martínez", "t": "Argentina", "g": 2, "a": 0},
+  {"n": "Memphis Depay", "t": "Netherlands", "g": 2, "a": 1},
+  {"n": "Breel Embolo", "t": "Switzerland", "g": 2, "a": 0},
+  {"n": "Cole Palmer", "t": "England", "g": 1, "a": 2},
+  {"n": "Lamine Yamal", "t": "Spain", "g": 1, "a": 2}
+]
