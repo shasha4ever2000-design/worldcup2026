@@ -30,12 +30,6 @@
     "a": 0
   },
   {
-    "n": "Cody Gakpo",
-    "t": "Netherlands",
-    "g": 2,
-    "a": 1
-  },
-  {
     "n": "Crysencio Summerville",
     "t": "Netherlands",
     "g": 2,
@@ -68,6 +62,12 @@
   {
     "n": "Daichi Kamada",
     "t": "Japan",
+    "g": 2,
+    "a": 0
+  },
+  {
+    "n": "Daniel Muñoz",
+    "t": "Colombia",
     "g": 2,
     "a": 0
   },
