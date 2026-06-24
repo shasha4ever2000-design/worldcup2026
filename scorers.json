@@ -24,6 +24,12 @@
     "a": 2
   },
   {
+    "n": "Johan Manzambi",
+    "t": "Switzerland",
+    "g": 3,
+    "a": 1
+  },
+  {
     "n": "Jonathan David",
     "t": "Canada",
     "g": 3,
@@ -32,12 +38,6 @@
   {
     "n": "Crysencio Summerville",
     "t": "Netherlands",
-    "g": 2,
-    "a": 1
-  },
-  {
-    "n": "Johan Manzambi",
-    "t": "Switzerland",
     "g": 2,
     "a": 1
   },
