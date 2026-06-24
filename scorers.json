@@ -36,6 +36,12 @@
     "a": 1
   },
   {
+    "n": "Ismael Saibari",
+    "t": "Morocco",
+    "g": 3,
+    "a": 0
+  },
+  {
     "n": "Jonathan David",
     "t": "Canada",
     "g": 3,
@@ -98,12 +104,6 @@
   {
     "n": "Harry Kane",
     "t": "England",
-    "g": 2,
-    "a": 0
-  },
-  {
-    "n": "Ismael Saibari",
-    "t": "Morocco",
     "g": 2,
     "a": 0
   },
