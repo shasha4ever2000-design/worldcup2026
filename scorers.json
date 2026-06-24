@@ -36,6 +36,12 @@
     "a": 1
   },
   {
+    "n": "Johan Manzambi",
+    "t": "Switzerland",
+    "g": 2,
+    "a": 1
+  },
+  {
     "n": "Maximiliano Araújo",
     "t": "Uruguay",
     "g": 2,
@@ -92,12 +98,6 @@
   {
     "n": "Ismael Saibari",
     "t": "Morocco",
-    "g": 2,
-    "a": 0
-  },
-  {
-    "n": "Johan Manzambi",
-    "t": "Switzerland",
     "g": 2,
     "a": 0
   },
