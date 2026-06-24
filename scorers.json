@@ -6,6 +6,12 @@
     "a": 0
   },
   {
+    "n": "Vinicius Junior",
+    "t": "Brazil",
+    "g": 4,
+    "a": 1
+  },
+  {
     "n": "Erling Haaland",
     "t": "Norway",
     "g": 4,
@@ -26,12 +32,6 @@
   {
     "n": "Johan Manzambi",
     "t": "Switzerland",
-    "g": 3,
-    "a": 1
-  },
-  {
-    "n": "Vinicius Junior",
-    "t": "Brazil",
     "g": 3,
     "a": 1
   },
