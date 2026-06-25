@@ -71,6 +71,7 @@ const DEFAULT_SETTINGS = {
   purchaseOrder: { prefix: 'PO-',   next: 1 },
   creditNote:    { prefix: 'CN-',   next: 1 },
   debitNote:     { prefix: 'DN-',   next: 1 },
+  ai:            { apiKey: '', model: 'claude-haiku-4-5-20251001' },
   payroll:       { prefix: 'PR-',    next: 1 },
   fixedAsset:    { prefix: 'FA-',    next: 1 },
   stockAdj:      { prefix: 'ADJ-',   next: 1 },
@@ -102,6 +103,9 @@ export const useStore = create(
 
       updateInvoiceSettings: (patch) =>
         set((s) => ({ settings: { ...s.settings, invoice: { ...s.settings.invoice, ...patch } } })),
+
+      updateAiSettings: (patch) =>
+        set((s) => ({ settings: { ...s.settings, ai: { ...(s.settings.ai || {}), ...patch } } })),
 
       // ─── ACCOUNTS ──────────────────────────────────────────────────
       accounts: DEFAULT_ACCOUNTS,

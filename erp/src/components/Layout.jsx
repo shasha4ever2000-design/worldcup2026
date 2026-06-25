@@ -1,5 +1,6 @@
 import { NavLink } from 'react-router-dom'
 import { useStore } from '../store'
+import AIAssistant from './AIAssistant'
 import {
   LayoutDashboard, BookOpen, Users, FileText, ShoppingCart,
   Package, Landmark, BarChart3, Settings, Building2, TrendingUp,
@@ -113,6 +114,9 @@ export default function Layout({ children }) {
       <main className="flex-1 overflow-y-auto">
         <div className="min-h-full p-8">{children}</div>
       </main>
+
+      {/* Floating AI Assistant */}
+      <AIAssistant />
     </div>
   )
 }
