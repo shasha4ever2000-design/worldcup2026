@@ -66,12 +66,6 @@
     "a": 1
   },
   {
-    "n": "Ruben Vargas",
-    "t": "Switzerland",
-    "g": 2,
-    "a": 1
-  },
-  {
     "n": "Cyle Larin",
     "t": "Canada",
     "g": 2,
@@ -104,6 +98,12 @@
   {
     "n": "Harry Kane",
     "t": "England",
+    "g": 2,
+    "a": 0
+  },
+  {
+    "n": "Julián Quiñones",
+    "t": "Mexico",
     "g": 2,
     "a": 0
   },
