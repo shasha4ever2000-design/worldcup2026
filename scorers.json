@@ -36,6 +36,12 @@
     "a": 1
   },
   {
+    "n": "Brian Brobbey",
+    "t": "Netherlands",
+    "g": 3,
+    "a": 0
+  },
+  {
     "n": "Ismael Saibari",
     "t": "Morocco",
     "g": 3,
@@ -74,12 +80,6 @@
   {
     "n": "Daichi Kamada",
     "t": "Japan",
-    "g": 2,
-    "a": 0
-  },
-  {
-    "n": "Daniel Muñoz",
-    "t": "Colombia",
     "g": 2,
     "a": 0
   },
