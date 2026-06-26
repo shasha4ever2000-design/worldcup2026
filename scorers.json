@@ -6,6 +6,12 @@
     "a": 0
   },
   {
+    "n": "Kylian Mbappé",
+    "t": "France",
+    "g": 4,
+    "a": 1
+  },
+  {
     "n": "Vinicius Junior",
     "t": "Brazil",
     "g": 4,
@@ -14,12 +20,6 @@
   {
     "n": "Erling Haaland",
     "t": "Norway",
-    "g": 4,
-    "a": 0
-  },
-  {
-    "n": "Kylian Mbappé",
-    "t": "France",
     "g": 4,
     "a": 0
   },
