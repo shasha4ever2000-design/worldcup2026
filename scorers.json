@@ -36,6 +36,12 @@
     "a": 2
   },
   {
+    "n": "Ismaïla Sarr",
+    "t": "Senegal",
+    "g": 3,
+    "a": 1
+  },
+  {
     "n": "Johan Manzambi",
     "t": "Switzerland",
     "g": 3,
@@ -50,12 +56,6 @@
   {
     "n": "Ismael Saibari",
     "t": "Morocco",
-    "g": 3,
-    "a": 0
-  },
-  {
-    "n": "Ismaïla Sarr",
-    "t": "Senegal",
     "g": 3,
     "a": 0
   },
