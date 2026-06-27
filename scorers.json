@@ -54,6 +54,12 @@
     "a": 0
   },
   {
+    "n": "Elijah Just",
+    "t": "New Zealand",
+    "g": 3,
+    "a": 0
+  },
+  {
     "n": "Ismael Saibari",
     "t": "Morocco",
     "g": 3,
@@ -74,12 +80,6 @@
   {
     "n": "Crysencio Summerville",
     "t": "Netherlands",
-    "g": 2,
-    "a": 1
-  },
-  {
-    "n": "Maximiliano Araújo",
-    "t": "Uruguay",
     "g": 2,
     "a": 1
   },
