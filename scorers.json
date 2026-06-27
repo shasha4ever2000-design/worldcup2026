@@ -60,6 +60,12 @@
     "a": 0
   },
   {
+    "n": "Harry Kane",
+    "t": "England",
+    "g": 3,
+    "a": 0
+  },
+  {
     "n": "Ismael Saibari",
     "t": "Morocco",
     "g": 3,
@@ -110,12 +116,6 @@
   {
     "n": "Kai Havertz",
     "t": "Germany",
-    "g": 2,
-    "a": 0
-  },
-  {
-    "n": "Yasin Ayari",
-    "t": "Sweden",
     "g": 2,
     "a": 0
   }
