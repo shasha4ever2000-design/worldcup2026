@@ -212,25 +212,27 @@ header::before{content:"";position:absolute;inset:-40% -10% auto -10%;height:170
 .bkt-hint{font-size:10px;color:var(--muted);margin-bottom:8px}
 .bkt-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;padding:4px 0 10px}
 .bkt{display:flex;align-items:stretch;min-width:max-content}
-.bkt-col{display:flex;flex-direction:column;justify-content:space-around;min-width:122px;padding:0 9px;position:relative}
-.bkt-col.center{justify-content:center;min-width:142px}
-.bkt-rnd{font-size:9px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;text-align:center;margin-bottom:6px}
-.bkt-m{background:var(--card);border:1px solid var(--line);border-radius:9px;padding:5px 7px;box-shadow:var(--shadow);cursor:pointer;margin:5px 0;position:relative}
-.bkt-m.fin{border-color:var(--gold);background:linear-gradient(135deg,rgba(245,197,24,.16),var(--card))}
+.bkt-col{display:flex;flex-direction:column;justify-content:space-around;min-width:116px;padding:0 11px;position:relative}
+.bkt-col.center{justify-content:center;min-width:150px;padding:0 6px}
+.bkt-rnd{font-size:9px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;text-align:center;margin-bottom:4px}
+.bkt-pair{display:flex;flex-direction:column;justify-content:space-around;flex:1 1 auto;position:relative}
+.bkt-m{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:4px 7px;box-shadow:var(--shadow);cursor:pointer;margin:4px 0;position:relative;z-index:1}
+.bkt-m.fin{border-color:var(--gold);background:linear-gradient(135deg,rgba(245,197,24,.16),var(--card));box-shadow:0 0 0 1px var(--gold),0 6px 20px rgba(245,197,24,.22)}
 .bkt-m.tp{opacity:.9}
-.bkt-t{display:flex;align-items:center;gap:5px;font-size:11px;font-weight:600;padding:2px 0}
+.bkt-t{display:flex;align-items:center;gap:5px;font-size:10.5px;font-weight:600;padding:1.5px 0}
 .bkt-t.win{font-weight:800}.bkt-t.win .bn{color:var(--green)}
-.bkt-t .bf{font-size:13px;line-height:1}
-.bkt-t .bn{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:80px}
+.bkt-t .bf{font-size:12px;line-height:1}
+.bkt-t .bn{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:84px}
 .bkt-t .tbd{color:var(--muted);font-weight:700}
-.bkt-sc{font-variant-numeric:tabular-nums;color:var(--muted);min-width:9px;text-align:right}
-.bkt-when{font-size:8px;color:var(--muted);text-align:center;margin-top:2px}
-.bkt-col.L .bkt-m::after{content:"";position:absolute;right:-9px;top:50%;width:9px;height:2px;background:var(--line)}
-.bkt-col.R .bkt-m::after{content:"";position:absolute;left:-9px;top:50%;width:9px;height:2px;background:var(--line)}
-.bkt-col.L:first-child .bkt-m::after,.bkt-col.center .bkt-m::after{display:none}
-.bkt-trophy{display:flex;justify-content:center;margin:8px 0 2px}
-.bkt-trophy svg{width:104px;height:auto;filter:drop-shadow(0 5px 12px rgba(245,197,24,.4))}
-.bkt-m.fin{box-shadow:0 0 0 1px var(--gold),0 6px 20px rgba(245,197,24,.22)}
+.bkt-sc{font-variant-numeric:tabular-nums;color:var(--muted);min-width:9px;text-align:right;font-weight:700}
+.bkt-when{font-size:8px;color:var(--muted);text-align:center;margin-top:1px}
+/* elbow connectors: a "]" / "[" joining each feeder pair to the next round */
+.bkt-col.L .bkt-pair::after{content:"";position:absolute;right:-11px;top:25%;bottom:25%;width:11px;border:2px solid var(--line);border-left:0;border-radius:0 7px 7px 0}
+.bkt-col.R .bkt-pair::after{content:"";position:absolute;left:-11px;top:25%;bottom:25%;width:11px;border:2px solid var(--line);border-right:0;border-radius:7px 0 0 7px}
+.bkt-col.sfL .bkt-m::after{content:"";position:absolute;right:-11px;top:50%;width:11px;height:2px;background:var(--line)}
+.bkt-col.sfR .bkt-m::after{content:"";position:absolute;left:-11px;top:50%;width:11px;height:2px;background:var(--line)}
+.bkt-trophy{display:flex;justify-content:center;margin:6px 0 2px}
+.bkt-trophy svg{width:96px;height:auto;filter:drop-shadow(0 5px 12px rgba(245,197,24,.4))}
 .bkt-champ{margin-top:10px;text-align:center;font-size:12px;font-weight:800;color:var(--gold);background:rgba(245,197,24,.12);border:1px solid var(--gold);border-radius:9px;padding:7px 9px;white-space:nowrap}
 .bkt-champ .bf{font-size:14px}
 .myteams,.statsv{padding:14px}.myteams h3,.statsv h3{font-size:14px;font-weight:800;margin-bottom:10px}
@@ -853,20 +855,23 @@ function scenHTML(g){const sc=qualScenarios(g);if(!sc)return"";const chip=tm=>{c
 
 /* ============ BRACKET ============ */
 function brkHTML(){const BR=bracketResolve();const byNum=new Map();M.filter(m=>m.ph).forEach(m=>byNum.set(m.__num,m));
-  const collect=(num,acc)=>{const m=byNum.get(num);if(!m)return;acc.add(num);[m.h,m.a].forEach(x=>{const mm=/^W(\d+)$/.exec(typeof x==="string"?x:"");if(mm)collect(+mm[1],acc)})};
-  const Lh=new Set();collect(101,Lh);const Rh=new Set();collect(102,Rh);
-  const rng=(s,lo,hi)=>[...s].filter(n=>n>=lo&&n<=hi).sort((a,b)=>a-b).map(n=>byNum.get(n)).filter(Boolean);
+  const kids=num=>{const m=byNum.get(num);if(!m)return[null,null];return [m.h,m.a].map(x=>{const mm=/^W(\d+)$/.exec(typeof x==="string"?x:"");return mm?+mm[1]:null})};
+  const parentOf={};M.filter(m=>m.ph).forEach(m=>{[m.h,m.a].forEach(x=>{const mm=/^W(\d+)$/.exec(typeof x==="string"?x:"");if(mm)parentOf[+mm[1]]=m.__num})});
+  const leaves=num=>{const c=kids(num);if(c[0]==null)return byNum.has(num)?[num]:[];return[...leaves(c[0]),...leaves(c[1])]};
+  const ladder=root=>{const r32=leaves(root);const r16=[];for(let i=0;i<r32.length;i+=2)r16.push(parentOf[r32[i]]);const qf=[];for(let i=0;i<r16.length;i+=2)qf.push(parentOf[r16[i]]);return{r32,r16,qf,sf:[r16.length?(qf.length?parentOf[qf[0]]:root):root]}};
+  const Lo=ladder(101),Ro=ladder(102);
   const teamRow=(m,sd)=>{const r=BR.get(m)||{},code=m[sd],team=r[sd];let name,flag;if(team&&isRealTeam(team)){name=`<span class="bn">${tn(team)}</span>`;flag=`<span class="bf">${fl(team)}</span>`}else{name=`<span class="bn tbd">${typeof code==="string"?code:"?"}</span>`;flag=""}let sc="",win=false;if(m.s){const p=m.s.split("-").map(Number);sc=sd==="h"?p[0]:p[1];win=(sd==="h"&&p[0]>p[1])||(sd==="a"&&p[1]>p[0])}return `<div class="bkt-t${win?" win":""}">${flag}${name}<span class="bkt-sc">${sc}</span></div>`};
   const box=(m,extra)=>m?`<div class="bkt-m${extra||""}" onclick="openSheetByIdx(${M.indexOf(m)})" role="button" tabindex="0" aria-label="${t().motd}">${teamRow(m,"h")}${teamRow(m,"a")}<div class="bkt-when">${fDay(new Date(m.dt))}</div></div>`:"";
-  const col=(label,ms,cls)=>`<div class="bkt-col ${cls||""}">${label?`<div class="bkt-rnd">${label}</div>`:""}${ms.map(m=>box(m)).join("")}</div>`;
+  const colP=(label,nums,cls)=>{let inner="";for(let i=0;i<nums.length;i+=2)inner+=`<div class="bkt-pair">${box(byNum.get(nums[i]))}${nums[i+1]!=null?box(byNum.get(nums[i+1])):""}</div>`;return `<div class="bkt-col ${cls}"><div class="bkt-rnd">${label}</div>${inner}</div>`};
+  const colS=(label,nums,cls)=>`<div class="bkt-col ${cls}"><div class="bkt-rnd">${label}</div>${nums.map(n=>box(byNum.get(n))).join("")}</div>`;
   const final=byNum.get(104),third=byNum.get(103);
   const TROPHY=`<div class="bkt-trophy"><svg viewBox="0 0 120 150" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="World Cup trophy"><defs><linearGradient id="tg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fef3c7"/><stop offset=".45" stop-color="#f5c518"/><stop offset="1" stop-color="#a9760a"/></linearGradient></defs><path d="M30 30 C8 30 9 64 36 67" fill="none" stroke="url(#tg)" stroke-width="7" stroke-linecap="round"/><path d="M90 30 C112 30 111 64 84 67" fill="none" stroke="url(#tg)" stroke-width="7" stroke-linecap="round"/><path d="M28 20 H92 V42 C92 71 28 71 28 42 Z" fill="url(#tg)"/><rect x="54" y="68" width="12" height="20" fill="url(#tg)"/><rect x="40" y="88" width="40" height="9" rx="3" fill="url(#tg)"/><rect x="32" y="99" width="56" height="12" rx="3" fill="url(#tg)"/><path d="M40 24 H51 V40 C51 51 40 51 40 40 Z" fill="#fff" opacity=".28"/></svg></div>`;
   let champ="";if(final&&final.s){const r=BR.get(final)||{},p=final.s.split("-").map(Number),w=p[0]>p[1]?r.h:p[1]>p[0]?r.a:null;if(w&&isRealTeam(w))champ=`<div class="bkt-champ">🏆 <span class="bf">${fl(w)}</span> ${tn(w)}</div>`}
   const center=`<div class="bkt-col center">${third?`<div class="bkt-rnd">🥉 ${t().third}</div>${box(third," tp")}`:""}${TROPHY}<div class="bkt-rnd" style="margin-top:4px">🏆 ${t().final}</div>${box(final," fin")}${champ}</div>`;
-  const flow=`<div class="bkt">`+col(t().r32,rng(Lh,73,88),"L")+col(t().r16,rng(Lh,89,96),"L")+col(t().qf,rng(Lh,97,100),"L")+col(t().sf,rng(Lh,101,101),"L")+center+col(t().sf,rng(Rh,102,102),"R")+col(t().qf,rng(Rh,97,100),"R")+col(t().r16,rng(Rh,89,96),"R")+col(t().r32,rng(Rh,73,88),"R")+`</div>`;
+  const flow=`<div class="bkt">`+colP(t().r32,Lo.r32,"L")+colP(t().r16,Lo.r16,"L")+colP(t().qf,Lo.qf,"L")+colS(t().sf,Lo.sf,"L sfL")+center+colS(t().sf,Ro.sf,"R sfR")+colP(t().qf,Ro.qf,"R")+colP(t().r16,Ro.r16,"R")+colP(t().r32,Ro.r32,"R")+`</div>`;
   const note=BR.thirdsProvisional?`<div class="fb-note" style="text-align:center;margin-top:6px">${L("3rd-place seeding is provisional until FIFA confirms the official allocation.","ترتيب أصحاب المركز الثالث مؤقت حتى تؤكده فيفا.","La asignación de terceros es provisional hasta que la FIFA confirme.","A alocação dos terceiros é provisória até a FIFA confirmar.","Le placement des troisièmes est provisoire jusqu'à confirmation FIFA.","Die Zuordnung der Drittplatzierten ist vorläufig bis zur FIFA-Bestätigung.","L'assegnazione delle terze è provvisoria fino alla conferma FIFA.","3位チームの組み分けはFIFA確定まで暫定です。")}</div>`:"";
   const hint=`<div class="bkt-hint">↔ ${L("Scroll sideways to explore the full bracket","مرّر جانبياً لاستعراض الشجرة كاملة","Desliza para ver todo el cuadro","Deslize para ver toda a chave","Faites défiler pour voir tout le tableau","Seitwärts scrollen für den ganzen Baum","Scorri per vedere tutto il tabellone","横スクロールで全体表示")}</div>`;
-  return`<div class="bracket"><h3>🏆 ${L("Tournament Bracket","شجرة البطولة","Cuadro del torneo","Chaveamento do torneio","Tableau du tournoi","Turnierbaum","Tabellone del torneo","トーナメント表")}</h3>${hint}<div class="bkt-scroll">${flow}</div>${note}<div style="text-align:center;margin-top:18px"><button class="hbtn gold" onclick="shareBracket()" style="padding:10px 20px;font-size:13px">📸 ${L("Share my bracket","شارك توقعاتي","Compartir mi cuadro","Compartilhar meu chaveamento","Partager mon tableau","Meinen Spielbaum teilen","Condividi il mio tabellone","トーナメント表を共有")}</button></div></div>`}
+  return`<div class="bracket"><h3>🏆 ${L("Tournament Bracket","شجرة البطولة","Cuadro del torneo","Chaveamento do torneio","Tableau du tournoi","Turnierbaum","Tabellone del torneo","トーナメント表")}</h3>${hint}<div class="bkt-scroll" id="bktScroll">${flow}</div>${note}<div style="text-align:center;margin-top:18px"><button class="hbtn gold" onclick="shareBracket()" style="padding:10px 20px;font-size:13px">📸 ${L("Share my bracket","شارك توقعاتي","Compartir mi cuadro","Compartilhar meu chaveamento","Partager mon tableau","Meinen Spielbaum teilen","Condividi il mio tabellone","トーナメント表を共有")}</button></div></div>`}
 
 /* ============ STATS ============ */
 function tournamentStats(M){const played=M.filter(m=>m.s);let goals=0,clean=0,homeWins=0,draws=0,awayWins=0,high=null,big=null;for(const m of played){const[h,a]=m.s.split("-").map(Number);goals+=h+a;if(h===0||a===0)clean++;if(h>a)homeWins++;else if(h<a)awayWins++;else draws++;if(!high||h+a>high.tot)high={m,tot:h+a};if(!big||Math.abs(h-a)>big.diff)big={m,diff:Math.abs(h-a)}}return{count:played.length,goals,avg:played.length?Math.round(goals/played.length*100)/100:0,clean,homeWins,draws,awayWins,high,big}}
@@ -959,7 +964,7 @@ document.getElementById("tabBar").innerHTML=TABS.map(([k,l])=>`<button class="ta
 document.getElementById("scheduleControls").style.display=tab==="schedule"?"block":"none";document.getElementById("todayFab").classList.toggle("show",false);renderLiveStrip();renderChips();renderNations();renderContent()}
 window.setTab=function(k){tab=k;if(window.trackTab)trackTab(k);if(document.startViewTransition&&matchMedia("(prefers-reduced-motion: no-preference)").matches){document.startViewTransition(()=>render())}else{render()}}
 function renderContent(){const el=document.getElementById("content");if(tab==="schedule")el.innerHTML=`<div class="sec">${motdHTML()}${schHTML()}</div>`;else if(tab==="groups")el.innerHTML=`<div class="sec">${grpHTML()}</div>`;else if(tab==="bracket")el.innerHTML=brkHTML();else if(tab==="stats")el.innerHTML=statsHTML();else if(tab==="favorites")el.innerHTML=favHTML();else if(tab==="sim")el.innerHTML=simHTML();else if(tab==="league")el.innerHTML=leagueHTML();
-if(tab==="schedule"){const a=document.getElementById("todayAnchor");document.getElementById("todayFab").classList.toggle("show",!!a&&day==="all"&&filter==="all")}else document.getElementById("todayFab").classList.remove("show")}
+if(tab==="schedule"){const a=document.getElementById("todayAnchor");document.getElementById("todayFab").classList.toggle("show",!!a&&day==="all"&&filter==="all")}else document.getElementById("todayFab").classList.remove("show");if(tab==="bracket"){const sc=document.getElementById("bktScroll");if(sc)requestAnimationFrame(()=>{sc.scrollLeft=Math.max(0,(sc.scrollWidth-sc.clientWidth)/2)})}}
 
 /* ============ EVENTS ============ */
 let sT;document.getElementById("search").oninput=e=>{query=e.target.value;day="all";filter="all";clearTimeout(sT);sT=setTimeout(()=>{renderChips();renderContent()},180)};
