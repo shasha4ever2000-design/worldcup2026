@@ -6,7 +6,7 @@ on:
     # Data-only commits (scores.json / scorers.json) skip the test suite — they
     # touch no code. GitHub Pages still redeploys them, so live scores and the
     # Golden Boot reach every visitor fast.
-    paths-ignore: ["scores.json", "scorers.json"]
+    paths-ignore: ["scores.json", "scorers.json", "knockouts.json"]
   pull_request:
 
 jobs:

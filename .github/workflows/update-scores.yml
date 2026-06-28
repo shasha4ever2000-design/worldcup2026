@@ -37,13 +37,14 @@ jobs:
           while [ $SECONDS -lt $END ]; do
             python update_scores.py || true
             python update_scorers.py || true
-            if ! git diff --quiet -- scores.json scorers.json; then
-              git add scores.json scorers.json
+            python update_knockouts.py || true
+            if ! git diff --quiet -- scores.json scorers.json knockouts.json; then
+              git add scores.json scorers.json knockouts.json
               # No "[skip ci]": we WANT GitHub Pages to redeploy so the same-origin
-              # scores.json / scorers.json refresh for every visitor (even cached/old
-              # clients). The test suite (ci.yml) ignores data-only commits via
-              # paths-ignore, so this does not run vitest/pytest/playwright per goal.
-              git commit -m "Auto-update scores & scorers" || true
+              # scores.json / scorers.json / knockouts.json refresh for every visitor
+              # (even cached/old clients). The test suite (ci.yml) ignores data-only
+              # commits via paths-ignore, so this does not run the full suite per goal.
+              git commit -m "Auto-update scores, scorers & knockouts" || true
               # absorb any concurrent commits (e.g. PR merges) before pushing
               git pull --rebase --autostash origin main || true
               git push || true

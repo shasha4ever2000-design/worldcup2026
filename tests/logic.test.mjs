@@ -73,6 +73,18 @@ describe("bracketResolve", () => {
     expect(r.get(final).a).toBe(r.get(r32b).a); // away of #74 won 0-3
   });
 
+  it("overlays real teams from the live knockout feed (koMap wins)", () => {
+    const M = [...groupGames("A"), ...groupGames("B")];
+    M.forEach((m) => (m.s = "1-0"));
+    const r32 = { g: "R32", ph: 1, dt: "2026-06-28T20:00:00+01:00", h: "1A", a: "2B" };
+    M.push(r32);
+    const koMap = { "R32|2026-06-28T20:00:00+01:00|1A|2B": { h: "Egypt", a: "Australia" } };
+    const r = bracketResolve(M, GROUPS, koMap);
+    expect(r.get(r32).h).toBe("Egypt"); // feed overrides placeholder resolution
+    expect(r.get(r32).a).toBe("Australia");
+    expect(r.thirdsProvisional).toBe(false); // feed present → no longer provisional
+  });
+
   it("does not crash on a level knockout score (penalties undeterminable)", () => {
     const M = [...groupGames("A"), ...groupGames("B")];
     M.forEach((m) => (m.s = "1-0"));
