@@ -1,5 +1,5 @@
-/* World Cup 2026 — Service Worker (v48) */
-const VERSION = "wc2026-v48";
+/* World Cup 2026 — Service Worker (v49) */
+const VERSION = "wc2026-v49";
 const CORE = [
   "./index.html", "./privacy.html", "./eg.html", "./sa.html", "./guide.html", "./cities.html", "./teams.html", "./manifest.json",
   "./icon-192.png", "./icon-512.png", "./icon-maskable-512.png",
@@ -24,7 +24,7 @@ self.addEventListener("fetch", e => {
   const url = new URL(req.url);
 
   // Always go to network first for live results so updates show fast
-  if (url.pathname.endsWith("scores.json") || url.pathname.endsWith("scorers.json")) {
+  if (url.pathname.endsWith("scores.json") || url.pathname.endsWith("scorers.json") || url.pathname.endsWith("knockouts.json")) {
     e.respondWith(
       fetch(req).then(r => {
         const copy = r.clone();

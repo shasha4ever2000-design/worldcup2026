@@ -695,7 +695,7 @@ function bracketResolve(){
   function decided(m){if(!m||!m.s)return null;const h=side(m,"h"),a=side(m,"a");if(!h||!a)return null;const[gh,ga]=m.s.split("-").map(Number);if(gh===ga)return null;return{win:gh>ga?h:a,lose:gh>ga?a:h}}
   function winnerOf(m){const d=decided(m);return d?d.win:null}
   function loserOf(m){const d=decided(m);return d?d.lose:null}
-  const out=new Map();ko.forEach(m=>out.set(m,{h:side(m,"h"),a:side(m,"a"),num:m.__num}));out.thirdsProvisional=thirdsProvisional;return out;
+  const out=new Map();ko.forEach(m=>{const ov=knockoutsMap&&knockoutsMap[`${m.g}|${m.dt}|${m.h}|${m.a}`];out.set(m,{h:(ov&&ov.h)||side(m,"h"),a:(ov&&ov.a)||side(m,"a"),num:m.__num})});out.thirdsProvisional=thirdsProvisional&&!(knockoutsMap&&Object.keys(knockoutsMap).length);return out;
 }
 /* Group qualification scenarios (q / out / live + next-match hint). Brute-forces
    remaining results as generic W/D/L. Mirrors qualScenarios in src/logic.mjs. */
@@ -932,7 +932,7 @@ document.getElementById("todayFab").onclick=()=>{const a=document.getElementById
 window.addEventListener("beforeinstallprompt",e=>{e.preventDefault();deferredPrompt=e;document.getElementById("installBtn").style.display="inline-flex"});
 document.getElementById("installBtn").onclick=async()=>{if(!deferredPrompt)return;deferredPrompt.prompt();const c=await deferredPrompt.userChoice;if(window.trackEvent)trackEvent("pwa_install_prompt",{outcome:c&&c.outcome});deferredPrompt=null;document.getElementById("installBtn").style.display="none"};
 document.addEventListener("keydown",e=>{if(e.target.tagName==="INPUT"||e.target.tagName==="TEXTAREA"||e.target.tagName==="SELECT")return;const n=parseInt(e.key);if(n>=1&&n<=TABS.length){e.preventDefault();setTab(TABS[n-1][0])}});
-window.manualRefresh=async function(){const btn=document.getElementById("refreshBtn");if(btn){btn.classList.remove("spin");void btn.offsetWidth;btn.classList.add("spin")}await fetchScores(false);await autoLiveFetch(false);await fetchScorers(false);vibrate(10);toast(t().scoresUpdated)};
+window.manualRefresh=async function(){const btn=document.getElementById("refreshBtn");if(btn){btn.classList.remove("spin");void btn.offsetWidth;btn.classList.add("spin")}await fetchScores(false);await autoLiveFetch(false);await fetchScorers(false);await fetchKnockouts(false);vibrate(10);toast(t().scoresUpdated)};
 (function initPTR(){let startY=0,pulling=false;const threshold=70;document.addEventListener("touchstart",e=>{if(window.scrollY===0&&!pulling)startY=e.touches[0].pageY},{passive:true});document.addEventListener("touchmove",e=>{if(!startY)return;const dy=e.touches[0].pageY-startY;if(dy>10&&window.scrollY===0)pulling=true},{passive:true});document.addEventListener("touchend",()=>{if(pulling){const dy=event.changedTouches[0].pageY-startY;if(dy>=threshold)manualRefresh()}startY=0;pulling=false},{passive:true})})();
 
 /* ============ INIT ============ */
@@ -980,7 +980,8 @@ function celebrateGoal(){goalSound();
 }
 let lastScoresRaw="";
 let lastScorersRaw="";
-let scoresMap={},liveMap={},lastUpdateTime=0;
+let lastKnockoutsRaw="";
+let scoresMap={},liveMap={},knockoutsMap={},lastUpdateTime=0;
 function pickScore(status,server,live){if(status==="now")return live!=null?live:(server!=null?server:null);return server!=null?server:(live!=null?live:null)}
 /* Reconcile both score sources into the fixture list. The live feed wins while a
    match is in play (it has no GitHub Pages redeploy lag); scores.json wins once
@@ -994,18 +995,23 @@ async function fetchScores(initial){const RAW="https://raw.githubusercontent.com
    raw GitHub copy as a fallback. Keeps the inline seed if the feed is unavailable. */
 function applyScorers(arr,initial){if(!Array.isArray(arr)||!arr.length)return;SCORERS=arr.filter(s=>s&&s.n&&s.t).map(s=>({n:String(s.n),t:String(s.t),g:+s.g||0,a:+s.a||0}));if(!initial){if(tab==="stats")renderContent()}}
 async function fetchScorers(initial){const RAW="https://raw.githubusercontent.com/shasha4ever2000-design/worldcup2026/main/scorers.json";let raw=null;try{const r=await fetch("scorers.json?_="+Date.now(),{cache:"no-store"});if(r.ok)raw=await r.text()}catch(e){}if(raw==null){try{const r2=await fetch(RAW+"?_="+Date.now(),{cache:"no-store"});if(r2.ok)raw=await r2.text()}catch(e){}}if(raw==null||raw===lastScorersRaw)return;lastScorersRaw=raw;let arr=null;try{arr=JSON.parse(raw)}catch(e){return}applyScorers(arr,initial)}
+/* Live knockout bracket. knockouts.json is written by the GitHub Action from the
+   real football-data.org fixtures once the draw is set; it maps our placeholder
+   knockout fixtures to their actual teams (official FIFA allocation). */
+function applyKnockouts(obj,initial){if(!obj||typeof obj!=="object"||Array.isArray(obj))return;knockoutsMap=obj;if(!initial)refreshDynamic()}
+async function fetchKnockouts(initial){const RAW="https://raw.githubusercontent.com/shasha4ever2000-design/worldcup2026/main/knockouts.json";let raw=null;try{const r=await fetch("knockouts.json?_="+Date.now(),{cache:"no-store"});if(r.ok)raw=await r.text()}catch(e){}if(raw==null){try{const r2=await fetch(RAW+"?_="+Date.now(),{cache:"no-store"});if(r2.ok)raw=await r2.text()}catch(e){}}if(raw==null||raw===lastKnockoutsRaw)return;lastKnockoutsRaw=raw;let obj=null;try{obj=JSON.parse(raw)}catch(e){return}applyKnockouts(obj,initial)}
 function normTeam(x){x=(x||"").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");"&.'`-/".split("").forEach(ch=>{x=x.split(ch).join(" ")});x=x.replace(/\s+/g," ").trim();const al={"turkiye":"turkey","korea republic":"south korea","republic of korea":"south korea","ir iran":"iran","united states":"usa","united states of america":"usa","czechia":"czech republic","cote d ivoire":"ivory coast","cabo verde":"cape verde","cape verde islands":"cape verde","bosnia and herzegovina":"bosnia herzegovina","congo dr":"dr congo","democratic republic of congo":"dr congo"};return al[x]||x}
 function findFixtureByTeams(h,a){const H=normTeam(h),A=normTeam(a);return M.find(m=>{if(m.ph)return false;const mh=normTeam(m.h),ma=normTeam(m.a);return(mh===H&&ma===A)||(mh===A&&ma===H)})}
 async function autoLiveFetch(initial){const days=[];for(let i=0;i<3;i++)days.push(new Date(Date.now()-i*864e5).toISOString().slice(0,10));for(const d of days){try{const r=await fetch(`https://www.thesportsdb.com/api/v1/json/3/eventsday.php?d=${d}&s=Soccer`);if(!r.ok)continue;const j=await r.json();const evs=(j.events||[]).filter(e=>/world cup/i.test(e.strLeague||"")&&!/wom|u-?[12]?\d|qualif|youth|futsal|beach/i.test(e.strLeague||""));for(const e of evs){const hs=e.intHomeScore,as=e.intAwayScore;if(hs==null||as==null||hs===""||as==="")continue;const m=findFixtureByTeams(e.strHomeTeam,e.strAwayTeam);if(!m)continue;const sc=normTeam(m.h)===normTeam(e.strHomeTeam)?`${hs}-${as}`:`${as}-${hs}`;liveMap[mId(m)]=sc}}catch(e){}}return applyScores(initial)}
 function parseInitialTab(search,hash,valid){let q="";try{q=new URLSearchParams(search||"").get("tab")||""}catch{}const h=(hash||"").replace(/^#/,"");if(valid.includes(q))return q;if(valid.includes(h))return h;return null}
 function anyLiveNow(arr,now=Date.now()){return arr.some(m=>!m.ph&&mSt(new Date(m.dt),now)==="now")}
 let liveT=null;
-function schedulePoll(){const live=anyLiveNow(M);liveT=setTimeout(async()=>{await fetchScores(false);if(live)await autoLiveFetch(false);fetchScorers(false);schedulePoll()},live?20000:60000)}
-async function init(){const it0=parseInitialTab(location.search,location.hash,TABS.map(x=>x[0]));if(it0)tab=it0;await fetchScores(true);fetchScorers(true);render();injectMatchSchema();setTimeout(()=>{const a=document.getElementById("todayAnchor");if(a&&tab==="schedule")a.scrollIntoView({block:"center"})},150);autoLiveFetch(true);schedulePoll();loadNewsTicker();checkPendingReminders();setInterval(checkPendingReminders,60000);handleIncomingPicks();setTimeout(showCookieBanner,1200);if(consentChoice==="accept")loadAdSense();}
+function schedulePoll(){const live=anyLiveNow(M);liveT=setTimeout(async()=>{await fetchScores(false);if(live)await autoLiveFetch(false);fetchScorers(false);fetchKnockouts(false);schedulePoll()},live?20000:60000)}
+async function init(){const it0=parseInitialTab(location.search,location.hash,TABS.map(x=>x[0]));if(it0)tab=it0;await fetchScores(true);fetchScorers(true);fetchKnockouts(true);render();injectMatchSchema();setTimeout(()=>{const a=document.getElementById("todayAnchor");if(a&&tab==="schedule")a.scrollIntoView({block:"center"})},150);autoLiveFetch(true);schedulePoll();loadNewsTicker();checkPendingReminders();setInterval(checkPendingReminders,60000);handleIncomingPicks();setTimeout(showCookieBanner,1200);if(consentChoice==="accept")loadAdSense();}
 init();
 function updateCountdowns(){if(document.hidden)return;document.querySelectorAll(".nation").forEach(card=>{const team=card.dataset.team,now=Date.now(),ne=nationNext(nationMatches(team),now),next=ne&&ne.m;const cd=card.querySelector(".cd");if(!next||!cd)return;const diff=new Date(next.dt)-now;if(diff<=0)return;const bs=cd.querySelectorAll("b");if(bs.length===4){bs[0].textContent=String(Math.floor(diff/864e5)).padStart(2,"0");bs[1].textContent=String(Math.floor(diff%864e5/36e5)).padStart(2,"0");bs[2].textContent=String(Math.floor(diff%36e5/6e4)).padStart(2,"0");bs[3].textContent=String(Math.floor(diff%6e4/1e3)).padStart(2,"0")}})}
 setInterval(()=>{updateCountdowns();updateLastUpdated()},1000);
-document.addEventListener("visibilitychange",()=>{if(!document.hidden){updateCountdowns();fetchScores(false);fetchScorers(false)}});
+document.addEventListener("visibilitychange",()=>{if(!document.hidden){updateCountdowns();fetchScores(false);fetchScorers(false);fetchKnockouts(false)}});
 /* ============ PICK'EM LEAGUE ============ */
 const VC={h:"1",d:"2",a:"3"},VCR={"1":"h","2":"d","3":"a"};
 function compactVotes(v){return M.map(m=>VC[v[mId(m)]]||"-").join("")}

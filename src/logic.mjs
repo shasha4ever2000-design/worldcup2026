@@ -280,7 +280,7 @@ export function qualScenarios(grp, GROUPS, M) {
  * FIFA's official allocation table). Knockout matches keep FIFA's 73..104 numbering
  * in fixture order.
  */
-export function bracketResolve(M, GROUPS) {
+export function bracketResolve(M, GROUPS, koMap = {}) {
   const ko = M.filter((m) => m.ph);
   const byNum = new Map();
   let n = 73;
@@ -378,9 +378,15 @@ export function bracketResolve(M, GROUPS) {
     return d ? d.lose : null;
   }
 
+  // Overlay real teams from the live knockout feed (knockouts.json) when present —
+  // these already reflect FIFA's official allocation, so they win over our own
+  // placeholder resolution and retire the "provisional" third-place note.
   const out = new Map();
-  ko.forEach((m) => out.set(m, { h: side(m, "h"), a: side(m, "a"), num: m.__num }));
-  out.thirdsProvisional = thirdsProvisional;
+  ko.forEach((m) => {
+    const ov = koMap && koMap[`${m.g}|${m.dt}|${m.h}|${m.a}`];
+    out.set(m, { h: (ov && ov.h) || side(m, "h"), a: (ov && ov.a) || side(m, "a"), num: m.__num });
+  });
+  out.thirdsProvisional = thirdsProvisional && !(koMap && Object.keys(koMap).length);
   return out;
 }
 
