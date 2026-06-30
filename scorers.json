@@ -36,12 +36,6 @@
     "a": 2
   },
   {
-    "n": "Cody Gakpo",
-    "t": "Netherlands",
-    "g": 3,
-    "a": 1
-  },
-  {
     "n": "Ismaïla Sarr",
     "t": "Senegal",
     "g": 3,
@@ -100,6 +94,12 @@
     "t": "DR Congo",
     "g": 3,
     "a": 0
+  },
+  {
+    "n": "Crysencio Summerville",
+    "t": "Netherlands",
+    "g": 2,
+    "a": 1
   },
   {
     "n": "Cyle Larin",
