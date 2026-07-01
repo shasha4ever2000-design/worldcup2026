@@ -30,6 +30,12 @@
     "a": 1
   },
   {
+    "n": "Harry Kane",
+    "t": "England",
+    "g": 4,
+    "a": 0
+  },
+  {
     "n": "Deniz Undav",
     "t": "Germany",
     "g": 3,
@@ -68,12 +74,6 @@
   {
     "n": "Elijah Just",
     "t": "New Zealand",
-    "g": 3,
-    "a": 0
-  },
-  {
-    "n": "Harry Kane",
-    "t": "England",
     "g": 3,
     "a": 0
   },
