@@ -54,6 +54,12 @@
     "a": 1
   },
   {
+    "n": "Julián Quiñones",
+    "t": "Mexico",
+    "g": 3,
+    "a": 1
+  },
+  {
     "n": "Brian Brobbey",
     "t": "Netherlands",
     "g": 3,
@@ -84,12 +90,6 @@
     "a": 0
   },
   {
-    "n": "Julián Quiñones",
-    "t": "Mexico",
-    "g": 3,
-    "a": 0
-  },
-  {
     "n": "Kai Havertz",
     "t": "Germany",
     "g": 3,
@@ -114,8 +114,8 @@
     "a": 0
   },
   {
-    "n": "Folarin Balogun",
-    "t": "USA",
+    "n": "Raúl Jiménez",
+    "t": "Mexico",
     "g": 2,
     "a": 0
   }
