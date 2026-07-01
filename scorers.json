@@ -1,33 +1,33 @@
 [
   {
-    "n": "Kylian Mbappé",
-    "t": "France",
-    "g": 6,
-    "a": 2
-  },
-  {
     "n": "Lionel Messi",
     "t": "Argentina",
     "g": 6,
     "a": 0
   },
   {
-    "n": "Erling Haaland",
-    "t": "Norway",
-    "g": 5,
-    "a": 0
+    "n": "Kylian Mbappé",
+    "t": "France",
+    "g": 4,
+    "a": 2
   },
   {
     "n": "Ousmane Dembélé",
     "t": "France",
     "g": 4,
-    "a": 2
+    "a": 1
   },
   {
     "n": "Vinicius Junior",
     "t": "Brazil",
     "g": 4,
     "a": 1
+  },
+  {
+    "n": "Erling Haaland",
+    "t": "Norway",
+    "g": 4,
+    "a": 0
   },
   {
     "n": "Deniz Undav",
