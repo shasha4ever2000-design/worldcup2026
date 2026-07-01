@@ -1,33 +1,33 @@
 [
   {
+    "n": "Kylian Mbappé",
+    "t": "France",
+    "g": 6,
+    "a": 2
+  },
+  {
     "n": "Lionel Messi",
     "t": "Argentina",
     "g": 6,
     "a": 0
   },
   {
-    "n": "Kylian Mbappé",
-    "t": "France",
-    "g": 4,
-    "a": 2
+    "n": "Erling Haaland",
+    "t": "Norway",
+    "g": 5,
+    "a": 0
   },
   {
     "n": "Ousmane Dembélé",
     "t": "France",
     "g": 4,
-    "a": 1
+    "a": 2
   },
   {
     "n": "Vinicius Junior",
     "t": "Brazil",
     "g": 4,
     "a": 1
-  },
-  {
-    "n": "Erling Haaland",
-    "t": "Norway",
-    "g": 4,
-    "a": 0
   },
   {
     "n": "Deniz Undav",
@@ -50,6 +50,12 @@
   {
     "n": "Johan Manzambi",
     "t": "Switzerland",
+    "g": 3,
+    "a": 1
+  },
+  {
+    "n": "Julián Quiñones",
+    "t": "Mexico",
     "g": 3,
     "a": 1
   },
@@ -108,13 +114,7 @@
     "a": 0
   },
   {
-    "n": "Folarin Balogun",
-    "t": "USA",
-    "g": 2,
-    "a": 0
-  },
-  {
-    "n": "Julián Quiñones",
+    "n": "Raúl Jiménez",
     "t": "Mexico",
     "g": 2,
     "a": 0
