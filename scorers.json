@@ -30,6 +30,12 @@
     "a": 2
   },
   {
+    "n": "Ismaïla Sarr",
+    "t": "Senegal",
+    "g": 4,
+    "a": 1
+  },
+  {
     "n": "Vinicius Junior",
     "t": "Brazil",
     "g": 4,
@@ -44,12 +50,6 @@
   {
     "n": "Cody Gakpo",
     "t": "Netherlands",
-    "g": 3,
-    "a": 1
-  },
-  {
-    "n": "Ismaïla Sarr",
-    "t": "Senegal",
     "g": 3,
     "a": 1
   },
