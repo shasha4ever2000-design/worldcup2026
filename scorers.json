@@ -18,6 +18,12 @@
     "a": 0
   },
   {
+    "n": "Harry Kane",
+    "t": "England",
+    "g": 5,
+    "a": 0
+  },
+  {
     "n": "Ousmane Dembélé",
     "t": "France",
     "g": 4,
@@ -28,12 +34,6 @@
     "t": "Brazil",
     "g": 4,
     "a": 1
-  },
-  {
-    "n": "Harry Kane",
-    "t": "England",
-    "g": 4,
-    "a": 0
   },
   {
     "n": "Deniz Undav",
