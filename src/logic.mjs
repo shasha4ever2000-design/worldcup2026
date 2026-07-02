@@ -361,12 +361,17 @@ export function bracketResolve(M, GROUPS, koMap = {}) {
   };
   const side = (m, s) => (m.ph ? resolveCode(m[s]) : m[s]);
   function decided(m) {
-    if (!m || !m.s) return null;
+    if (!m) return null;
     const h = side(m, "h");
     const a = side(m, "a");
     if (!h || !a) return null;
+    // Explicit winner from the feed wins first — it covers penalty shootouts
+    // (where full-time is level).
+    if (m.w === "h") return { win: h, lose: a };
+    if (m.w === "a") return { win: a, lose: h };
+    if (!m.s) return null;
     const [gh, ga] = m.s.split("-").map(Number);
-    if (gh === ga) return null; // level after 90/ET → penalties, undeterminable here
+    if (gh === ga) return null; // level, no winner flag yet → undeterminable
     return { win: gh > ga ? h : a, lose: gh > ga ? a : h };
   }
   function winnerOf(m) {

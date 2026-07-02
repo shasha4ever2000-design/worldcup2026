@@ -33,6 +33,19 @@ def m(stage, utc, home, away):
     }
 
 
+def mS(stage, utc, home, away, status, ft=None, winner=None, pens=None):
+    d = m(stage, utc, home, away)
+    d["status"] = status
+    d["score"] = {}
+    if ft is not None:
+        d["score"]["fullTime"] = {"home": ft[0], "away": ft[1]}
+    if winner is not None:
+        d["score"]["winner"] = winner
+    if pens is not None:
+        d["score"]["penalties"] = {"home": pens[0], "away": pens[1]}
+    return d
+
+
 def test_maps_feed_teams_onto_our_placeholder_fixtures():
     api = feed(
         m("LAST_32", "2026-06-28T19:00:00Z", "Mexico", "Switzerland"),   # earlier R32
@@ -43,6 +56,37 @@ def test_maps_feed_teams_onto_our_placeholder_fixtures():
     assert out["R32|2026-06-28T20:00:00+01:00|2A|2B"] == {"h": "Mexico", "a": "Switzerland"}
     # later R32 placeholder (2D v 2G, Jul 3) → second feed R32 by date
     assert out["R32|2026-07-03T19:00:00+01:00|2D|2G"] == {"h": "Australia", "a": "Egypt"}
+
+
+def test_captures_score_and_winner_for_a_finished_knockout():
+    api = feed(mS("LAST_32", "2026-06-28T19:00:00Z", "Mexico", "Switzerland",
+                  "FINISHED", ft=(2, 1), winner="HOME_TEAM"))
+    out = parse_knockouts(api, FIXTURES, DISPLAY)
+    e = out["R32|2026-06-28T20:00:00+01:00|2A|2B"]
+    assert e["s"] == "2-1" and e["w"] == "h"
+
+
+def test_winner_covers_penalty_shootout_on_level_score():
+    api = feed(mS("LAST_32", "2026-06-28T19:00:00Z", "Mexico", "Switzerland",
+                  "FINISHED", ft=(1, 1), winner="AWAY_TEAM", pens=(3, 5)))
+    out = parse_knockouts(api, FIXTURES, DISPLAY)
+    e = out["R32|2026-06-28T20:00:00+01:00|2A|2B"]
+    assert e["s"] == "1-1" and e["w"] == "a" and e["p"] == "3-5"
+
+
+def test_in_play_gets_score_but_no_winner_yet():
+    api = feed(mS("LAST_32", "2026-06-28T19:00:00Z", "Mexico", "Switzerland",
+                  "IN_PLAY", ft=(1, 0)))
+    out = parse_knockouts(api, FIXTURES, DISPLAY)
+    e = out["R32|2026-06-28T20:00:00+01:00|2A|2B"]
+    assert e["s"] == "1-0" and "w" not in e
+
+
+def test_scheduled_knockout_has_teams_but_no_score():
+    api = feed(mS("LAST_32", "2026-06-28T19:00:00Z", "Mexico", "Switzerland", "SCHEDULED"))
+    out = parse_knockouts(api, FIXTURES, DISPLAY)
+    e = out["R32|2026-06-28T20:00:00+01:00|2A|2B"]
+    assert e == {"h": "Mexico", "a": "Switzerland"}
 
 
 def test_normalises_api_team_spellings_to_site_names():

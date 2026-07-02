@@ -85,6 +85,17 @@ describe("bracketResolve", () => {
     expect(r.thirdsProvisional).toBe(false); // feed present → no longer provisional
   });
 
+  it("advances the winner flag on a level knockout (penalty shootout)", () => {
+    const M = [...groupGames("A"), ...groupGames("B")];
+    M.forEach((m) => (m.s = "1-0"));
+    const r32 = { g: "R32", ph: 1, dt: "2026-06-28T20:00:00+01:00", h: "1A", a: "2B", s: "1-1", w: "a" };
+    const next = { g: "Final", ph: 1, dt: "2026-07-19T20:00:00+01:00", h: "W73", a: "1B" };
+    M.push(r32, next);
+    const r = bracketResolve(M, GROUPS);
+    // even though full-time is level, the feed winner flag (away) advances
+    expect(r.get(next).h).toBe(r.get(r32).a);
+  });
+
   it("does not crash on a level knockout score (penalties undeterminable)", () => {
     const M = [...groupGames("A"), ...groupGames("B")];
     M.forEach((m) => (m.s = "1-0"));
