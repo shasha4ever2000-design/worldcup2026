@@ -74,6 +74,15 @@ def test_winner_covers_penalty_shootout_on_level_score():
     assert e["s"] == "1-1" and e["w"] == "a" and e["p"] == "3-5"
 
 
+def test_penalties_only_shown_when_full_time_is_level():
+    # non-level full-time with stray penalty data → no "p"
+    api = feed(mS("LAST_32", "2026-06-28T19:00:00Z", "Mexico", "Switzerland",
+                  "FINISHED", ft=(4, 5), winner="AWAY_TEAM", pens=(3, 4)))
+    out = parse_knockouts(api, FIXTURES, DISPLAY)
+    e = out["R32|2026-06-28T20:00:00+01:00|2A|2B"]
+    assert e["s"] == "4-5" and e["w"] == "a" and "p" not in e
+
+
 def test_in_play_gets_score_but_no_winner_yet():
     api = feed(mS("LAST_32", "2026-06-28T19:00:00Z", "Mexico", "Switzerland",
                   "IN_PLAY", ft=(1, 0)))
