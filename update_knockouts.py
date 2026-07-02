@@ -70,8 +70,23 @@ def parse_knockouts(api_json, fixtures, team_display):
             a = team_display.get(canon(an))
             if not h or not a:
                 continue
+            entry = {"h": h, "a": a}
+            # Capture the score, the winner (which covers penalty shootouts, where
+            # full-time is level), and the shootout score for display.
+            score = m.get("score") or {}
+            ft = score.get("fullTime") or {}
+            gh, ga = ft.get("home"), ft.get("away")
+            status = m.get("status")
+            if status in ("IN_PLAY", "PAUSED", "FINISHED") and gh is not None and ga is not None:
+                entry["s"] = f"{gh}-{ga}"
+            win = score.get("winner")
+            if status == "FINISHED" and win in ("HOME_TEAM", "AWAY_TEAM"):
+                entry["w"] = "h" if win == "HOME_TEAM" else "a"
+            pen = score.get("penalties") or {}
+            if pen.get("home") is not None and pen.get("away") is not None:
+                entry["p"] = f"{pen['home']}-{pen['away']}"
             key = f'{fx["g"]}|{fx["dt"]}|{fx["h"]}|{fx["a"]}'
-            out[key] = {"h": h, "a": a}
+            out[key] = entry
     return out
 
 
