@@ -66,6 +66,12 @@
     "a": 1
   },
   {
+    "n": "Mikel Oyarzabal",
+    "t": "Spain",
+    "g": 3,
+    "a": 1
+  },
+  {
     "n": "Brian Brobbey",
     "t": "Netherlands",
     "g": 3,
@@ -111,12 +117,6 @@
     "n": "Yoane Wissa",
     "t": "DR Congo",
     "g": 3,
-    "a": 0
-  },
-  {
-    "n": "Raúl Jiménez",
-    "t": "Mexico",
-    "g": 2,
     "a": 0
   }
 ]
