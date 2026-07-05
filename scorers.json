@@ -2,13 +2,13 @@
   {
     "n": "Kylian Mbappé",
     "t": "France",
-    "g": 6,
+    "g": 7,
     "a": 2
   },
   {
     "n": "Lionel Messi",
     "t": "Argentina",
-    "g": 6,
+    "g": 7,
     "a": 0
   },
   {
@@ -36,6 +36,12 @@
     "a": 1
   },
   {
+    "n": "Mikel Oyarzabal",
+    "t": "Spain",
+    "g": 4,
+    "a": 1
+  },
+  {
     "n": "Vinicius Junior",
     "t": "Brazil",
     "g": 4,
@@ -48,14 +54,14 @@
     "a": 2
   },
   {
-    "n": "Cody Gakpo",
-    "t": "Netherlands",
-    "g": 3,
-    "a": 1
-  },
-  {
     "n": "Johan Manzambi",
     "t": "Switzerland",
+    "g": 3,
+    "a": 2
+  },
+  {
+    "n": "Cody Gakpo",
+    "t": "Netherlands",
     "g": 3,
     "a": 1
   },
@@ -111,12 +117,6 @@
     "n": "Yoane Wissa",
     "t": "DR Congo",
     "g": 3,
-    "a": 0
-  },
-  {
-    "n": "Raúl Jiménez",
-    "t": "Mexico",
-    "g": 2,
     "a": 0
   }
 ]
