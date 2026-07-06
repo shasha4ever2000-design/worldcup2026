@@ -72,12 +72,6 @@
     "a": 2
   },
   {
-    "n": "Brian Brobbey",
-    "t": "Netherlands",
-    "g": 3,
-    "a": 0
-  },
-  {
     "n": "Elijah Just",
     "t": "New Zealand",
     "g": 3,
@@ -110,6 +104,12 @@
   {
     "n": "Matheus Cunha",
     "t": "Brazil",
+    "g": 3,
+    "a": 0
+  },
+  {
+    "n": "Raúl Jiménez",
+    "t": "Mexico",
     "g": 3,
     "a": 0
   },
