@@ -6,14 +6,14 @@
     "a": 2
   },
   {
-    "n": "Erling Haaland",
-    "t": "Norway",
-    "g": 7,
-    "a": 0
-  },
-  {
     "n": "Lionel Messi",
     "t": "Argentina",
+    "g": 7,
+    "a": 1
+  },
+  {
+    "n": "Erling Haaland",
+    "t": "Norway",
     "g": 7,
     "a": 0
   },
