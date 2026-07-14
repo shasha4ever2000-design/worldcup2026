@@ -36,6 +36,12 @@
     "a": 2
   },
   {
+    "n": "Mikel Oyarzabal",
+    "t": "Spain",
+    "g": 5,
+    "a": 1
+  },
+  {
     "n": "Ismaïla Sarr",
     "t": "Senegal",
     "g": 4,
@@ -44,12 +50,6 @@
   {
     "n": "Julián Quiñones",
     "t": "Mexico",
-    "g": 4,
-    "a": 1
-  },
-  {
-    "n": "Mikel Oyarzabal",
-    "t": "Spain",
     "g": 4,
     "a": 1
   },
