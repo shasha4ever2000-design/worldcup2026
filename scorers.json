@@ -12,6 +12,12 @@
     "a": 4
   },
   {
+    "n": "Jude Bellingham",
+    "t": "England",
+    "g": 7,
+    "a": 1
+  },
+  {
     "n": "Erling Haaland",
     "t": "Norway",
     "g": 7,
@@ -25,12 +31,6 @@
   },
   {
     "n": "Harry Kane",
-    "t": "England",
-    "g": 6,
-    "a": 1
-  },
-  {
-    "n": "Jude Bellingham",
     "t": "England",
     "g": 6,
     "a": 1
