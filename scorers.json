@@ -72,6 +72,12 @@
     "a": 2
   },
   {
+    "n": "Bradley Barcola",
+    "t": "France",
+    "g": 3,
+    "a": 1
+  },
+  {
     "n": "Elijah Just",
     "t": "New Zealand",
     "g": 3,
@@ -98,12 +104,6 @@
   {
     "n": "Kai Havertz",
     "t": "Germany",
-    "g": 3,
-    "a": 0
-  },
-  {
-    "n": "Matheus Cunha",
-    "t": "Brazil",
     "g": 3,
     "a": 0
   },
