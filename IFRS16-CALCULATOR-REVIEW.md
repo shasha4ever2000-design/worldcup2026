@@ -7,6 +7,11 @@
 
 ---
 
+> **Update:** the fixed calculator is committed on this branch as `ifrs16-lease-calculator.html`.
+> Bugs **1–6** below plus the CSV BOM issue are **FIXED** and verified (35/35 engine tests, 28/28 UI tests pass).
+> Items 7–9 (stub proration, leap-year escalation day, accrual JE dated the 1st) are documented
+> methodology choices left unchanged.
+
 ## Bugs found (ordered by severity)
 
 ### 1. HIGH — Final payment month is missing from the Tab 8 month dropdown
