@@ -89,7 +89,7 @@ Monthly interest accrual entries carry `date: monthStart` (e.g. 01-Mar for March
 ## Suggested features (prioritized)
 
 **Tier 1 — biggest real-world impact**
-1. **Auto-save to localStorage** (with the existing JSON export kept as backup). Losing all data on refresh is the #1 practical risk today.
+1. ~~**Auto-save to localStorage**~~ — **IMPLEMENTED** on this branch: leases auto-save to the browser on every change and are restored on reopen (selection included); a deleted-empty register stays empty; corrupt/blocked storage falls back cleanly with a footer warning; JSON export remains the backup/transfer path.
 2. **Lease modifications & remeasurements (IFRS 16.44–46)** — the biggest functional gap for real use: change of term/rate/payments at an effective date, remeasure the liability with adjustment against the ROU asset, and generate the remeasurement JE. Real leases get amended constantly; today the only option is deleting and re-creating, which destroys history.
 3. **Termination / early exit** — derecognize ROU and liability at a chosen date and compute the gain/loss JE.
 4. **Disclosure note pack (IFRS 16.53 / 58)** — auto-generated: maturity analysis of undiscounted payments (≤1y, 1–2y, 2–5y, >5y), ROU rollforward by asset class, interest expense and depreciation for the period. This turns the tool from a calculator into a close/audit deliverable.

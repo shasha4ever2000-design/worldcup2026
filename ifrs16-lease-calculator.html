@@ -1322,6 +1322,41 @@ function scheduleToCSV(headers, rows) {
   rows.forEach(r => out.push(r));
   return out.map(r => r.map(csvEscape).join(',')).join('\n');
 }
+// ---- localStorage auto-save ----
+// Everything stays in this browser; the JSON export remains the way to back up or move data.
+const STORAGE_KEY = 'ifrs16_leases_v1';
+function loadSavedState() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return null; // first run — no saved state yet
+    const parsed = JSON.parse(raw);
+    if (!parsed || !Array.isArray(parsed.leases)) return null;
+    // Merge over defaults so leases saved by older versions pick up any new fields.
+    return {
+      leases: parsed.leases.map(l => ({
+        ...defaultLease(),
+        ...l
+      })),
+      selectedId: parsed.selectedId || null
+    };
+  } catch (e) {
+    return null; // corrupt/unavailable storage — start fresh rather than crash
+  }
+}
+function saveState(leases, selectedId) {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({
+      version: 1,
+      savedAt: new Date().toISOString(),
+      leases,
+      selectedId
+    }));
+    return true;
+  } catch (e) {
+    return false; // storage full or blocked (private mode) — app keeps working in memory
+  }
+}
+
 // ============================= REACT SETUP + UI PRIMITIVES =============================
 const {
   useState,
@@ -2228,7 +2263,8 @@ function Sidebar({
   mobileOpen,
   setMobileOpen,
   onExportAll,
-  onImportAll
+  onImportAll,
+  storageOk
 }) {
   const fileRef = useRef(null);
   const validLeases = leases.filter(l => calcs[l.id] && !calcs[l.id].errors.length);
@@ -2349,7 +2385,7 @@ function Sidebar({
     }
   }))), /*#__PURE__*/React.createElement("div", {
     className: "sidebar-footer"
-  }, "No data leaves your browser. Nothing is auto-saved between sessions — export to JSON before closing this tab if you want to reload it later.")));
+  }, storageOk ? 'No data leaves your device — leases are auto-saved to this browser and restored when you reopen this page. Use Export JSON for backups or to move data to another browser.' : '⚠ Auto-save is unavailable (private browsing or storage blocked). Your work exists only in this tab — export to JSON before closing.')));
 }
 // ============================= APP ROOT =============================
 const TABS = [{
@@ -2391,12 +2427,18 @@ const TABS = [{
 }];
 function App() {
   const [leases, setLeases] = useState(() => {
-    const l = exampleLeaseDemo();
-    return [l];
+    const saved = loadSavedState();
+    if (saved) return saved.leases; // includes the empty register if the user deleted everything
+    return [exampleLeaseDemo()];
   });
-  const [selectedId, setSelectedId] = useState(() => leases[0] ? leases[0].id : null);
+  const [selectedId, setSelectedId] = useState(() => {
+    const saved = loadSavedState();
+    if (saved && saved.selectedId && saved.leases.some(l => l.id === saved.selectedId)) return saved.selectedId;
+    return leases[0] ? leases[0].id : null;
+  });
   const [activeTab, setActiveTab] = useState('basic');
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [storageOk, setStorageOk] = useState(true);
 
   // keep selectedId valid
   useEffect(() => {
@@ -2406,6 +2448,11 @@ function App() {
     }
     if (!leases.find(l => l.id === selectedId)) setSelectedId(leases[0].id);
   }, [leases]);
+
+  // auto-save every change to this browser's localStorage
+  useEffect(() => {
+    setStorageOk(saveState(leases, selectedId));
+  }, [leases, selectedId]);
   const calcs = useMemo(() => {
     const map = {};
     leases.forEach(l => {
@@ -2512,7 +2559,8 @@ function App() {
     mobileOpen: mobileOpen,
     setMobileOpen: setMobileOpen,
     onExportAll: exportAll,
-    onImportAll: importAll
+    onImportAll: importAll,
+    storageOk: storageOk
   }), /*#__PURE__*/React.createElement("div", {
     className: "main"
   }, selectedLease ? /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
