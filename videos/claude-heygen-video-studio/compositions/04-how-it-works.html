@@ -1,0 +1,201 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+  </head>
+  <body>
+    <template>
+      <style>
+        #root {
+          position: absolute;
+          inset: 0;
+          width: 1920px;
+          height: 1080px;
+          overflow: hidden;
+          background: #14110d;
+          font-family: "Archivo Black", "Montserrat", sans-serif;
+          color: #f5efe6;
+        }
+
+        .bg-grid {
+          position: absolute;
+          inset: 0;
+          background-image: linear-gradient(rgba(245, 239, 230, 0.05) 1px, transparent 1px);
+          background-size: 100% 108px;
+          opacity: 0.4;
+        }
+
+        .kicker-wrap {
+          position: absolute;
+          left: 180px;
+          top: 128px;
+          opacity: 0;
+        }
+        .kicker {
+          font-family: "Space Mono", monospace;
+          font-size: 26px;
+          letter-spacing: 0.14em;
+          color: #e07a5f;
+        }
+        .kicker-title {
+          margin-top: 14px;
+          font-size: 84px;
+          letter-spacing: -0.03em;
+        }
+
+        .row {
+          position: absolute;
+          left: 0;
+          top: 380px;
+          width: 1920px;
+          height: 460px;
+        }
+
+        .card {
+          position: absolute;
+          top: 0;
+          width: 480px;
+          height: 440px;
+          border-radius: 24px;
+          background: #1c1712;
+          border: 2px solid rgba(245, 239, 230, 0.14);
+          padding: 56px 48px;
+          opacity: 0;
+          transform: translateY(60px) scale(0.94);
+        }
+        #card-1 { left: 180px; }
+        #card-2 { left: 720px; }
+        #card-3 { left: 1260px; }
+
+        .card .num {
+          font-family: "Space Mono", monospace;
+          font-size: 34px;
+          color: #e07a5f;
+          border: 2px solid #e07a5f;
+          border-radius: 50%;
+          width: 76px;
+          height: 76px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+        .card .title {
+          margin-top: 44px;
+          font-size: 52px;
+          letter-spacing: -0.02em;
+          line-height: 1.05;
+        }
+        .card .desc {
+          margin-top: 26px;
+          font-family: "Space Mono", monospace;
+          font-size: 24px;
+          line-height: 1.5;
+          color: #b8ada0;
+        }
+
+        .chevron {
+          position: absolute;
+          top: 190px;
+          font-size: 60px;
+          color: #948a7d;
+          opacity: 0;
+          z-index: 5;
+        }
+        #chev-1 { left: 662px; }
+        #chev-2 { left: 1202px; }
+
+        .sweep {
+          position: absolute;
+          top: 0;
+          left: -400px;
+          width: 400px;
+          height: 460px;
+          background: linear-gradient(90deg, rgba(224, 122, 95, 0) 0%, rgba(224, 122, 95, 0.14) 50%, rgba(224, 122, 95, 0) 100%);
+          opacity: 0;
+        }
+
+        .frame-mark {
+          position: absolute;
+          bottom: 90px;
+          right: 140px;
+          font-family: "Space Mono", monospace;
+          font-size: 22px;
+          letter-spacing: 0.1em;
+          color: #948a7d;
+        }
+      </style>
+
+      <div id="root" data-composition-id="04-how-it-works" data-width="1920" data-height="1080">
+        <div class="bg-grid"></div>
+
+        <div class="kicker-wrap" id="how-kicker">
+          <div class="kicker">HOW IT WORKS</div>
+          <div class="kicker-title">THREE STEPS. ZERO TIMELINE.</div>
+        </div>
+
+        <div class="row" id="how-row">
+          <div class="card" id="card-1">
+            <div class="num">01</div>
+            <div class="title">CONNECT</div>
+            <div class="desc">Link your HeyGen account to Claude.</div>
+          </div>
+          <div class="chevron" id="chev-1">&#8594;</div>
+          <div class="card" id="card-2">
+            <div class="num">02</div>
+            <div class="title">DESCRIBE</div>
+            <div class="desc">Tell Claude your video idea in a prompt.</div>
+          </div>
+          <div class="chevron" id="chev-2">&#8594;</div>
+          <div class="card" id="card-3">
+            <div class="num">03</div>
+            <div class="title">RENDER</div>
+            <div class="desc">Claude composes and renders it in the cloud.</div>
+          </div>
+          <div class="sweep" id="how-sweep"></div>
+        </div>
+
+        <div class="frame-mark">04 / HOW IT WORKS</div>
+      </div>
+
+      <script>
+        window.__timelines = window.__timelines || {};
+        const tl = gsap.timeline({ paused: true });
+        const root = "[data-composition-id='04-how-it-works'] ";
+
+        tl.fromTo(root + "#how-kicker", { opacity: 0, y: -16 }, { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" }, 0.1);
+
+        // Cards self-assemble in a staggered cascade — fade + short slide/scale into slot.
+        tl.fromTo(
+          root + ".card",
+          { opacity: 0, y: 60, scale: 0.94 },
+          { opacity: 1, y: 0, scale: 1, duration: 0.55, ease: "back.out(1.5)", stagger: 0.16 },
+          0.4,
+        );
+
+        // Chevrons pop in once their neighboring cards have landed.
+        tl.fromTo(root + "#chev-1", { opacity: 0, scale: 0.6 }, { opacity: 1, scale: 1, duration: 0.35, ease: "back.out(2)" }, 1.05);
+        tl.fromTo(root + "#chev-2", { opacity: 0, scale: 0.6 }, { opacity: 1, scale: 1, duration: 0.35, ease: "back.out(2)" }, 1.2);
+
+        // Traveling accent-glow sweep across the row — one pass.
+        tl.fromTo(root + "#how-sweep", { x: 0, opacity: 0 }, { opacity: 1, duration: 0.2 }, 1.6);
+        tl.fromTo(root + "#how-sweep", { x: 0 }, { x: 2400, duration: 1.6, ease: "power1.inOut" }, 1.6);
+        tl.to(root + "#how-sweep", { opacity: 0, duration: 0.2 }, 3.0);
+
+        // Held array — gentle continuous float on the cards (finite bounded sine breathe).
+        tl.fromTo(
+          root + ".card",
+          { y: 0 },
+          { y: -10, duration: 1.8, ease: "sine.inOut", yoyo: true, repeat: 3 },
+          1.4,
+        );
+
+        // Slow push-in on the whole row across the tail of the hold.
+        tl.fromTo(root + "#how-row", { scale: 1 }, { scale: 1.035, duration: 1.5, ease: "sine.inOut" }, 7.3);
+
+        tl.fromTo(root + ".frame-mark", { opacity: 0 }, { opacity: 1, duration: 0.4 }, 0.4);
+
+        window.__timelines["04-how-it-works"] = tl;
+      </script>
+    </template>
+  </body>
+</html>

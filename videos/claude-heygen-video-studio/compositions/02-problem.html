@@ -1,0 +1,180 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+  </head>
+  <body>
+    <template>
+      <style>
+        #root {
+          position: absolute;
+          inset: 0;
+          width: 1920px;
+          height: 1080px;
+          overflow: hidden;
+          background: #14110d;
+          font-family: "Archivo Black", "Montserrat", sans-serif;
+          color: #f5efe6;
+        }
+
+        .scatter {
+          position: absolute;
+          inset: 0;
+        }
+        .bar {
+          position: absolute;
+          height: 10px;
+          border-radius: 6px;
+          background: rgba(245, 239, 230, 0.1);
+        }
+        .bar.accent {
+          background: rgba(224, 122, 95, 0.35);
+        }
+        .b1 { width: 260px; left: 180px; top: 210px; transform: rotate(-6deg); }
+        .b2 { width: 180px; left: 1500px; top: 260px; transform: rotate(4deg); }
+        .b3 { width: 340px; left: 1420px; top: 780px; transform: rotate(-3deg); }
+        .b4 { width: 220px; left: 140px; top: 830px; transform: rotate(5deg); }
+        .b5 { width: 150px; left: 900px; top: 150px; transform: rotate(2deg); }
+
+        .clock {
+          position: absolute;
+          right: 200px;
+          top: 130px;
+          width: 120px;
+          height: 120px;
+          border-radius: 50%;
+          border: 6px solid rgba(245, 239, 230, 0.16);
+          opacity: 0.6;
+        }
+        .clock::after {
+          content: "";
+          position: absolute;
+          left: 50%;
+          top: 50%;
+          width: 4px;
+          height: 44px;
+          background: #e07a5f;
+          transform-origin: bottom center;
+          transform: translate(-50%, -100%) rotate(0deg);
+        }
+
+        .stage {
+          position: absolute;
+          inset: 0;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+        .beat {
+          position: absolute;
+          width: 1500px;
+          text-align: left;
+          left: 210px;
+          top: 50%;
+          transform: translateY(-50%);
+          opacity: 0;
+        }
+        .beat .line {
+          font-size: 108px;
+          line-height: 1.08;
+          letter-spacing: -0.03em;
+        }
+        .beat .accent {
+          color: #e07a5f;
+        }
+        .kicker {
+          position: absolute;
+          left: 210px;
+          top: 300px;
+          font-family: "Space Mono", monospace;
+          font-size: 26px;
+          letter-spacing: 0.12em;
+          color: #a89c8d;
+          opacity: 0;
+        }
+
+        .frame-mark {
+          position: absolute;
+          bottom: 90px;
+          right: 140px;
+          font-family: "Space Mono", monospace;
+          font-size: 22px;
+          letter-spacing: 0.1em;
+          color: #948a7d;
+        }
+      </style>
+
+      <div id="root" data-composition-id="02-problem" data-width="1920" data-height="1080">
+        <div class="scatter">
+          <div class="bar b1"></div>
+          <div class="bar accent b2"></div>
+          <div class="bar b3"></div>
+          <div class="bar accent b4"></div>
+          <div class="bar b5"></div>
+        </div>
+        <div class="clock" id="problem-clock"></div>
+
+        <div class="kicker" id="problem-kicker">THE OLD WAY</div>
+
+        <div class="stage">
+          <div class="beat" id="beat-a">
+            <div class="line">MAKING A VIDEO</div>
+            <div class="line">USUALLY MEANS</div>
+          </div>
+          <div class="beat" id="beat-b">
+            <div class="line accent">HOURS OF</div>
+            <div class="line">MANUAL EDITING.</div>
+          </div>
+        </div>
+
+        <div class="frame-mark">02 / PROBLEM</div>
+      </div>
+
+      <script>
+        window.__timelines = window.__timelines || {};
+        const tl = gsap.timeline({ paused: true });
+        const root = "[data-composition-id='02-problem'] ";
+
+        // Scattered decorative timeline bars — slow ambient drift.
+        [".b1", ".b2", ".b3", ".b4", ".b5"].forEach((sel, i) => {
+          tl.fromTo(
+            root + sel,
+            { x: 0, opacity: 0.5 },
+            { x: i % 2 === 0 ? 14 : -14, opacity: 0.85, duration: 5, ease: "sine.inOut" },
+            0,
+          );
+        });
+
+        // Clock — static decorative housing; a slow ambient breathe keeps it alive.
+        tl.fromTo(root + "#problem-clock", { opacity: 0.4, scale: 0.96 }, { opacity: 0.7, scale: 1, duration: 5, ease: "sine.inOut" }, 0);
+
+        tl.fromTo(root + "#problem-kicker", { opacity: 0, y: -10 }, { opacity: 1, y: 0, duration: 0.4 }, 0.15);
+
+        // Beat A — enters via chunk fade+rise, holds, then blurs/zooms off.
+        tl.fromTo(
+          root + "#beat-a",
+          { opacity: 0, y: 30, filter: "blur(10px)" },
+          { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.55, ease: "power3.out" },
+          0.35,
+        );
+        tl.to(
+          root + "#beat-a",
+          { opacity: 0, scale: 1.12, filter: "blur(14px)", duration: 0.45, ease: "power2.in" },
+          2.15,
+        );
+
+        // Beat B — flies in as beat A blurs off, holds to end.
+        tl.fromTo(
+          root + "#beat-b",
+          { opacity: 0, y: -26, filter: "blur(12px)", scale: 0.96 },
+          { opacity: 1, y: 0, filter: "blur(0px)", scale: 1, duration: 0.55, ease: "power3.out" },
+          2.35,
+        );
+
+        tl.fromTo(root + ".frame-mark", { opacity: 0 }, { opacity: 1, duration: 0.4 }, 0.4);
+
+        window.__timelines["02-problem"] = tl;
+      </script>
+    </template>
+  </body>
+</html>

@@ -1,0 +1,110 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+  </head>
+  <body>
+    <template>
+      <style>
+        #root {
+          position: absolute;
+          inset: 0;
+          width: 1920px;
+          height: 1080px;
+          overflow: hidden;
+          background: #14110d;
+          font-family: "Archivo Black", "Montserrat", sans-serif;
+          color: #f5efe6;
+        }
+
+        .stage {
+          position: absolute;
+          inset: 0;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+        .phrase {
+          position: absolute;
+          left: 50%;
+          top: 50%;
+          transform: translate(-50%, -50%) scale(0.8);
+          text-align: center;
+          font-size: 128px;
+          letter-spacing: -0.03em;
+          white-space: nowrap;
+          opacity: 0;
+        }
+        #phrase-1 { color: #f5efe6; }
+        #phrase-2 { color: #e07a5f; }
+        #phrase-3 {
+          color: #f5efe6;
+          white-space: normal;
+          width: 1500px;
+          font-size: 110px;
+        }
+        #phrase-3 .accent {
+          color: #8f80f3;
+        }
+
+        .kicker {
+          position: absolute;
+          left: 140px;
+          top: 110px;
+          font-family: "Space Mono", monospace;
+          font-size: 26px;
+          letter-spacing: 0.14em;
+          color: #a89c8d;
+          opacity: 0;
+        }
+
+        .frame-mark {
+          position: absolute;
+          bottom: 90px;
+          right: 140px;
+          font-family: "Space Mono", monospace;
+          font-size: 22px;
+          letter-spacing: 0.1em;
+          color: #948a7d;
+        }
+      </style>
+
+      <div id="root" data-composition-id="05-benefit" data-width="1920" data-height="1080">
+        <div class="kicker" id="ben-kicker">WHAT YOU GET</div>
+        <div class="stage">
+          <div class="phrase" id="phrase-1">UNLIMITED VIDEOS.</div>
+          <div class="phrase" id="phrase-2">NO MANUAL EDITING.</div>
+          <div class="phrase" id="phrase-3">JUST ASK CLAUDE TO <span class="accent">TWEAK IT.</span></div>
+        </div>
+        <div class="frame-mark">05 / BENEFIT</div>
+      </div>
+
+      <script>
+        window.__timelines = window.__timelines || {};
+        const tl = gsap.timeline({ paused: true });
+        const root = "[data-composition-id='05-benefit'] ";
+
+        tl.fromTo(root + "#ben-kicker", { opacity: 0 }, { opacity: 1, duration: 0.3 }, 0.1);
+
+        // bg color flips per beat — backgroundColor is an allowed animatable paint property.
+        tl.to(root + "#root", { backgroundColor: "#1c1712", duration: 0.25 }, 1.5);
+        tl.to(root + "#root", { backgroundColor: "#14110d", duration: 0.25 }, 3.0);
+
+        // Beat 1 — spring pop in, hold, spring out (hard cut feel via fast clear).
+        tl.fromTo(root + "#phrase-1", { opacity: 0, scale: 0.72 }, { opacity: 1, scale: 1, duration: 0.4, ease: "back.out(2.4)" }, 0.2);
+        tl.to(root + "#phrase-1", { opacity: 0, scale: 1.18, duration: 0.22, ease: "power2.in" }, 1.4);
+
+        // Beat 2 — same engine.
+        tl.fromTo(root + "#phrase-2", { opacity: 0, scale: 0.72 }, { opacity: 1, scale: 1, duration: 0.4, ease: "back.out(2.4)" }, 1.6);
+        tl.to(root + "#phrase-2", { opacity: 0, scale: 1.18, duration: 0.22, ease: "power2.in" }, 2.9);
+
+        // Beat 3 — lands and settles, holds to the end (no scale-out).
+        tl.fromTo(root + "#phrase-3", { opacity: 0, scale: 0.8, y: 0 }, { opacity: 1, scale: 1, duration: 0.5, ease: "back.out(1.8)" }, 3.1);
+
+        tl.fromTo(root + ".frame-mark", { opacity: 0 }, { opacity: 1, duration: 0.3 }, 3.3);
+
+        window.__timelines["05-benefit"] = tl;
+      </script>
+    </template>
+  </body>
+</html>

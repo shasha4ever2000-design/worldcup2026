@@ -11,3 +11,4 @@ __pycache__/
 # Cloudflare / wrangler
 .dev.vars
 .wrangler/
+videos/**/node_modules/

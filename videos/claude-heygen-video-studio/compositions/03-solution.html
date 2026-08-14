@@ -1,0 +1,214 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+  </head>
+  <body>
+    <template>
+      <style>
+        #root {
+          position: absolute;
+          inset: 0;
+          width: 1920px;
+          height: 1080px;
+          overflow: hidden;
+          background: #14110d;
+          font-family: "Archivo Black", "Montserrat", sans-serif;
+          color: #f5efe6;
+        }
+
+        .glow {
+          position: absolute;
+          left: 50%;
+          top: 46%;
+          width: 1000px;
+          height: 1000px;
+          transform: translate(-50%, -50%);
+          border-radius: 50%;
+          background: radial-gradient(circle, rgba(224, 122, 95, 0.24) 0%, rgba(224, 122, 95, 0) 66%);
+        }
+
+        .world {
+          position: absolute;
+          left: 0;
+          top: -30px;
+          width: 1920px;
+          height: 1080px;
+          transform: scale(1);
+          transform-origin: 960px 500px;
+        }
+
+        .hub {
+          position: absolute;
+          left: 840px;
+          top: 380px;
+          width: 240px;
+          height: 240px;
+          border-radius: 50%;
+          background: #1c1712;
+          border: 3px solid #e07a5f;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          text-align: center;
+          transform: scale(0);
+        }
+        .hub span {
+          font-family: "Space Mono", monospace;
+          font-size: 26px;
+          letter-spacing: 0.02em;
+          line-height: 1.3;
+          color: #f5efe6;
+        }
+
+        .pulse-ring {
+          position: absolute;
+          left: 840px;
+          top: 380px;
+          width: 240px;
+          height: 240px;
+          border-radius: 50%;
+          border: 3px solid #e07a5f;
+          transform: scale(1);
+          opacity: 0;
+        }
+
+        .node {
+          position: absolute;
+          width: 360px;
+          height: 170px;
+          border-radius: 20px;
+          border: 3px solid rgba(245, 239, 230, 0.22);
+          background: #1c1712;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transform: scale(0);
+        }
+        .node .label {
+          font-size: 56px;
+          letter-spacing: -0.02em;
+        }
+        #node-claude {
+          left: 250px;
+          top: 415px;
+        }
+        #node-claude .label { color: #e07a5f; }
+        #node-heygen {
+          left: 1310px;
+          top: 415px;
+        }
+        #node-heygen .label { color: #8f80f3; }
+
+        .conn {
+          position: absolute;
+          top: 497px;
+          height: 6px;
+          background: rgba(245, 239, 230, 0.4);
+          transform: scaleX(0);
+        }
+        #conn-left {
+          left: 610px;
+          width: 230px;
+          transform-origin: right center;
+        }
+        #conn-right {
+          left: 1080px;
+          width: 230px;
+          transform-origin: left center;
+        }
+
+        .headline {
+          position: absolute;
+          left: 0;
+          right: 0;
+          top: 850px;
+          text-align: center;
+          font-size: 78px;
+          letter-spacing: -0.02em;
+          opacity: 0;
+        }
+        .headline .accent {
+          color: #e07a5f;
+        }
+        .caption {
+          position: absolute;
+          left: 0;
+          right: 0;
+          top: 950px;
+          text-align: center;
+          font-family: "Space Mono", monospace;
+          font-size: 26px;
+          letter-spacing: 0.08em;
+          color: #a89c8d;
+          opacity: 0;
+        }
+
+        .frame-mark {
+          position: absolute;
+          bottom: 90px;
+          right: 140px;
+          font-family: "Space Mono", monospace;
+          font-size: 22px;
+          letter-spacing: 0.1em;
+          color: #948a7d;
+        }
+      </style>
+
+      <div id="root" data-composition-id="03-solution" data-width="1920" data-height="1080">
+        <div class="glow" id="sol-glow"></div>
+
+        <div class="world" id="sol-world">
+          <div class="conn" id="conn-left"></div>
+          <div class="conn" id="conn-right"></div>
+          <div class="node" id="node-claude"><span class="label">CLAUDE</span></div>
+          <div class="node" id="node-heygen"><span class="label">HEYGEN</span></div>
+          <div class="hub" id="sol-hub"><span>HYPER<br />FRAMES</span></div>
+          <div class="pulse-ring" id="sol-pulse"></div>
+        </div>
+
+        <div class="headline" id="sol-headline">CONNECT HEYGEN TO CLAUDE. <span class="accent">ONCE.</span></div>
+        <div class="caption" id="sol-caption">via the HyperFrames connector</div>
+
+        <div class="frame-mark">03 / SOLUTION</div>
+      </div>
+
+      <script>
+        window.__timelines = window.__timelines || {};
+        const tl = gsap.timeline({ paused: true });
+        const root = "[data-composition-id='03-solution'] ";
+
+        // Ambient glow — persistent slow breathe.
+        tl.fromTo(root + "#sol-glow", { scale: 0.9, opacity: 0.6 }, { scale: 1.06, opacity: 0.9, duration: 5, ease: "sine.inOut" }, 0);
+
+        // Nodes spring-pop into place (elastic overshoot, staggered).
+        tl.fromTo(root + "#node-claude", { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.6, ease: "back.out(2.2)" }, 0.3);
+        tl.fromTo(root + "#node-heygen", { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.6, ease: "back.out(2.2)" }, 0.45);
+        tl.fromTo(root + "#sol-hub", { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.55, ease: "back.out(2)" }, 0.75);
+
+        // Connector lines draw outward from the hub.
+        tl.fromTo(root + "#conn-left", { scaleX: 0 }, { scaleX: 1, duration: 0.45, ease: "power3.out" }, 1.15);
+        tl.fromTo(root + "#conn-right", { scaleX: 0 }, { scaleX: 1, duration: 0.45, ease: "power3.out" }, 1.15);
+
+        // Headline + caption.
+        tl.fromTo(root + "#sol-headline", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }, 1.75);
+        tl.fromTo(root + "#sol-caption", { opacity: 0 }, { opacity: 1, duration: 0.4 }, 2.15);
+
+        // Continuous slow camera push-in on the node cluster, holding to the end.
+        tl.fromTo(root + "#sol-world", { scale: 1 }, { scale: 1.1, duration: 2.6, ease: "sine.inOut" }, 2.3);
+
+        // Finite pulse ring on the hub — transform + opacity only, two bounded repeats.
+        tl.fromTo(
+          root + "#sol-pulse",
+          { scale: 1, opacity: 0.55 },
+          { scale: 1.35, opacity: 0, duration: 1, ease: "sine.out", repeat: 1 },
+          2.5,
+        );
+
+        tl.fromTo(root + ".frame-mark", { opacity: 0 }, { opacity: 1, duration: 0.4 }, 0.4);
+
+        window.__timelines["03-solution"] = tl;
+      </script>
+    </template>
+  </body>
+</html>
