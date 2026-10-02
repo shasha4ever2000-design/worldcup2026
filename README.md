@@ -86,7 +86,3 @@ has the full set of UI strings.
 ## Credits
 
 Created and designed by **Ahmed Hussein**, with [Claude AI](https://claude.ai).
-
----
-
-_Test change made from the `mandarin` workspace in Orca to check that pull requests show up in the app._

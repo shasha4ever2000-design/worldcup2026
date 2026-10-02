@@ -138,6 +138,9 @@ test.describe("World Cup 2026 site smoke", () => {
   });
 
   test("shows a Match to Watch card and a Guide link", async ({ page }) => {
+    // The card only appears while there is an upcoming match, so pin the clock
+    // to the eve of the tournament; otherwise this fails once the final is over.
+    await page.clock.setFixedTime(new Date("2026-06-10T12:00:00Z"));
     await page.goto("/");
     await expect(page.locator(".motd")).toBeVisible();
     await expect(page.locator("#t_guide")).toHaveAttribute("href", "guide.html");
